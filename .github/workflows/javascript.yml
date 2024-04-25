@@ -1,0 +1,25 @@
+name: PR Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'javascript/**'
+
+jobs:
+  javascript-tests:
+    name: Run JavaScript Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: changes
+        uses: jitterbit/get-changed-files@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Set Environment Variable
+        run: echo "TEST_ANSWER=${{ secrets.TEST_ANSWER }}" >> $GITHUB_ENV
+      - run: cd javascript && npm install
+      - run: cd javascript && npm test
