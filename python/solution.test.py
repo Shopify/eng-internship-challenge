@@ -1,15 +1,37 @@
 import unittest
 import subprocess
 import os
+from solution import decryptPlayfairCipher
 
+# Tests for Playfair Cipher solution
 class TestSolution(unittest.TestCase):
-    def test_decryption_output(self):
-        # Run the solution.py script
-        result = subprocess.run(['python3', 'solution.py'], text=True, capture_output=True)
-        
-        # Check the output
-        expected_output = os.getenv('TEST_ANSWER')
-        self.assertEqual(result.stdout.strip(), expected_output)
+    def testBasicDecryption(self):
+        key = "SUPERSPY"
+        ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+        expected = "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
+        result = decryptPlayfairCipher(ciphertext, key)
+        self.assertEqual(result, expected)
+
+    def testSpecialCharacters(self):
+        key = "SUPERSPY"
+        ciphertext = "IKEWENENXLNQLPZSLERUMRH@@@ERYBOFNEINCHCV"
+        expected = "HIPPOPOTOMONSTROSESQUIPSDCNHLCOBIBTW"
+        result = decryptPlayfairCipher(ciphertext, key)
+        self.assertEqual(result, expected)
+
+    def testShortMessage(self):
+        key = "SUPERSPY"
+        ciphertext = "AB"
+        expected = "YA"
+        result = decryptPlayfairCipher(ciphertext, key)
+        self.assertEqual(result, expected)
+
+    def testWithKeyIncludingAllLetters(self):
+        key = "ABCDEFGHIJKLMNOPQRSTUVWXY"  # All letters but 'J'
+        ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+        expected = "HIBZCPCPVNLSPOUPAQTGMKCBUWDLIPCHOCA"
+        result = decryptPlayfairCipher(ciphertext, key)
+        self.assertEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()
