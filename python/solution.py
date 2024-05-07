@@ -1,4 +1,5 @@
 LETTERS = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # J is removed in order to have 25 letters and fit in a 5x5 grid
+SPECIAL = "!@#$%^&*()_+-=[]{}|;':,.<>?/`~" # Special characters that should not found in the message or key
 
 # Returns the position of a letter in the grid in the form of a tuple (row, column)
 def searchGrid (grid, letter):
@@ -9,6 +10,10 @@ def searchGrid (grid, letter):
     return None
 
 def decipher (key, message):
+    # Check if the key or message contain special characters
+    if any(c in key for c in SPECIAL) or any(c in message for c in SPECIAL):
+        return
+    
     # Remove J and spaces, and convert to uppercase
     key = key.replace("J", "I").replace(" ", "").upper()
 
@@ -54,7 +59,9 @@ def decipher (key, message):
         else:
             output += grid[a[0]][b[1]] + grid[b[0]][a[1]]
 
-    return output.replace("X", "")
+    # Ensure there aren't any spaces or Xs in the output
+    return output.replace("X", "").replace(" ", "")
+    
 
 
 # Test the decipher algorithm
