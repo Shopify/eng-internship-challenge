@@ -57,7 +57,9 @@ def decrypt_playfair(text, key):
         decrypted_text.extend([new_a, new_b])
 
     # Only return non X and alpha character in decrypted text
-    return ''.join([char for char in decrypted_text if char != "X" and char.isalpha()])
+    result = ''.join([char for char in decrypted_text if char != "X" and char.isalpha()])
+
+    return result.upper()
 
 
 if __name__ == '__main__':
