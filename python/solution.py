@@ -1,3 +1,4 @@
+# Find the row and column of the character in the grid.
 def find_row_col(grid, ch):
     for row in range(5):
         for col in range(5):
@@ -5,7 +6,9 @@ def find_row_col(grid, ch):
                 return row, col
 
 
-def build_grid(key):
+def build_grid():
+    # removed duplicate letters in the key
+    key = "SUPERY"
     remaining_set = set("ABCDEFGHIKLMNOPQRSTUVWXYZ") - set(key)
     remaining_alphabet = sorted(list(remaining_set))
 
@@ -22,24 +25,30 @@ def build_grid(key):
     return grid
 
 
-if __name__ == '__main__':
+def decrypt_pairs(grid):
     encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-    # removed duplicate letters in the key
-    key = "SUPERY"
-
-    # create 5x5 matrix grid
-    grid = build_grid(key)
-
-    message = []
+    pairs = []
     for i in range(0, len(encrypted_message) - 2, 2):
         pair = encrypted_message[i:i + 2]
         row1, col1 = find_row_col(grid, pair[0])
         row2, col2 = find_row_col(grid, pair[1])
 
         if row1 == row2:
-            message.append(grid[row1][(col1 + 1) % 5] + grid[row2][(col2 + 1) % 5])
+            pairs.append(grid[row1][(col1 - 1) % 5] + grid[row2][(col2 - 1) % 5])
         elif col1 == col2:
-            message.append(grid[(row1 + 1) % 5][col1] + grid[(row2 + 1) % 5][col2])
+            pairs.append(grid[(row1 - 1) % 5][col1] + grid[(row2 - 1) % 5][col2])
         else:
-            message.append(grid[row1][col2] + grid[row2][col1])
-    print(''.join(message), end='')
+            pairs.append(grid[row1][col2] + grid[row2][col1])
+    return pairs
+
+
+if __name__ == '__main__':
+    # create 5x5 matrix grid
+    grid = build_grid()
+    # decrypt the message
+    decrypted_pairs = decrypt_pairs(grid)
+    # join the pairs to form the message
+    pairs_message = "".join(decrypted_pairs)
+    # Remove added X in the decrypted message
+    message = pairs_message.replace("X", "")
+    print(message)
