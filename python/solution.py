@@ -1,7 +1,12 @@
+ALPHABET = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'  # no J
+
+
 def generate_matrix(key):
     """
     Return a 5x5 matrix with given key using Playfair cipher rule (https://en.wikipedia.org/wiki/Playfair_cipher)
-
+    - J and I is used interchangeably
+    - 5x5 is first filled with keyword;
+    - then the rest of the characters in alphabet (no duplicate)
     :param key:
     :return: 2-d 5x5 array
     """
@@ -15,8 +20,7 @@ def generate_matrix(key):
             normalized += char
 
     # Populate the rest with non-duplicate char in the alphabet
-    alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'  # no J
-    full_key = normalized + ''.join([ch for ch in alphabet if ch not in seen])
+    full_key = normalized + ''.join([ch for ch in ALPHABET if ch not in seen])
 
     # Create a 5x5 matrix
     key_matrix = [full_key[i:i + 5] for i in range(0, 25, 5)]
