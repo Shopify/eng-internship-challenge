@@ -28,7 +28,7 @@ def build_grid():
 def decrypt_pairs(grid):
     encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     pairs = []
-    for i in range(0, len(encrypted_message) - 2, 2):
+    for i in range(0, len(encrypted_message), 2):
         pair = encrypted_message[i:i + 2]
         row1, col1 = find_row_col(grid, pair[0])
         row2, col2 = find_row_col(grid, pair[1])
