@@ -9,8 +9,7 @@ class PlayfairCipher:
     key = self._remove_special_characters(key.replace(' ', '').upper().replace('J', 'I'))
     cipher_matrix = [['' for _ in range(5)] for _ in range(5)]
     char_coordinates = {}
-    r: int = 0
-    c: int = 0
+    r, c = 0, 0
 
     # Process Key First
     for char in key:
