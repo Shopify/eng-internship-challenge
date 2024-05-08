@@ -16,6 +16,7 @@ def solution():
 
     #Loop through each pair
     for i in range(0,len(inputString),2):
+        decodedFirst, decodedSecond = "", ""
         encodedPair = inputString[i:i+2]
         firstLetter = cipherCoords[encodedPair[0]]
         secondLetter = cipherCoords[encodedPair[1]]
@@ -27,17 +28,11 @@ def solution():
                 decodedFirst = cipher[firstLetter[0]][4]
             else:
                 decodedFirst = cipher[firstLetter[0]][firstLetter[1]-1]
-            
-            if decodedFirst != "X":
-                decodedWord += decodedFirst
 
             if secondLetter[1] == 0:
                 decodedSecond = cipher[secondLetter[0]][4]
             else:
                 decodedSecond = cipher[secondLetter[0]][secondLetter[1]-1]
-
-            if decodedSecond != "X":
-                decodedWord += decodedSecond
 
         #When the letters are on the same column
         elif firstLetter[1] == secondLetter[1]:
@@ -46,27 +41,22 @@ def solution():
                 decodedFirst = cipher[4][firstLetter[1]]
             else:
                 decodedFirst = cipher[firstLetter[0]-1][firstLetter[1]]
-            
-            if decodedFirst != "X":
-                decodedWord += decodedFirst
-
+        
             if secondLetter[0] == 0:
                 decodedFirst = cipher[4][secondLetter[1]]
             else:
                 decodedFirst = cipher[secondLetter[0]-1][secondLetter[1]]
-        
-            if decodedSecond != "X":
-                decodedWord += decodedSecond
 
         else:
             decodedFirst = cipher[firstLetter[0]][secondLetter[1]]
             decodedSecond = cipher[secondLetter[0]][firstLetter[1]]
     
-            if decodedFirst != "X":
-                decodedWord += decodedFirst
-                
-            if decodedSecond != "X":
-                decodedWord += decodedSecond
+        if decodedFirst != "X":
+            decodedWord += decodedFirst
+            
+        if decodedSecond != "X":
+            decodedWord += decodedSecond
+
 
     return decodedWord
 
