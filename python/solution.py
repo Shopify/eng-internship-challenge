@@ -23,8 +23,13 @@ def initMap():
 ##Effects: Decrypts the Rectangle Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
 def rect(first,second):
-    ##STUB
-    return ""
+    firstcol = map[first][1]
+    secondcol = map[second][1]
+    firstrow = map[first][0]
+    secondrow = map[second][0]
+
+    rsf = key[firstrow][secondcol] + key[secondrow][firstcol]
+    return rsf
 
 ##Effects: Decrypts the Row Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
