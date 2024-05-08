@@ -58,8 +58,8 @@ def decryption(message, grid):
     #Initialize the result variable to store the decrypted message
     result = ""
 
-    #Filter out special characters, non-alphabetical characters and spaces from the message
-    message = "".join(char for char in message if char.isalpha() and char not in SPECIAL_CHARACTERS)
+    #Filter out special characters, non-alphabetical characters and spaces from the message. Upper case incoming message.
+    message = "".join(char for char in message if char.isalpha() and char not in SPECIAL_CHARACTERS).upper()
 
     #If the message length is odd, add an "X" to the end of the message to allow for even pair creation
     if len(message) % 2 != 0:
