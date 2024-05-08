@@ -38,7 +38,7 @@ def playfair_decrypt(key, text):
 
     # process text
     if len(text) % 2 != 0:
-        text += 'Z'  # append filler character if text length is odd
+        text += 'X'  # append filler character if text length is odd
     pairs = [text[n:n+2] for n in range(0, len(text), 2)]
 
     decrypted_text = ''
