@@ -1,9 +1,8 @@
 import unittest
 import subprocess
 import os
-from solution import decrypt_message, create_playfair_matrix
 
-class TestDecryption(unittest.TestCase):
+class TestSolution(unittest.TestCase):
     def test_decryption_output(self):
         # Run the solution.py script
         result = subprocess.run(['python3', 'solution.py'], text=True, capture_output=True)
