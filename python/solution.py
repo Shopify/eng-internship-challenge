@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 secret_string = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-# HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA
+
 key = "SUPERSPY"
 plain_text = ""
 alphabet = OrderedDict()
@@ -11,12 +11,12 @@ position_map = {}
 for i, letter in enumerate('abcdefghiklmnopqrstuvwxyz', start=1):
     alphabet[letter] = i
 
-# create diagraph that will contain the letters
-diagraph = [["" for _ in range(5)] for _ in range(5)]
+# create digraph that will contain the letters
+digraph = [["" for _ in range(5)] for _ in range(5)]
 key_index = 0
 row_num = 0
 
-for row in diagraph:
+for row in digraph:
     row_index = 0
     while row_index < len(row):
         if key_index < len(key):
@@ -47,18 +47,18 @@ while secret_index < len(secret_string) - 1:
 
     #check if same row
     if position_first[0] == position_second[0]:
-        char1 = diagraph[position_first[0]][position_first[1] - 1]
-        char2 = diagraph[position_second[0]][position_second[1] - 1]
+        char1 = digraph[position_first[0]][position_first[1] - 1]
+        char2 = digraph[position_second[0]][position_second[1] - 1]
 
     #check if same column
     elif position_first[1] == position_second[1]:
-        char1 = diagraph[position_first[0] - 1][position_first[1]]
-        char2 = diagraph[position_second[0] - 1][position_second[1]]
+        char1 = digraph[position_first[0] - 1][position_first[1]]
+        char2 = digraph[position_second[0] - 1][position_second[1]]
     
     #check if diagonal
     else:
-        char2 = diagraph[position_second[0]][position_first[1]]
-        char1 = diagraph[position_first[0]][position_second[1]]
+        char2 = digraph[position_second[0]][position_first[1]]
+        char1 = digraph[position_first[0]][position_second[1]]
     
     double = False
     #check if double chars
@@ -78,14 +78,9 @@ while secret_index < len(secret_string) - 1:
     else:
         plain_text += char1
     
-
     secret_index += 2
 
 if plain_text[-1] == filler:
     print(plain_text[:-1])
 else:
     print(plain_text)
-
-#visualize diagraph
-for row in diagraph:
-    print(row)
