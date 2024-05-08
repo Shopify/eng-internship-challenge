@@ -49,8 +49,22 @@ def row(first,second):
 ##Effects: Decrypts the Col Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
 def col(first,second):
-    ##STUB
-    return ""
+    firstrow = map[first][0]
+    secondrow = map[second][0]
+    col = map[first][1]
+    if(firstrow == 0):
+        firstrow = 4
+    else:
+        firstrow = firstrow-1
+    
+    if(secondrow == 0):
+        secondrow = 4
+    else:
+        secondrow = secondrow-1
+    
+    rsf = key[firstrow][col] + key[secondrow][col]
+
+    return rsf
 
 ##Effects: Removes all instances of "X" from the string and returns it
 ##s = the string to remove X from
