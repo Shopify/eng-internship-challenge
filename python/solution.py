@@ -10,6 +10,16 @@ key = [["S","U","P","E","R"],
 ##The encrypted Message
 encrypted = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
+## maps letter, [row,col] pairs
+map = {}
+
+##Effects: Initializes the map, mapping letters to a row column array
+def initMap():
+    for i, row in enumerate(key):
+        for j, letter in enumerate(row):
+            map[letter] = [i,j]
+            
+
 ##Effects: Decrypts the Rectangle Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
 def rect(first,second):
@@ -36,11 +46,11 @@ def removeX(s):
 
 ##Effects: Returns true if first and second are in the same row in key
 def sameRow(first,second):
-    return True
+    return map[first][0] == map[second][0]
 
 ##Effects: Returns true if first and second are in the same col in key
 def sameCol(first,second):
-    return True
+    return map[first][1] == map[second][1]
 
 
 ##Effects: Decrypts the encrypted global with the global key
@@ -56,15 +66,21 @@ def decrypt():
         second = encrypted[i+1:i+2]
 
         if (sameRow(first,second)):
-            ##STUB
-            print("hi")
+            rsf = rsf + row(first,second)
         elif (sameCol(first,second)):
-            ##STUB
-            print("hi")
+            rsf = rsf + col(first,second)
         else:
-            print("hi")
-        
+            rsf = rsf + rect(first,second)
         
         i = i + 2
 
-decrypt()
+    rsf = removeX(rsf)
+    print(rsf)
+
+
+
+
+initMap()
+
+
+##decrypt()
