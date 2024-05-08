@@ -88,7 +88,9 @@ def clean_decrypted_message(decrypted_message):
     return cleaned_message
 
 def decrypt_message(encrypted_message, cipher_table):
-    """Decrypt an entire message using the Playfair cipher."""
+    """
+    Decrypt an entire message using the Playfair cipher.
+    """
     encrypted_message = encrypted_message.replace(" ", "").upper()
     decrypted_message = ""
 
