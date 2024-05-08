@@ -1,7 +1,17 @@
 import unittest
+import subprocess
+import os
 from solution import decrypt_message, create_playfair_matrix
 
 class TestDecryption(unittest.TestCase):
+    def test_decryption_output(self):
+        # Run the solution.py script
+        result = subprocess.run(['python3', 'solution.py'], text=True, capture_output=True)
+        
+        # Check the output
+        expected_output = os.getenv('TEST_ANSWER')
+        self.assertEqual(result.stdout.strip(), expected_output)
+
     def test_decrypt_message(self):
         key = "SUPERSPY"
         matrix = create_playfair_matrix(key)
@@ -52,7 +62,7 @@ class TestDecryption(unittest.TestCase):
         decrypted_message = decrypt_message(matrix, encrypted_message)
         expected_output = "THISISASTRINGWITHSPACES"
         self.assertEqual(decrypted_message, expected_output)
-        
+
     def test_different_key(self):
         key = "INTERN"
         matrix = create_playfair_matrix(key)
@@ -60,7 +70,6 @@ class TestDecryption(unittest.TestCase):
         decrypted_message = decrypt_message(matrix, encrypted_message)
         expected_output = "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
         self.assertEqual(decrypted_message, expected_output)
-
 
 if __name__ == '__main__':
     unittest.main()
