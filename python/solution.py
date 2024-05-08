@@ -1,13 +1,11 @@
-
-
-## The key "SUPERSPY", WHER I=J
+## The key "SUPERSPY", where I=J
 key = [["S","U","P","E","R"],
        ["Y","A","B","C","D"],
        ["F","G","H","I","K"],
        ["L","M","N","O","Q"],
        ["T","V","W","X","Z"]]
 
-##The encrypted Message
+##The encrypted message
 encrypted = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
 ## maps letter, [row,col] pairs
@@ -28,8 +26,7 @@ def rect(first,second):
     firstrow = map[first][0]
     secondrow = map[second][0]
 
-    rsf = key[firstrow][secondcol] + key[secondrow][firstcol]
-    return rsf
+    return key[firstrow][secondcol] + key[secondrow][firstcol]
 
 ##Effects: Decrypts the Row Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
@@ -46,10 +43,8 @@ def row(first,second):
         secondcol = 4
     else:
         secondcol = secondcol-1
-    
-    rsf = key[row][firstcol] + key[row][secondcol]
 
-    return rsf
+    return key[row][firstcol] + key[row][secondcol]
 
 ##Effects: Decrypts the Col Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
@@ -66,16 +61,13 @@ def col(first,second):
         secondrow = 4
     else:
         secondrow = secondrow-1
-    
-    rsf = key[firstrow][col] + key[secondrow][col]
 
-    return rsf
+    return key[firstrow][col] + key[secondrow][col]
 
-##Effects: Removes all instances of "X" from the string and returns it
+##Effects: Removes regular expression "X" from the string and returns it
 ##s = the string to remove X from
 def removeX(s):
-    ##STUB
-    return ""
+    return s.replace("X","")
 
 ##Effects: Returns true if first and second are in the same row in key
 def sameRow(first,second):
@@ -92,8 +84,7 @@ def decrypt():
     ##Stub
     rsf =""
     i = 0
-
-    ##Gets two letter pairs as first and second
+    ##Gets two letter pairs as first and second (encryped is even length)
     while (i < len(encrypted)):
         first = encrypted[i:i+1]
         second = encrypted[i+1:i+2]
@@ -112,8 +103,6 @@ def decrypt():
 
 
 
-
+## First Call initMap to create the map and then decrypt to print the solution.
 initMap()
-
-
-##decrypt()
+decrypt()
