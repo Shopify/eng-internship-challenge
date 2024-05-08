@@ -25,7 +25,7 @@ def find_position(char, matrix):
     Function to return the position of a character in the matrix
     char: The character to be found
     matrix: the playfair matrix.
-    The position of the character in the matrix is returned.
+    the position of the character in the matrix is returned.
     """
     for i in range(5):
         for j in range(5):
@@ -37,11 +37,17 @@ def playfair_decrypt(key, ciphertext):
     Function to use the playfair matrix to decode the text
     key: the secret key which will be used to create the matrix
     ciphertext: The text to be decoded
-    The decyphered text is returned
+    The
     """
     key, matrix = create_matrix(key)
     plaintext = ""
-    ciphertext = ciphertext.replace(" ", "").upper()
+    
+    ciphertext = ''.join([c for c in ciphertext.upper() if c in "ABCDEFGHIKLMNOPQRSTUVWXYZ"])
+
+    # Appending an uncommon letter at the end to make it even
+    if len(ciphertext) % 2 != 0:
+        ciphertext += 'X'
+
     for i in range(0, len(ciphertext), 2):
         char1, char2 = ciphertext[i], ciphertext[i+1]
         row1, col1 = find_position(char1, matrix)
