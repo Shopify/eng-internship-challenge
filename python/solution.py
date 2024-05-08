@@ -34,10 +34,37 @@ def removeX(s):
     ##STUB
     return ""
 
+##Effects: Returns true if first and second are in the same row in key
+def sameRow(first,second):
+    return True
+
+##Effects: Returns true if first and second are in the same col in key
+def sameCol(first,second):
+    return True
+
 
 ##Effects: Decrypts the encrypted global with the global key
 ##         Prints the decrptyed string
 def decrypt():
     ##Stub
-    print("works")
+    rsf =""
+    i = 0
 
+    ##Gets two letter pairs as first and second
+    while (i < len(encrypted)):
+        first = encrypted[i:i+1]
+        second = encrypted[i+1:i+2]
+
+        if (sameRow(first,second)):
+            ##STUB
+            print("hi")
+        elif (sameCol(first,second)):
+            ##STUB
+            print("hi")
+        else:
+            print("hi")
+        
+        
+        i = i + 2
+
+decrypt()
