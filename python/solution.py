@@ -11,7 +11,7 @@ def generate_grid(key):
     #Initialize the grid with 5x5 empty strings
     grid = [['' for _ in range(5)] for _ in range(5)]
 
-    #Create a set to store the letters that have been added to the grid to prevent duplicates and "J" from being added to grid
+    #Create a set to store the letters that have been added to the grid to prevent duplicates from being added to grid
     added_to_grid = set()
 
     #Accounts for in key cotains "J" and replaces it with "I" and converts the key to uppercase
