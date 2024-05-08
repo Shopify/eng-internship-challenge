@@ -29,8 +29,22 @@ def rect(first,second):
 ##Effects: Decrypts the Row Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
 def row(first,second):
-    ##STUB
-    return ""
+    firstcol = map[first][1]
+    secondcol = map[second][1]
+    row = map[first][0]
+    if(firstcol == 0):
+        firstcol = 4
+    else:
+        firstcol = firstcol-1
+    
+    if(secondcol == 0):
+        secondcol = 4
+    else:
+        secondcol = secondcol-1
+    
+    rsf = key[row][firstcol] + key[row][secondcol]
+
+    return rsf
 
 ##Effects: Decrypts the Col Rule, Returns a two letter string
 ##first, second = the first and second letters to decrypt
