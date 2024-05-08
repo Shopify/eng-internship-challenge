@@ -17,7 +17,7 @@ def create_matrix(key):
         if char not in seen:
             matrix.append(char)
             seen.add(char)
-            
+
     return filtered_key, [matrix[i:i+5] for i in range(0, 25, 5)]
 
 def find_position(char, matrix):
@@ -42,6 +42,7 @@ def playfair_decrypt(key, ciphertext):
     key, matrix = create_matrix(key)
     plaintext = ""
     
+    #Clearing the ciphertext of any spaces and special characters 
     ciphertext = ''.join([c for c in ciphertext.upper() if c in "ABCDEFGHIKLMNOPQRSTUVWXYZ"])
 
     # Appending an uncommon letter at the end to make it even
