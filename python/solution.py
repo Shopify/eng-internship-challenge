@@ -33,14 +33,18 @@ def create_cipher_table(keyword):
 
 
 def find_position(letter, cipher_table):
-    """Find the position (row, col) of a letter in the cipher table."""
+    """
+    Find the position (row, col) of a letter in the cipher table.
+    """
     for row_index, row in enumerate(cipher_table):
         if letter in row:
             return (row_index, row.index(letter))
     return None
 
 def decrypt_digram(digram, cipher_table):
-    """Decrypt a single digram according to Playfair cipher rules."""
+    """
+    Decrypt a single digram according to Playfair cipher rules.
+    """
     row1, col1 = find_position(digram[0], cipher_table)
     row2, col2 = find_position(digram[1], cipher_table)
 
@@ -56,6 +60,33 @@ def decrypt_digram(digram, cipher_table):
 
     return decrypted
 
+def clean_decrypted_message(decrypted_message):
+    """
+    Clean up the decrypted message by handling 
+    padding and special cases, including 'X' characters.
+    """
+    # First pass to remove 'X' that are clearly padding or inserted for repeated letters
+    cleaned_message = ""
+    i = 0
+    while i < len(decrypted_message):
+        if i + 2 < len(decrypted_message) and decrypted_message[i] == decrypted_message[i + 2]:
+            # Check if 'X' is between two same letters
+            if decrypted_message[i + 1] == 'X':
+                cleaned_message += decrypted_message[i]
+                i += 2  # Skip the 'X' and the next repeated letter
+            else:
+                cleaned_message += decrypted_message[i]
+                i += 1
+        else:
+            cleaned_message += decrypted_message[i]
+            i += 1
+
+    # Second pass to remove trailing 'X', if exists
+    if cleaned_message.endswith('X'):
+        cleaned_message = cleaned_message[:-1]
+
+    return cleaned_message
+
 def decrypt_message(encrypted_message, cipher_table):
     """Decrypt an entire message using the Playfair cipher."""
     encrypted_message = encrypted_message.replace(" ", "").upper()
@@ -64,12 +95,14 @@ def decrypt_message(encrypted_message, cipher_table):
     # Process the message in digrams
     for i in range(0, len(encrypted_message), 2):
         digram = encrypted_message[i:i+2]
-        decrypted_message += decrypt_digram(digram, cipher_table)
+        decrypted_digram = decrypt_digram(digram, cipher_table)
+        decrypted_message += decrypted_digram
 
-    return decrypted_message
+    # Handle potential padding 'X' and clean the decrypted message
+    return clean_decrypted_message(decrypted_message)
 
-# Example usage
-cipher_table = create_cipher_table("SUPERSPY")
-encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-decrypted_message = decrypt_message(encrypted_message, cipher_table)
-print(decrypted_message)
+if __name__ == "__main__":
+    cipher_table = create_cipher_table("SUPERSPY")
+    encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    decrypted_message = decrypt_message(encrypted_message, cipher_table)
+    print(decrypted_message)
