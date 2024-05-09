@@ -153,9 +153,6 @@ def clean_message(message, stage):
     elif stage == "decrypted":
         message = message.replace("X", "")
 
-    # check if message properly cleaned (only alphabetic, uppercase characters)
-
-    
     return message
 
 
