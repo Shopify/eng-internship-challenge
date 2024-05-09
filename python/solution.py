@@ -7,9 +7,11 @@ def main():
 
     # Decrypt message
     decrypted = decrypt(MESSAGE, KEY)
+
+    final_answer = check(decrypted)
     
     # Print only the Playfair decrypted text
-    print(decrypted)
+    print(final_answer)
 
 def decrypt(message, key):
 
@@ -31,14 +33,15 @@ def decrypt(message, key):
     while counter < len(message):
 
         # Break ciphertext into chunks of two chars
-        chunk += message[counter:counter+1]
+        chunk = message[counter:counter+2]
 
         # Add decrypted chunks to new message
-        message_decrypted += decrypt_chunk(chunk, message, key, matrix)
+        message_decrypted += decrypt_chunk(chunk, key, matrix)
 
         # Update counter by two to account for the chunks of two chars
         counter += 2
 
+    print("message_decrypted", message_decrypted)
     return message_decrypted
 
 
@@ -48,6 +51,7 @@ def clean_message(message):
     if len(message) % 2 == 1:
         message += 'X'
 
+    print("message", message)
     return message
 
 def clean_key(key):
@@ -62,14 +66,17 @@ def clean_key(key):
     # Create a list of chars unique chars starting with the key and ending with the alphabet
     unique_list = key_unique + [i for i in ALPHABET if i not in unique_chars]
 
+    print("unique_list", unique_list)
     return unique_list
 
-def decrypt_chunk(chunk, message, key, matrix):
+def decrypt_chunk(chunk, key, matrix):
      
+    print("chunk_in", chunk)
+
     # Compare message chunk to playfair matrix
     # Decrypt if letters appear in the same row
     x = 0
-    while x is < len(key):
+    while x < len(key):
         if chunk[0] == key[x]:
             loci0 = x
         elif chunk[1] == key[x]:
@@ -79,18 +86,22 @@ def decrypt_chunk(chunk, message, key, matrix):
     row0, column0 = find_column_and_row(loci0)
     row1, column1 = find_column_and_row(loci1)
 
+    # Decrypt if letters appear in the same row
     if row0 == row1:
-        matrix[][]
-    if column0 == column1:
-
-    else:
-    
+        chunk = matrix[row0][column0-1]
+        chunk += matrix[row1][column1-1]
     # Decrypt if letters appear in the same column
+    if column0 == column1:
+        chunk = matrix[row0][column0-1]
+        chunk += matrix[row1][column1-1]
     # Decrypt if exception
+    else:
+        chunk = matrix[row0][column1]
+        chunk += matrix[row1][column0]
 
-    # Your decrypted string must by entirely UPPER CASE, and not include spaces, the letter "X", or special characters. Ensure you meet all these conditions before outputting the result.
+    print("chunk_out", chunk)
 
-     return
+    return chunk
 
 def find_column_and_row(loci):
     
@@ -102,8 +113,16 @@ def find_column_and_row(loci):
 
     return column, row
 
+def check(message):
+    
+    # Your decrypted string must by entirely UPPER CASE, and not include spaces, the letter "X", or special characters. Ensure you meet all these conditions before outputting the result.
+    new_string = ''
+    for i in range(len(message)):
+        if message[i].isalpha() and message[i].upper() != 'X':
+            new_string += message[i].upper()
 
-
+    print("new_string", new_string)
+    return new_string
 
 if __name__ == '__main__':
     main()
