@@ -27,6 +27,7 @@ RECTAGLE: USE OPPOSITE (3)
 const ENCRYPTED_MESS = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 const KEY = "SUPERSPY";
 
+/*
 let tableCipher = [
   ["S", "U", "P", "E", "R"],
   ["Y", "A", "B", "C", "D"],
@@ -34,19 +35,17 @@ let tableCipher = [
   ["L", "M", "N", "O", "Q"],
   ["T", "V", "W", "X", "Z"],
 ];
+*/
 
 const decryptMessage = decrypt(KEY, ENCRYPTED_MESS);
-
 console.log(decryptMessage);
 
 function decrypt(key, encryptedMessage) {
   let decryptMessage = "";
+  const tableCipher = createTableCipher(key);
 
-  let count = 0;
-
-  while (count < encryptedMessage.length) {
+  for (let count = 0; count < encryptedMessage.length; count += 2) {
     const coupleString = encryptedMessage[count] + encryptedMessage[count + 1];
-    count += 2;
 
     const [row1, column1] = getColumnRow(tableCipher, coupleString[0]);
     const [row2, column2] = getColumnRow(tableCipher, coupleString[1]);
@@ -87,16 +86,50 @@ function decrypt(key, encryptedMessage) {
           }
         }
         break;
-      default: //RECTANGLE
-            {
-                let firstCharDecrypted = tableCipher[row1][column2];
-                let secondCharDecrypted = tableCipher[row2][column1];
-                decryptMessage += firstCharDecrypted + secondCharDecrypted;
-            }
+      default:
+        {
+          //RECTANGLE
+          let firstCharDecrypted = tableCipher[row1][column2];
+          let secondCharDecrypted = tableCipher[row2][column1];
+          decryptMessage += firstCharDecrypted + secondCharDecrypted;
+        }
         break;
     }
   }
-  return decryptMessage.replaceAll('X','');
+  return decryptMessage.replaceAll("X", "");
+}
+
+function createTableCipher(key) {
+  let ALPHA_BET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  ALPHA_BET = ALPHA_BET.replace("J", "");
+  ALPHA_BET = key + ALPHA_BET;
+  ALPHA_BET = removeRepetive(ALPHA_BET);
+
+  let cipherTable = [[], [], [], [], []];
+  let count = 0;
+
+  for (let i = 0; i < cipherTable.length; i++) {
+    for (let j = 0; j < 5; j++) {
+      cipherTable[i].push(ALPHA_BET[count]);
+      count++;
+    }
+  }
+
+  return cipherTable;
+}
+
+function removeRepetive(text) {
+  let cleanedText = "";
+  for (let i = 0; i < text.length; i++) {
+    const currentChar = text[i];
+    if (text.indexOf(currentChar) == -1) {
+      cleanedText += currentChar;
+    } else {
+      cleanedText += currentChar;
+      text = cleanedText + text.substring(i + 1).replaceAll(currentChar, "");
+    }
+  }
+  return cleanedText;
 }
 
 function checkType(row1, column1, row2, column2) {
