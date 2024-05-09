@@ -51,4 +51,3 @@ if __name__ == "__main__":
     matrix = create_a_matrix(key)
     decrypted_message = decrypt_message(ciphertext, matrix)
     print(decrypted_message)
-
