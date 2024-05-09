@@ -2,6 +2,28 @@ class PlayFairCipherDecoder:
   def __init__(self, key):
     self.pf_grid = self.__generate_playfair_grid(key)
   
+  def __insert_into_grid(self, grid: list, letters: str, exclude: set):
+    curIdx = 0
+    seenChars = exclude.copy()
+    curRow = []
+    # Is there room in the last row of the grid to insert?
+    if grid and len(grid[-1]) != 5:
+      curRow = grid.pop()
+    while len(grid) < 5 and curIdx < len(letters):
+      if len(curRow) == 5:
+        grid.append(curRow)
+        curRow = []
+      curChar = letters[curIdx]
+      if curChar in seenChars:
+        curIdx += 1
+        continue
+      seenChars.add(curChar)
+      curRow.append(curChar)
+      curIdx += 1
+    
+    if len(grid) < 5 and 1 <= len(curRow) < 5:
+      grid.append(curRow)
+  
   def __generate_playfair_grid(self, key: str):
     """
     Generates a Playfair Cipher grid, given a key.
@@ -11,35 +33,15 @@ class PlayFairCipherDecoder:
     Returns:
       grid (list(list(str))): The Playfair Grid generated with key
     """
-    grid = []
-    curRow = []
-    curIdx = 0
-    seenChars = set()
-    while curIdx < len(key):
-      if len(curRow) == 5:
-        grid.append(curRow)
-        curRow = []
-      curChar = key[curIdx]
-      if curChar in seenChars:
-        curIdx += 1
-        continue
-      seenChars.add(curChar)
-      curRow.append(curChar)
-      curIdx += 1
+    key = ''.join(key.split(" ")).upper().replace("J", "I")
     # Append the rest of the characters
-    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    curIdx = 0
-    while len(grid) != 5:
-      if len(curRow) == 5:
-        grid.append(curRow)
-        curRow = []
-      curChar = alphabet[curIdx]
-      if curChar in seenChars:
-        curIdx += 1
-        continue
-      seenChars.add(curChar)
-      curRow.append(curChar)
-      curIdx += 1
+    exclude = set()
+    grid = []
+    # First insert key into the grid
+    self.__insert_into_grid(grid, key, exclude)
+    # Next insert the remaining characters of the alphabet (skip j)
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+    self.__insert_into_grid(grid, alphabet, exclude)
     return grid
 
   def decode(self, message: str):
@@ -56,7 +58,7 @@ class PlayFairCipherDecoder:
     return "init"
 
 message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-key = "SUPERSPY"
+key = "PLAY FAIR EXAMPLE"#"SUPERSPY"
 
 playFairCipher = PlayFairCipherDecoder(key)
 print(playFairCipher.decode(message))
