@@ -13,6 +13,7 @@ def main():
     # Print only the Playfair decrypted text
     print(final_answer)
 
+
 def decrypt(message, key):
 
     # Variables
@@ -20,6 +21,7 @@ def decrypt(message, key):
     chunk = ''
     counter = 0
 
+    # Clean message and key
     message = clean_message(message)
     key = clean_key(key)
 
@@ -33,15 +35,16 @@ def decrypt(message, key):
     while counter < len(message):
 
         # Break ciphertext into chunks of two chars
-        chunk = message[counter:counter+2]
+        if message[counter] == message[counter+1]:
+            chunk = message[counter] + 'X'
+            counter += 1
+        else:
+            chunk = message[counter:counter+2]
+            counter += 2
 
         # Add decrypted chunks to new message
         message_decrypted += decrypt_chunk(chunk, matrix)
 
-        # Update counter by two to account for the chunks of two chars
-        counter += 2
-
-    print("message_decrypted", message_decrypted)
     return message_decrypted
 
 
@@ -51,8 +54,8 @@ def clean_message(message):
     if len(message) % 2 == 1:
         message += 'X'
 
-    print("message", message)
     return message
+
 
 def clean_key(key):
      
@@ -66,8 +69,8 @@ def clean_key(key):
     # Create a list of chars unique chars starting with the key and ending with the alphabet
     unique_list = key_unique + [i for i in ALPHABET if i not in unique_chars]
 
-    print("unique_list", unique_list)
     return unique_list
+
 
 def decrypt_chunk(chunk, matrix):
     loci = [(i, row.index(chunk[j])) for j in range(2) for i, row in enumerate(matrix) if chunk[j] in row]
@@ -81,11 +84,11 @@ def decrypt_chunk(chunk, matrix):
     if row0 == row1:
         # Same row, shift columns to the left
         decrypted_chars = [
-            matrix[row0][(col0 - 1) % 5],  # Wrap around using modulus
+            matrix[row0][(col0 - 1) % 5],
             matrix[row1][(col1 - 1) % 5]
         ]
     # Decrypt if letters appear in the same column
-    if col0 == col1:
+    elif col0 == col1:
         # Same column: shift rows up
         decrypted_chars = [
             matrix[(row0 - 1) % 5][col0],
@@ -96,9 +99,8 @@ def decrypt_chunk(chunk, matrix):
         # Rectangle: swap columns
         decrypted_chars = [matrix[row0][col1], matrix[row1][col0]]
 
-    print("chunk_out", chunk)
-
     return ''.join(decrypted_chars)
+
 
 def find_column_and_row(loci):
     
@@ -110,6 +112,7 @@ def find_column_and_row(loci):
 
     return column, row
 
+
 def check(message):
     
     # Your decrypted string must by entirely UPPER CASE, and not include spaces, the letter "X", or special characters. Ensure you meet all these conditions before outputting the result.
@@ -118,8 +121,8 @@ def check(message):
         if message[i].isalpha() and message[i].upper() != 'X':
             new_string += message[i].upper()
 
-    print("new_string", new_string)
     return new_string
+
 
 if __name__ == '__main__':
     main()
