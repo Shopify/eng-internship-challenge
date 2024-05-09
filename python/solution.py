@@ -12,7 +12,7 @@ def create_key_square(key):
             # unique_letters.append(char)
 
     # Fills key square with remaining letters that weren't in the key.
-    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ".replace("J", " ")
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ".replace("J", "")
     for char in alphabet:
         if char not in seen_char:
             # unique_letters.append(char)
@@ -29,10 +29,19 @@ def decrypt_playfair(ciphertext, key):
     size = 5  # Size is 5 as our playfair uses 5x5 matrix
 
     # Decrypt each pair of the characters
-    for i in range(0, len(ciphertext), 2):
-        first, second = ciphertext[i], ciphertext[i+1]
-        row1, col1 = divmod(key_square.index(first), size)
-        row2, col2 = divmod(key_square.index(second), size)
+    for index in range(0, len(ciphertext), 2):
+        first_char = ciphertext[index]
+        second_char = ciphertext[index+1]
+        # Find the indices of the characters in the key square
+        index_first_char = key_square.index(first_char)
+        index_second_char = key_square.index(second_char)
+
+        # Calculate the row and column
+        row1 = index_first_char // size  # Integer division to find the row
+        col1 = index_first_char % size   # modulus to find the column
+
+        row2 = index_second_char // size
+        col2 = index_second_char % size
 
         # Apply decryption rules based on the positions
         if row1 == row2:
