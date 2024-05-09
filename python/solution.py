@@ -4,7 +4,7 @@ def get_cypher(key):
     # Initialize an empty string for the new key without duplicates
     new_key = ''
     # Replace 'J' with 'I' to handle the Playfair cipher rule that merges I and J
-    key = key.replace('J', 'I')
+    key = key.replace('J', 'I').upper()
     # Iterate through the key, adding unique letters to the new_key
     for i in range(0, len(key)):
         if key[i] not in used_letters and ord(key[i])>=65 and ord(key[i])<=90:
@@ -47,6 +47,7 @@ def decrypt_message(encrypted_message, key):
     # Handle odd-length encrypted messages by appending 'X' if necessary
     if len(encrypted_message) % 2 != 0:
         encrypted_message += 'X'
+    encrypted_message = encrypted_message.upper()
     # Initialize the decrypted message
     decrypted_message = ''
     # Decrypt two characters at a time
