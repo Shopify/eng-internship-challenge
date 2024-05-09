@@ -1,7 +1,7 @@
 '''
 Function to convert all the characters of a string to uppercase
 str: a string to be converted
-returns a string convered to upper case
+returns a string converted to upper case
 '''
 def toUpperCase(str):
    return str.upper()
@@ -106,6 +106,7 @@ returns decrypted message
 ''' 
 def decrypt(table, str):
    for i in range(0,len(str),2):
+      # if both same characters, add "X"
       if str[i] == str[i+1]:
          str = str[:i+1] + "X" + str[i+1:]
       pos1 = search(table, str[i])
@@ -143,4 +144,3 @@ if __name__ == '__main__':
    encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
    decryptedMessage = decipher(encryptedMessage,key)
    print(decryptedMessage)
-   
