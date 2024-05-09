@@ -1,7 +1,6 @@
 """
-
+Playfair Cipher
 """
-
 # Constants
 ALPHABET = 'ABCDEFGHIKLMNOPQRSTUVWXYZ' # 'J' is excluded
 KEY = 'SUPERSPY'
@@ -9,7 +8,7 @@ MESSAGE = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
 
 def main():
     """
-    The main function that decrypts a message using the Playfair cipher and prints the decrypted text.
+    The main function that decrypts a message using the Playfair cipher, and prints the decrypted text.
 
     This function takes no parameters.
 
@@ -187,7 +186,7 @@ def check(message):
     # Your decrypted string must by entirely UPPER CASE, and not include spaces, the letter "X", or special characters.
     # Ensure you meet all these conditions before outputting the result.
     new_string = ''
-    for i in enumerate(message):
+    for i in range(len(message)):
         if message[i].isalpha() and message[i].upper() != 'X':
             new_string += message[i].upper()
 
