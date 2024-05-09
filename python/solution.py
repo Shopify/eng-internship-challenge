@@ -36,7 +36,7 @@ def decrypt(message, key):
         chunk = message[counter:counter+2]
 
         # Add decrypted chunks to new message
-        message_decrypted += decrypt_chunk(chunk, key, matrix)
+        message_decrypted += decrypt_chunk(chunk, matrix)
 
         # Update counter by two to account for the chunks of two chars
         counter += 2
@@ -69,39 +69,36 @@ def clean_key(key):
     print("unique_list", unique_list)
     return unique_list
 
-def decrypt_chunk(chunk, key, matrix):
-     
-    print("chunk_in", chunk)
+def decrypt_chunk(chunk, matrix):
+    loci = [(i, row.index(chunk[j])) for j in range(2) for i, row in enumerate(matrix) if chunk[j] in row]
+    if len(loci) != 2:
+        return chunk  # In case of an error or no matches found
 
-    # Compare message chunk to playfair matrix
-    # Decrypt if letters appear in the same row
-    x = 0
-    while x < len(key):
-        if chunk[0] == key[x]:
-            loci0 = x
-        elif chunk[1] == key[x]:
-            loci1 = x
-        x += 1
-
-    row0, column0 = find_column_and_row(loci0)
-    row1, column1 = find_column_and_row(loci1)
+    # Unpack loci
+    (row0, col0), (row1, col1) = loci
 
     # Decrypt if letters appear in the same row
     if row0 == row1:
-        chunk = matrix[row0][column0-1]
-        chunk += matrix[row1][column1-1]
+        # Same row, shift columns to the left
+        decrypted_chars = [
+            matrix[row0][(col0 - 1) % 5],  # Wrap around using modulus
+            matrix[row1][(col1 - 1) % 5]
+        ]
     # Decrypt if letters appear in the same column
-    if column0 == column1:
-        chunk = matrix[row0][column0-1]
-        chunk += matrix[row1][column1-1]
+    if col0 == col1:
+        # Same column: shift rows up
+        decrypted_chars = [
+            matrix[(row0 - 1) % 5][col0],
+            matrix[(row1 - 1) % 5][col1]
+        ]
     # Decrypt if exception
     else:
-        chunk = matrix[row0][column1]
-        chunk += matrix[row1][column0]
+        # Rectangle: swap columns
+        decrypted_chars = [matrix[row0][col1], matrix[row1][col0]]
 
     print("chunk_out", chunk)
 
-    return chunk
+    return ''.join(decrypted_chars)
 
 def find_column_and_row(loci):
     
