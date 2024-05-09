@@ -50,7 +50,6 @@ def decrypt(ciphertext,key):
     # Our inputs are already properly formatted, but incase sanitization is needed
     ciphertext.upper().strip()
     key.upper().strip()
-    if len(ciphertext) // 2 == 1: ciphertext.append("X") # X is my chosen insert character
     
     # Keep a map of letter to coord pairs in the matrix for faster lookup time
     letter_to_coord = {}
