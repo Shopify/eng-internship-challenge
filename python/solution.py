@@ -1,15 +1,31 @@
 import sys
 
 def generate_playfair_grid(key):
+    # Remove 'J' from the base alphabet
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
-    key = key.upper().replace("J", "I")
-    key_set = set(key)
-    grid = []
-    for char in key + alphabet:
-        if char not in key_set:
-            key_set.add(char)
-            grid.append(char)
-    return [grid[i:i+5] for i in range(0, len(grid), 5)]
+    
+    # Remove duplicates from the key while preserving order
+    seen = set()
+    key = ''.join(char for char in key.upper() if not (char in seen or seen.add(char)))
+    
+    # Concatenate key and alphabet
+    key_alphabet = key + alphabet
+    
+    # Create the grid string
+    grid_string = ''
+    for char in key_alphabet:
+        if char not in grid_string:
+            grid_string += char
+    
+    # Fill in missing letters if necessary
+    for char in alphabet:
+        if char not in grid_string:
+            grid_string += char
+    
+    # Convert the grid string to a 5x5 grid
+    grid_matrix = [list(grid_string[i:i+5]) for i in range(0, 25, 5)]
+    
+    return grid_matrix
 
 def decrypt_playfair(ciphertext, key):
     grid = generate_playfair_grid(key)
@@ -18,9 +34,17 @@ def decrypt_playfair(ciphertext, key):
     
     # Find positions of letters in the grid
     positions = {}
-    for i in range(len(grid)):
-        for j in range(len(grid[i])):
+    for i in range(5):
+        for j in range(5):
             positions[grid[i][j]] = (i, j)
+    
+    # Insert 'X' between consecutive identical letters
+    i = 0
+    while i < len(ciphertext) - 1:
+        if ciphertext[i] == ciphertext[i+1]:
+            ciphertext = ciphertext[:i+1] + 'X' + ciphertext[i+1:]
+            i += 1  # Increment i to skip the inserted 'X'
+        i += 2
     
     # Decrypt pairs of letters
     i = 0
@@ -37,16 +61,14 @@ def decrypt_playfair(ciphertext, key):
         row1, col1 = positions[char1]
         row2, col2 = positions[char2]
         
-        # Same row
-        if row1 == row2:
+        # Decrypt characters based on their positions in the grid
+        if row1 == row2:  # Same row
             plaintext += grid[row1][(col1 - 1) % 5]
             plaintext += grid[row2][(col2 - 1) % 5]
-        # Same column
-        elif col1 == col2:
+        elif col1 == col2:  # Same column
             plaintext += grid[(row1 - 1) % 5][col1]
             plaintext += grid[(row2 - 1) % 5][col2]
-        # Rectangle
-        else:
+        else:  # Rectangle
             plaintext += grid[row1][col2]
             plaintext += grid[row2][col1]
         
