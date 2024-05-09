@@ -7,7 +7,7 @@ def get_cypher(key):
     key = key.replace('J', 'I')
     # Iterate through the key, adding unique letters to the new_key
     for i in range(0, len(key)):
-        if key[i] not in used_letters:
+        if key[i] not in used_letters and ord(key[i])>=65 and ord(key[i])<=90:
             new_key += key[i]
             used_letters[key[i]] = 1
     # Complete the key by adding unused letters of the alphabet, excluding 'J'
