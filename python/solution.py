@@ -90,13 +90,13 @@ def search(table, ch):
 
 '''
 Function to find the modulus of 5
-a: num to find the modulus of 5
+num: num to find the modulus of 5
 returns the modulus of 5
 ''' 
-def mod5(a):   
-   if a < 0:
-      return a     
-   return a % 5
+def mod5(num):   
+   if num < 0:
+      return num     
+   return num % 5
 
 '''
 Function to decrypt
@@ -109,6 +109,7 @@ def decrypt(table, str):
       # if both same characters, add "X"
       if str[i] == str[i+1]:
          str = str[:i+1] + "X" + str[i+1:]
+
       pos1 = search(table, str[i])
       pos2 = search(table, str[i+1])
       # same row
@@ -138,6 +139,7 @@ def decipher(str, key):
    table = generateTable(key)
    decryptedMessage =decrypt(table, str)
    return decryptedMessage
+
 
 if __name__ == '__main__':
    key = "SUPERSPY"
