@@ -1,10 +1,18 @@
-# Python code to solve playfair cipher problem
+# Python code to solve Playfair cipher problem
 
-# Function to generate the key square 
-def generate_key_square(key):
-    key = key.replace("J", "I")  # Replace J with I
-    key_square = [] 
-    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"  # J is omitted
+
+from typing import List, Tuple
+
+
+# Function to generate the key square
+def generate_key_square(key: str) -> List[List[str]]:
+    """
+    Generate a 5x5 matrix (key square) from the given key.
+    Replaces all occurrences of 'J' with 'I'.
+    """
+    key = key.replace("J", "I")  # Replace 'J' with 'I'
+    key_square = []
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"  # 'J' is omitted
 
     # Add the key to the key square
     for letter in key:
@@ -17,44 +25,64 @@ def generate_key_square(key):
             key_square.append(letter)
 
     # Reshape the key square to a 5x5 matrix
-    key_square = [key_square[i:i+5] for i in range(0, 25, 5)]  
+    return [key_square[i:i + 5] for i in range(0, 25, 5)]
 
-    return key_square
 
 # Function to split the encoded text into pairs of two letters
-def split_encoded_text(encoded_text):
-    # Split the encoded text into pairs of two letters
-    encoded_text_pairs = [encoded_text[i:i+2] for i in range(0, len(encoded_text), 2)]
+def split_encoded_text(encoded_text: str) -> List[str]:
+    """
+    Split the encoded text into pairs of two letters.
+    """
+    return [encoded_text[i:i + 2] for i in range(0, len(encoded_text), 2)]
 
-    return encoded_text_pairs
 
 # Function to find the position of a letter in the key square
-def find_position(letter, key_square):
-    letter = 'I' if letter == 'J' else letter  # Replace J with I
+def find_position(letter: str, key_square: List[List[str]]) -> Tuple[int, int]:
+    """
+    Find the position of a letter in the key square.
+    Replaces 'J' with 'I'.
+    """
+    letter = 'I' if letter == 'J' else letter  # Replace 'J' with 'I'
     for i in range(5):
         if letter in key_square[i]:
-            return (i, key_square[i].index(letter))
-        
+            return i, key_square[i].index(letter)
+    raise ValueError(f"Letter '{letter}' not found in the key square.")
+
+
 # Function to decrypt the encoded pair
-def decrypt_pair(pair, key_square):
-    # Find position of pair 
+def decrypt_pair(pair: str, key_square: List[List[str]]) -> Tuple[str, str]:
+    """
+    Decrypt a pair of letters according to Playfair cipher rules.
+    """
+    # Find position of the pair
     letter1_pos = find_position(pair[0], key_square)
     letter2_pos = find_position(pair[1], key_square)
 
     # If the letters are in the same row
     if letter1_pos[0] == letter2_pos[0]:
-        decrypted_pair = (key_square[letter1_pos[0]][(letter1_pos[1]-1)%5], key_square[letter2_pos[0]][(letter2_pos[1]-1)%5])
+        return (
+            key_square[letter1_pos[0]][(letter1_pos[1] - 1) % 5],
+            key_square[letter2_pos[0]][(letter2_pos[1] - 1) % 5],
+        )
     # If the letters are in the same column
     elif letter1_pos[1] == letter2_pos[1]:
-        decrypted_pair = (key_square[(letter1_pos[0]-1)%5][letter1_pos[1]], key_square[(letter2_pos[0]-1)%5][letter2_pos[1]])
+        return (
+            key_square[(letter1_pos[0] - 1) % 5][letter1_pos[1]],
+            key_square[(letter2_pos[0] - 1) % 5][letter2_pos[1]],
+        )
     # If the letters form a rectangle
     else:
-        decrypted_pair = (key_square[letter1_pos[0]][letter2_pos[1]], key_square[letter2_pos[0]][letter1_pos[1]])
-        
-    return decrypted_pair
+        return (
+            key_square[letter1_pos[0]][letter2_pos[1]],
+            key_square[letter2_pos[0]][letter1_pos[1]],
+        )
+
 
 # Function to decrypt the encoded text
-def decrypt_text(key, encoded_text):
+def decrypt_text(key: str, encoded_text: str) -> str:
+    """
+    Decrypt the encoded text using the provided key.
+    """
     # Convert key and encoded text to uppercase
     key = key.upper()
     encoded_text = encoded_text.upper()
@@ -73,57 +101,49 @@ def decrypt_text(key, encoded_text):
 
     return decrypted_text
 
-# Clean up decrypted text
-def clean_text(text):
-    # If the last letter is X, remove it
-    if text[-1] == "X":
-        text = text[:-1]
 
-    # If there is X in between two same letters, remove it
-    text = "".join([text[i] for i in range(len(text)-1) if text[i] != "X" or text[i-1] != text[i+1]]) + text[-1]
-
-    return text
-
-# Input and Encoded text validation
-def text_verification(text, is_encoded = False):
-    # Check if space is present in the text
-    if " " in text:
-        text = text.replace(" ", "")
-
-    # Check if all characters are alphabets
+# Function to validate and clean up the input text
+def text_verification(text: str, is_encoded: bool = False) -> Tuple[str, bool]:
+    """
+    Validate and clean the input text. If 'is_encoded' is True, ensure it's of even length.
+    """
+    # Remove spaces and ensure only alphabets remain
+    text = text.replace(" ", "")
     if not text.isalpha():
         return text, False
-    
-    # Check if all characters are uppercase
-    if not text.isupper():
-        text = text.upper()
-    
-    # Check if encoded text is of even length
+
+    # Convert to uppercase
+    text = text.upper()
+
+    # If encoded, ensure even length
     if is_encoded and len(text) % 2 != 0:
         return text, False
-    
+
     return text, True
-    
-    
+
+
+# Main function
 def main():
-    key = "TestJ"
-    encoded_text = "IAmAmazingJK"
+    key = "SUPERSPY"
+    encoded_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
     # Text validation
     key, key_valid = text_verification(key)
     encoded_text, encoded_text_valid = text_verification(encoded_text, True)
 
     if not key_valid:
-        print("Invalid key")
+        print("Invalid key.")
         return
     elif not encoded_text_valid:
-        print("Invalid encoded text")
+        print("Invalid encoded text.")
         return
 
     # Decrypt the encoded text
     decrypted_text = decrypt_text(key, encoded_text)
 
-    print(clean_text(decrypted_text))
+    # Remove 'X' used as padding characters in the decrypted message
+    print(decrypted_text.replace("X", ""))
+
 
 if __name__ == "__main__":
     main()
