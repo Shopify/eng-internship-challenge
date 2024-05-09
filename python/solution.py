@@ -95,12 +95,15 @@ if __name__ == "__main__":
     
     key = "SUPERSPY"
     ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    decrypted_text = decrypt_playfair(ciphertext, key)
+    print(f"key: {key} ciphertext: {ciphertext}\ndecrypt_text: {decrypted_text}")
     
     # key = "monarchy"
     # ciphertext = "gatlmzclrqtx"
+    # decrypted_text = decrypt_playfair(ciphertext, key)
+    # print(f"key: {key} ciphertext: {ciphertext}\ndecrypt_text: {decrypted_text}")
     
     # key = "Shaco"
     # ciphertext = "ASXHGSPUCLOEMSUTMSLKVKRAMNHLFXGZBKHCRVRBEX"
-    
-    decrypted_text = decrypt_playfair(ciphertext, key)
-    print(decrypted_text)
+    # decrypted_text = decrypt_playfair(ciphertext, key)
+    # print(f"key: {key} ciphertext: {ciphertext}\ndecrypt_text: {decrypted_text}")
