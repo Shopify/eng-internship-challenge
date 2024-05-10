@@ -108,8 +108,8 @@ def decrypt_string(table, char_indices):
             original_string += table[r1][c2]
             original_string += table[r2][c1]
 
-    # Remove any 'X's from the result
-    original_string = original_string.replace("X", "")
+    # Remove any 'X's or spaces from the result
+    original_string = original_string.replace("X", "").replace(" ", "")
 
     return original_string
 
