@@ -1,6 +1,7 @@
 // This program will allow the user to perform Playfair Cipher given:
 //   - keyword as a secret to this algorithm
 //   - message to be encrypted or decrypted
+
 package main
 
 import (
@@ -85,7 +86,7 @@ func NewPfCipher() *PfCipher {
 }
 
 // Initializes a 5*5 matrix for Playfair Cipher. This will be
-// filled with the keyword and the remaining words of the english 
+// filled with the keyword and the remaining words of the english
 // alphabet that did not exist in keyword
 func (p *PfCipher) newMatrix() {
 	mat := make([][]rune, matrixSize)
@@ -95,7 +96,7 @@ func (p *PfCipher) newMatrix() {
 	p.Matrix = mat
 }
 
-// Ensures the provided keyword by the user is valid for 
+// Ensures the provided keyword by the user is valid for
 // Playfair Cipher algorithm.
 func (p *PfCipher) validateKeyword(keyword string) error {
 	keyword = strings.TrimSpace(keyword)
@@ -356,7 +357,6 @@ func main() {
 
 	pfCipher := NewPfCipher()
 	pfCipher.SetUpMatrix(keyword)
-
 	decryptedMsg := pfCipher.Decrypt(messageToDecrypt)
 	fmt.Println(decryptedMsg)
 }

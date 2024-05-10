@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "os"
 	"os/exec"
 	"strings"
 	"testing"
@@ -21,7 +20,4 @@ func TestSolutionOutput(t *testing.T) {
 	if output != expected {
 		t.Errorf("Unexpected output, got: %q, want: %q", output, expected)
 	}
-
-
-// speicalhh
 }
