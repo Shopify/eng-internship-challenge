@@ -38,10 +38,14 @@ func IsInvalidRune(r rune) bool {
 	return unicode.IsSpace(r) || unicode.IsDigit(r) || unicode.IsPunct(r) || unicode.IsSymbol(r)
 }
 
+// To check if J exists in the user message for encryption
+// so it will be replaced by I based on Playfair Cipher rules
 func IsRuneJ(r rune) bool {
 	return r == 'J'
 }
 
+// This is to exclude the unacceptable runes for the final slice or rune
+// since the instructions specifically asks for this
 func IsValidForDecrypted(r rune) bool {
 	if IsInvalidRune(r) {
 		return false
