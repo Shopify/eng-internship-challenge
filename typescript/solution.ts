@@ -1,25 +1,5 @@
 /**
-* Encrypted message: IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV
-* Keyword: SUPERSPY
-*
-* Encryption Steps:
-*  1.Generate key table (cipher key)
-*    a. 5x5 table
-*    b. fill table with letters of keyword without duplicates (SUPERY)
-*    c. fill the rest of the table with letters of the alphabet in order omitting `J`
-*       NOTE: keyword can be written from left to right or other pattern like a spiral
-*
-*  Encrypt message
-*
-*  2. 
-*     a. break message in to groups of 2 letters ("HelloWorld" becomes "HE LL OW OR LD"). 
-  *      These digrams will be substituted using the key table.
-  *   b. message with an odd number of letters should be appended with `X`
-*  3. Enrypt each diagram
-*     1. if letters are same or there is 1 letter add "X" after second letter then encrypt new pair
-*
-* Decryption Steps
-*   1. 
+* Abdullah Morrison
 */
 
 const table: string[][] = []
