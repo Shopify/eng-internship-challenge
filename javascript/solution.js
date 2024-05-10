@@ -44,9 +44,7 @@ function createMatrix(key) {
     const matrix = [];
     const letters = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
     const set = new Set();
-    let index = 0;
-    // replace J in the key with I to make sure this matrix contains all letters but J.
-    key = key.replaceAll('J', 'I');
+    let index = 0;    
     
     // add key into matrix first
     for (const letter of key) {
