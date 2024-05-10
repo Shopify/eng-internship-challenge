@@ -5,7 +5,7 @@ const message: string = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 const cipher: string = "SUPERSPY";
 
 // Generate key table
-const keys: string[] = [...new Set(`${cipher}ABCDEFGHIKLMNOPQRSTUVWXYZ`.split(""))]
+const keys: string[] = [...new Set(`${cipher}ABCDEFGHIKLMNOPQRSTUVWXYZ`.split(""))] // JS Sets retain order
 
 let keyTable: string[][] = []
 let row: string[] = []
