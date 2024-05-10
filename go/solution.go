@@ -360,7 +360,9 @@ func main() {
 	messageToDecrypt := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
 	pfCipher := NewPfCipher()
-	pfCipher.SetUpMatrix(keyword)
+	if err := pfCipher.SetUpMatrix(keyword); err != nil {
+		panic(err)
+	}
 	decryptedMsg := pfCipher.Decrypt(messageToDecrypt)
 	fmt.Println(decryptedMsg)
 }
