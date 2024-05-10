@@ -1,14 +1,19 @@
+// This program will allow the user to perform Playfair Cipher given:
+//   - keyword as a secret to this algorithm
+//   - message to be encrypted or decrypted
 package main
 
 import (
 	"fmt"
+	"strings"
 	"unicode"
 )
 
 // Size of the matrix for Playfair Cipher
 // Both for rows and cols
 const (
-	matrixSize = 5
+	matrixSize       = 5
+	matrixValidBound = matrixSize - 1
 )
 
 // Define a custom type for the matrix of algorithm
@@ -26,9 +31,6 @@ func NewLetterLocation(x, y int) *LetterLocation {
 	}
 }
 
-/*
-Utils
-*/
 // If the given rune is space, digit, a puncuation, or a symbol, it will return false.
 // This is to remove the speical characters in the input message
 func IsInvalidRune(r rune) bool {
@@ -44,17 +46,6 @@ func IsValidForDecrypted(r rune) bool {
 		return false
 	}
 	return r != 'X'
-}
-
-func GetAlphabetLettersWihtoutJ() []rune {
-	letters := make([]rune, 0, 25)
-	for ch := 'A'; ch <= 'Z'; ch++ {
-		if ch == 'J' {
-			continue
-		}
-		letters = append(letters, ch)
-	}
-	return letters
 }
 
 // PfCipher holds all the necessary information for Playfair Cipher
@@ -90,8 +81,12 @@ func NewPfCipher() *PfCipher {
 		LettersLocation:         map[rune]*LetterLocation{},
 		LastEmptyIdx:            0,
 	}
+
 }
 
+// Initializes a 5*5 matrix for Playfair Cipher. This will be
+// filled with the keyword and the remaining words of the english 
+// alphabet that did not exist in keyword
 func (p *PfCipher) newMatrix() {
 	mat := make([][]rune, matrixSize)
 	for i := 0; i < matrixSize; i++ {
@@ -100,18 +95,33 @@ func (p *PfCipher) newMatrix() {
 	p.Matrix = mat
 }
 
+// Ensures the provided keyword by the user is valid for 
+// Playfair Cipher algorithm.
 func (p *PfCipher) validateKeyword(keyword string) error {
+	keyword = strings.TrimSpace(keyword)
 	if len(keyword) == 0 {
-		return fmt.Errorf("provided string must have at least one character")
+		return fmt.Errorf("provided keyword must have at least one character")
 	}
 	if len(keyword) > 25 {
-		return fmt.Errorf("provided string must have less than or equal to 25 characters")
+		return fmt.Errorf("provided keyword must have less than or equal to 25 characters")
 	}
+
+	// handling digits and special characters
+	for _, char := range keyword {
+		if IsInvalidRune(char) {
+			return fmt.Errorf("provided keyword must not contain special chars but found %v", char)
+		}
+	}
+
 	return nil
 }
 
+// Finds the unique letters in the keyword provided by the user
+// since Playfair Cipher needs to be filled row by row based on these
+// unique letters
 func (p *PfCipher) findUniqueKeywordLetters(keyword string) {
 	p.UniqueKeywordLetters = make([]rune, 0, len(keyword))
+
 	for _, char := range keyword {
 		upperRune := unicode.ToUpper(char)
 		_, prs := p.UniqueKeywordLettersSet[upperRune]
@@ -133,15 +143,33 @@ func (p *PfCipher) extractLocationFromPair(pair []rune) (int, int, int, int) {
 	return firstX, firstY, secondX, secondY
 }
 
+// Returns a slice of rune of all the uppercase letter of english
+// alphabet excluding J based on the rules of Playfair Cipher
+func (p *PfCipher) getAlphabetLettersWihtoutJ() []rune {
+	letters := make([]rune, 0, 25)
+	for ch := 'A'; ch <= 'Z'; ch++ {
+		if ch == 'J' {
+			continue
+		}
+		letters = append(letters, ch)
+	}
+	return letters
+}
+
 // Sets up the Playfair Cipher matrix using the provided keyword
-func (p *PfCipher) SetUpMatrix(keyword string, alphabetLetters []rune) error {
+func (p *PfCipher) SetUpMatrix(keyword string) error {
+	// keyword preparation
+	alphabetLetters := p.getAlphabetLettersWihtoutJ()
 	if err := p.validateKeyword(keyword); err != nil {
 		return err
 	}
 	p.findUniqueKeywordLetters(keyword)
 
+	// Setting up the matrix
 	p.newMatrix()
-	// KeywordLetters field has all the unique values of the keyword
+
+	// First, filling the matrix row by row with the unique
+	// runes from keyword
 	for _, char := range p.UniqueKeywordLetters {
 		i := p.LastEmptyIdx / matrixSize
 		j := p.LastEmptyIdx % matrixSize
@@ -150,12 +178,13 @@ func (p *PfCipher) SetUpMatrix(keyword string, alphabetLetters []rune) error {
 		p.LastEmptyIdx++
 	}
 
+	// Fill the rest of the matrix with the remaining letters of alphabet
+	// that does not exist in keyword
 	for _, letterRune := range alphabetLetters {
 		_, prs := p.UniqueKeywordLettersSet[letterRune]
 		if prs {
 			continue
 		}
-
 		i := p.LastEmptyIdx / matrixSize
 		j := p.LastEmptyIdx % matrixSize
 		p.Matrix[i][j] = letterRune
@@ -214,7 +243,10 @@ func (p *PfCipher) prepareMessage(message string) {
 	p.Message = finalMsg
 }
 
-// Encrypts the provided message
+// Encrypts the provided message.
+//
+// The message must not contains any special characters or spaces
+// in the middle of string.
 func (p *PfCipher) Encrypt(message string) string {
 	p.prepareMessage(message)
 	encryptedMsg := make([]rune, 0, len(p.Message))
@@ -229,11 +261,10 @@ func (p *PfCipher) Encrypt(message string) string {
 			// adding one to col index to achieve this
 			firstY++
 			secondY++
-
-			if firstY > matrixSize-1 {
+			if firstY > matrixValidBound {
 				firstY = 0
 			}
-			if secondY > matrixSize-1 {
+			if secondY > matrixValidBound {
 				secondY = 0
 			}
 
@@ -243,11 +274,10 @@ func (p *PfCipher) Encrypt(message string) string {
 			// adding one to the row to achieve this
 			firstX++
 			secondX++
-
-			if firstX > matrixSize-1 {
+			if firstX > matrixValidBound {
 				firstX = 0
 			}
-			if secondX > matrixSize-1 {
+			if secondX > matrixValidBound {
 				secondX = 0
 			}
 
@@ -263,7 +293,8 @@ func (p *PfCipher) Encrypt(message string) string {
 	return string(encryptedMsg)
 }
 
-// Decrypts the provdid message
+// Decrypts the provided message based on the keyword
+// passed to the PfCipher struct
 func (p *PfCipher) Decrypt(message string) string {
 	decryptedMsg := make([]rune, 0, len(message))
 	messageRune := []rune(message)
@@ -281,10 +312,10 @@ func (p *PfCipher) Decrypt(message string) string {
 
 			// wrap around the matrix if idx was zero
 			if firstY < 0 {
-				firstY = matrixSize - 1
+				firstY = matrixValidBound
 			}
 			if secondY < 0 {
-				secondY = matrixSize - 1
+				secondY = matrixValidBound
 			}
 
 			// if two letters/runes are on the same col
@@ -296,10 +327,10 @@ func (p *PfCipher) Decrypt(message string) string {
 
 			// wrap around the matrix if idx was zero
 			if firstX < 0 {
-				firstX = matrixSize - 1
+				firstX = matrixValidBound
 			}
 			if secondX < 0 {
-				secondX = matrixSize - 1
+				secondX = matrixValidBound
 			}
 
 			// Case of Rectangle formation
@@ -319,19 +350,12 @@ func (p *PfCipher) Decrypt(message string) string {
 }
 
 func main() {
-	alphabetLetters := GetAlphabetLettersWihtoutJ()
 	keyword := "SUPERSPY"
-
-	messageToEncrypt := "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
+	// messageToEncrypt := "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
 	messageToDecrypt := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
 	pfCipher := NewPfCipher()
-	pfCipher.SetUpMatrix(keyword, alphabetLetters)
-
-	fmt.Println("original message: ", messageToEncrypt)
-	encryptedMsg := pfCipher.Encrypt(messageToEncrypt)
-	fmt.Println("encrypted: ", encryptedMsg)
-	fmt.Println(encryptedMsg == messageToDecrypt)
+	pfCipher.SetUpMatrix(keyword)
 
 	decryptedMsg := pfCipher.Decrypt(messageToDecrypt)
 	fmt.Println(decryptedMsg)
