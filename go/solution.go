@@ -5,10 +5,16 @@ import (
 	"unicode"
 )
 
+// Size of the matrix for Playfair Cipher
+// Both for rows and cols
 const (
 	matrixSize = 5
 )
 
+// Define a custom type for the matrix of algorithm
+type PfMatrix [][]rune
+
+// Tracks the location of each letter by storing its row and col
 type LetterLocation struct {
 	X, Y int
 }
@@ -21,16 +27,9 @@ func NewLetterLocation(x, y int) *LetterLocation {
 
 }
 
-type PfMatrix [][]rune
-
-func NewMatrix() PfMatrix {
-	mat := make([][]rune, matrixSize)
-	for i := 0; i < matrixSize; i++ {
-		mat[i] = make([]rune, matrixSize)
-	}
-	return mat
-}
-
+/*
+Utils
+*/
 // If the given rune is space, digit, a puncuation, or a symbol, it will return false.
 // This is to remove the speical characters in the input message
 func IsInvalidRune(r rune) bool {
@@ -59,75 +58,120 @@ func GetAlphabetLettersWihtoutJ() []rune {
 	return letters
 }
 
+// PfCipher holds all the necessary information for Playfair Cipher
 type PfCipher struct {
-	LastEmptyIdx    int
-	Message         []rune
-	KeywordLetters  []rune
-	ExistingChars   map[rune]bool
+	// Last index to be filled by the rest of the alphabet
+	// after embedding the keyword in the matrix
+	LastEmptyIdx int
+
+	// Holds a modified version of the message that needs to be
+	// encrypted.
+	Message []rune
+
+	// Contains all the unique letters of keyword
+	UniqueKeywordLetters []rune
+
+	// Map that acts as a set to keep track of the keyword letters
+	// and to be able to find the unqiue values
+	UniqueKeywordLettersSet map[rune]bool
+
+	// Location (row and col) of every letter in the matrix
 	LettersLocation map[rune]*LetterLocation
-	Matrix          PfMatrix
+
+	// Playfair cipher matrix that holds the keyword and rest of the alphabet
+	// with the condition that there is no 'J' and all the letters unique
+	Matrix PfMatrix
 }
 
-func NewPfCipher(keyword string) *PfCipher {
-	if len(keyword) == 0 {
-		fmt.Println("provided string must have at least one character")
-		return nil
+// Starting a new cipher struct to be able to encrypt or decrypt the
+// user's message
+func NewPfCipher() *PfCipher {
+	return &PfCipher{
+		UniqueKeywordLettersSet: map[rune]bool{},
+		LettersLocation:         map[rune]*LetterLocation{},
+		LastEmptyIdx:            0,
 	}
-
-	if len(keyword) > 25 {
-		fmt.Println("provided string must have less than or equal to 25 characters")
-		return nil
-	}
-
-	pfc := PfCipher{
-		ExistingChars:   map[rune]bool{},
-		LettersLocation: map[rune]*LetterLocation{},
-		KeywordLetters:  make([]rune, 0, len(keyword)),
-	}
-
-	for _, char := range keyword {
-		upperRune := unicode.ToUpper(char)
-		_, prs := pfc.ExistingChars[upperRune]
-		if prs {
-			continue
-		}
-		pfc.ExistingChars[upperRune] = true
-		pfc.KeywordLetters = append(pfc.KeywordLetters, upperRune)
-	}
-
-	return &pfc
 }
 
-func (p *PfCipher) SetUpMatrix(alphabetLetters []rune) {
-	mat := NewMatrix()
-	lastEmptyIdx := 0
-
-	// KeywordLetters field has all the unique values of the keyword
-	for _, char := range p.KeywordLetters {
-		i := lastEmptyIdx / matrixSize
-		j := lastEmptyIdx % matrixSize
-		mat[i][j] = char
-		p.LettersLocation[char] = NewLetterLocation(i, j)
-		lastEmptyIdx++
+func (p *PfCipher) newMatrix() {
+	mat := make([][]rune, matrixSize)
+	for i := 0; i < matrixSize; i++ {
+		mat[i] = make([]rune, matrixSize)
 	}
-
-	for _, letterRune := range alphabetLetters {
-		_, prs := p.ExistingChars[letterRune]
-		if prs {
-			continue
-		}
-
-		i := lastEmptyIdx / matrixSize
-		j := lastEmptyIdx % matrixSize
-		mat[i][j] = letterRune
-		p.LettersLocation[letterRune] = NewLetterLocation(i, j)
-		lastEmptyIdx++
-	}
-
-	p.LastEmptyIdx = lastEmptyIdx
 	p.Matrix = mat
 }
 
+func (p *PfCipher) validateKeyword(keyword string) error {
+	if len(keyword) == 0 {
+		return fmt.Errorf("provided string must have at least one character")
+	}
+	if len(keyword) > 25 {
+		return fmt.Errorf("provided string must have less than or equal to 25 characters")
+	}
+	return nil
+}
+
+func (p *PfCipher) findUniqueKeywordLetters(keyword string) {
+	p.UniqueKeywordLetters = make([]rune, 0, len(keyword))
+	for _, char := range keyword {
+		upperRune := unicode.ToUpper(char)
+		_, prs := p.UniqueKeywordLettersSet[upperRune]
+		if prs {
+			continue
+		}
+		p.UniqueKeywordLettersSet[upperRune] = true
+		p.UniqueKeywordLetters = append(p.UniqueKeywordLetters, upperRune)
+	}
+}
+
+// After receving a pair of runes (digraphs), it returns the row and col of 
+// each rune
+func (p *PfCipher) extractLocationFromPair(pair []rune) (int, int, int, int) {
+	firstX := p.LettersLocation[pair[0]].X
+	firstY := p.LettersLocation[pair[0]].Y
+	secondX := p.LettersLocation[pair[1]].X
+	secondY := p.LettersLocation[pair[1]].Y
+	return firstX, firstY, secondX, secondY
+}
+
+// Sets up the Playfair Cipher matrix using the provided keyword
+func (p *PfCipher) SetUpMatrix(keyword string, alphabetLetters []rune) error {
+	if err := p.validateKeyword(keyword); err != nil {
+		return err
+	}
+	p.findUniqueKeywordLetters(keyword)
+
+	p.newMatrix()
+	// KeywordLetters field has all the unique values of the keyword
+	for _, char := range p.UniqueKeywordLetters {
+		i := p.LastEmptyIdx / matrixSize
+		j := p.LastEmptyIdx % matrixSize
+		p.Matrix[i][j] = char
+		p.LettersLocation[char] = NewLetterLocation(i, j)
+		p.LastEmptyIdx++
+	}
+
+	for _, letterRune := range alphabetLetters {
+		_, prs := p.UniqueKeywordLettersSet[letterRune]
+		if prs {
+			continue
+		}
+
+		i := p.LastEmptyIdx / matrixSize
+		j := p.LastEmptyIdx % matrixSize
+		p.Matrix[i][j] = letterRune
+		p.LettersLocation[letterRune] = NewLetterLocation(i, j)
+		p.LastEmptyIdx++
+	}
+
+	return nil
+}
+
+// Prepare the message for encryption. It gets rid of the special
+// characters and letter 'J'. Then, each rune becomes uppercase.
+// Finally, the repeated letters are dealt with using a filler 'X'
+// and if the length of the []rune was not even, another 'X' gets added
+// to the end of the message
 func (p *PfCipher) PrepareMessage(message string) {
 	originalMsg := []rune(message)
 	normalizedMsg := make([]rune, 0, len(originalMsg))
@@ -147,46 +191,27 @@ func (p *PfCipher) PrepareMessage(message string) {
 		normalizedMsg = append(normalizedMsg, unicode.ToUpper(char))
 	}
 
-	// Create digraphs and handle same letter situation
+	// Create digraphs and handle same letter issue
 	finalMsg := make([]rune, 0, len(normalizedMsg))
 	for i := 0; i < len(normalizedMsg); i++ {
-		if i+1 < len(normalizedMsg) && normalizedMsg[i] == normalizedMsg[i+1] {
+		if i < len(normalizedMsg)-1 && normalizedMsg[i] == normalizedMsg[i+1] {
 			finalMsg = append(finalMsg, normalizedMsg[i], 'X')
-			i++ // skip the next since it's the same and we've added 'X'
+			i++
+
 		} else {
 			finalMsg = append(finalMsg, normalizedMsg[i])
 		}
 	}
 
-	// Add 'X' if odd number of runes
+	// make the number of letters even
 	if len(finalMsg)%2 != 0 {
 		finalMsg = append(finalMsg, 'X')
 	}
 
-	// // Create digraphs
-	// finalMsg := make([]rune, 0, len(normalizedMsg))
-	// for i := 0; i < len(normalizedMsg)-1; i += 2 {
-	// 	pair := normalizedMsg[i : i+2]
-	// 	if pair[0] == pair[1] {
-	// 		pair[1] = 'X'
-	// 	}
-	// 	finalMsg = append(finalMsg, pair...)
-	// }
-
-	// if len(finalMsg)%2 != 0 {
-	// 	finalMsg = append(finalMsg, 'X')
-	// }
 	p.Message = finalMsg
 }
 
-func (p *PfCipher) extractLocationFromPair(pair []rune) (int, int, int, int) {
-	firstX := p.LettersLocation[pair[0]].X
-	firstY := p.LettersLocation[pair[0]].Y
-	secondX := p.LettersLocation[pair[1]].X
-	secondY := p.LettersLocation[pair[1]].Y
-	return firstX, firstY, secondX, secondY
-}
-
+// Encrypts the provided message
 func (p *PfCipher) Encrypt(message string) string {
 	p.PrepareMessage(message)
 	encryptedMsg := make([]rune, 0, len(p.Message))
@@ -227,6 +252,7 @@ func (p *PfCipher) Encrypt(message string) string {
 	return string(encryptedMsg)
 }
 
+// Decrypts the provdid message 
 func (p *PfCipher) Decrypt(message string) string {
 	decryptedMsg := make([]rune, 0, len(message))
 	messageRune := []rune(message)
@@ -281,14 +307,18 @@ func (p *PfCipher) Decrypt(message string) string {
 func main() {
 	alphabetLetters := GetAlphabetLettersWihtoutJ()
 	keyword := "SUPERSPY"
-	messageToEncrypt := "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
+
+	// messageToEncrypt := "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
+	// messageToEncrypt := "HIPXPOPOTOMONSTROSESQUIPPEDALIOPHOBIAX"
 	messageToDecrypt := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
-	pfCipher := NewPfCipher(keyword)
-	pfCipher.SetUpMatrix(alphabetLetters)
+	pfCipher := NewPfCipher()
+	pfCipher.SetUpMatrix(keyword, alphabetLetters)
+
+	// encryptedMsg := pfCipher.Encrypt(messageToEncrypt)
+	// fmt.Println(encryptedMsg)
+	// fmt.Println(encryptedMsg == messageToDecrypt)
 
 	decryptedMsg := pfCipher.Decrypt(messageToDecrypt)
-	encryptedMsg := pfCipher.Encrypt(messageToEncrypt)
 	fmt.Println(decryptedMsg)
-	fmt.Println(encryptedMsg)
 }
