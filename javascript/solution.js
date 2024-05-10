@@ -25,7 +25,7 @@ const keyTable = [
 
 /**
  * Represents the key table where letters are mapped to
- * coordinates on 5x5 grid:
+ * coordinates on 5x5 grid. Origin is top-left:
  *      S U P E R
  *      Y A B C D
  *      F G H I K
