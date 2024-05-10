@@ -6,7 +6,9 @@ class Cipher:
         self.cipherName = cipherName
         self.gridSize = 5
         self.cipherGrid = None
+        self.gridCollection = {}
         self.__buildPlayfairGrid()
+        self.__buildGridCollection()
 
     def __buildPlayfairGrid(self) -> None:
         """ Build 5 x 5 Play fair grid using the key. """
@@ -28,6 +30,13 @@ class Cipher:
         # Unflatten grid
         self.cipherGrid = [list(flattenedGrid[i: i + self.gridSize]) for i in range(0, self.gridSize * self.gridSize, self.gridSize)]
 
+    def __buildGridCollection(self) -> None:
+        """ Build a dictionary of letters with respect to their grid location. """
+
+        for i in range(len(self.cipherGrid)):
+            for j in range(len(self.cipherGrid[0])):
+                self.gridCollection[self.cipherGrid[i][j]] = (i, j)
+
 
     def decrypt(self, encryptedMessage: str) -> None:
         """
@@ -42,7 +51,6 @@ class Cipher:
         decryptedMessage = ''
         
         bigrams = self.__buildBigrams(encryptedMessage)
-
         
 
 
@@ -81,5 +89,5 @@ if __name__ == '__main__':
     cipherName = "Playfair"
 
     cipher = Cipher(key=key, cipherName=cipherName)
-
+    print(cipher.gridCollection)
     message = cipher.decrypt(encryptedMessage)
