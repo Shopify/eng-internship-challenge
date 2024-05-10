@@ -51,6 +51,7 @@ class PlayfairCipher:
     """
     Flatten consecutive letters to [1:] + 'X'
     """
+    if len(text) % 2 != 0: text += 'X'
     n: int = len(text)
     filtered_text: str = text.replace(' ', '') # get rid of whitespace
     filtered_text = filtered_text.upper() # normalize to uppercase
@@ -81,7 +82,6 @@ class PlayfairCipher:
     Decrypt phrase with the use of some helper functions
     """
     phrase = self.filter_text(phrase)
-    if len(phrase) % 2 != 0: phrase += 'X'
     n: int = len(phrase)
 
     message: str = ""
