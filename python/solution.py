@@ -39,7 +39,6 @@ def create_playfair_array(key_string: str) -> List[List[str]]:
             sorted_alphabet_uppercase.remove(letter)
 
     size_of_key: int = len(sorted_key_without_duplicates)
-    DIMENSION: int = 5
     letter_array: List[List[str]] = [["0"] * DIMENSION for _ in range(DIMENSION)]
 
     for i in range(size_of_key):
