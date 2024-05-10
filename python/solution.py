@@ -3,6 +3,7 @@
 #                   Letter X used as a filler character
 # decipher table goes left to right, top to bottom
 # decipher table does not be generated everytime, only asked to provide a solver for the cipher
+# switching letters not in table to I
 
 
 # S U P E R
@@ -29,8 +30,14 @@ def find_letter_in_table(letter):
 def solver(phrase):
     ans = ""
     for i in range(0, len(phrase), 2): #iterate over phrase, forming pairs by stepping over
-        letter1_row, letter1_column = find_letter_in_table(phrase[i])
-        letter2_row, letter2_column = find_letter_in_table(phrase[i+1])
+
+        letter1_coord = find_letter_in_table(phrase[i]) 
+        letter2_coord = find_letter_in_table(phrase[i+1])
+
+        letter1_coord = letter1_coord if letter1_coord != None else (2, 3) #setting to I if not found
+        letter2_coord = letter2_coord if letter2_coord != None else (2, 3)
+        letter1_row, letter1_column = letter1_coord
+        letter2_row, letter2_column = letter2_coord
         #negative index in python prints correct
         if letter1_row == letter2_row: #shift to left
             ans += decipher_table[letter1_row][letter1_column-1] + decipher_table[letter2_row][letter2_column-1]
@@ -43,8 +50,9 @@ def solver(phrase):
 def filter_ans(phrase):
     new_ans = ""
     for letter in phrase:
-        if letter != "X" and letter != " " and find_letter_in_table(letter) != None:
-            new_ans += letter   #remove filler char(x) , space, special char
+        if find_letter_in_table(letter) == None or letter == "X":  #remove filler char(x) , space, special char
+            continue
+        new_ans += letter  
     return new_ans
 
 
