@@ -11,7 +11,7 @@ function createSquare(keyword) {
     let square = "";
 
     // add the keyword to the square first
-    for (let c of keyword) {
+    for (let c of keyword.toUpperCase()) {
         if (square.indexOf(c) === -1) {
             square += c;
         }
