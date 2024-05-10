@@ -31,6 +31,7 @@ for (const token of tokens) {
     const letter1 = token.charAt(0)
     const letter2 = token.charAt(1)
 
+    // Get positions of each letter 
     let [row1, col1, row2, col2] = [0, 0, 0, 0]
     for (let i = 0; i < KEY_TABLE_HEIGHT; i ++) {
         if (keyTable[i].indexOf(letter1) > -1) {
@@ -44,6 +45,7 @@ for (const token of tokens) {
         }
     }
 
+    // Get new letters based on Playfair decryption rules
     let newLetter1 = ""
     let newLetter2 = ""
     if (letter1 === letter2) {
@@ -59,6 +61,7 @@ for (const token of tokens) {
         newLetter2 = keyTable[row2][col1]
     }
 
+    // Check to exclude Xs before pushing result
     res.push(`${newLetter1 === 'X' ? '' : newLetter1}${newLetter2 === 'X' ? '' : newLetter2}`)
 }
 
