@@ -24,7 +24,6 @@ func NewLetterLocation(x, y int) *LetterLocation {
 		X: x,
 		Y: y,
 	}
-
 }
 
 /*
@@ -124,7 +123,7 @@ func (p *PfCipher) findUniqueKeywordLetters(keyword string) {
 	}
 }
 
-// After receving a pair of runes (digraphs), it returns the row and col of 
+// After receving a pair of runes (digraphs), it returns the row and col of
 // each rune
 func (p *PfCipher) extractLocationFromPair(pair []rune) (int, int, int, int) {
 	firstX := p.LettersLocation[pair[0]].X
@@ -172,17 +171,16 @@ func (p *PfCipher) SetUpMatrix(keyword string, alphabetLetters []rune) error {
 // Finally, the repeated letters are dealt with using a filler 'X'
 // and if the length of the []rune was not even, another 'X' gets added
 // to the end of the message
-func (p *PfCipher) PrepareMessage(message string) {
+func (p *PfCipher) prepareMessage(message string) {
 	originalMsg := []rune(message)
 	normalizedMsg := make([]rune, 0, len(originalMsg))
 
-	// Removing any speical characters
 	for _, char := range originalMsg {
+		// Removing any speical characters
 		if IsInvalidRune(char) {
 			fmt.Printf("invalid char:\t%v\n", char)
 			continue
 		}
-
 		// Based on pf algorithm, if a letter is J, should be replaced by I
 		if IsRuneJ(char) {
 			normalizedMsg = append(normalizedMsg, 'I')
@@ -193,34 +191,42 @@ func (p *PfCipher) PrepareMessage(message string) {
 
 	// Create digraphs and handle same letter issue
 	finalMsg := make([]rune, 0, len(normalizedMsg))
-	for i := 0; i < len(normalizedMsg); i++ {
-		if i < len(normalizedMsg)-1 && normalizedMsg[i] == normalizedMsg[i+1] {
+	i := 0
+	for i < len(normalizedMsg) {
+		if i+1 < len(normalizedMsg) && normalizedMsg[i] == normalizedMsg[i+1] {
+			// If the pair has a repeating letter, add a filling 'X' and for the
+			// the next iteration, we increment by one since 'X' caused a pair
 			finalMsg = append(finalMsg, normalizedMsg[i], 'X')
 			i++
 
+		} else if i+1 < len(normalizedMsg) {
+			// In case of no repetition, append the pair to the slice and increment
+			// by 2 since this pair is done and we're moving forward to the next pair
+			finalMsg = append(finalMsg, normalizedMsg[i], normalizedMsg[i+1])
+			i += 2
+
 		} else {
-			finalMsg = append(finalMsg, normalizedMsg[i])
+			// If it has odd number of characters, add 'X' to the end
+			finalMsg = append(finalMsg, normalizedMsg[i], 'X')
+			i++
 		}
 	}
-
-	// make the number of letters even
-	if len(finalMsg)%2 != 0 {
-		finalMsg = append(finalMsg, 'X')
-	}
-
 	p.Message = finalMsg
 }
 
 // Encrypts the provided message
 func (p *PfCipher) Encrypt(message string) string {
-	p.PrepareMessage(message)
+	p.prepareMessage(message)
 	encryptedMsg := make([]rune, 0, len(p.Message))
 
 	for i := 0; i < len(p.Message)-1; i += 2 {
 		pair := p.Message[i : i+2]
 		firstX, firstY, secondX, secondY := p.extractLocationFromPair(pair)
 
+		// if two letters/runes are on the same row
 		if firstX == secondX {
+			// The letter should be replaced by the one to the right
+			// adding one to col index to achieve this
 			firstY++
 			secondY++
 
@@ -231,7 +237,10 @@ func (p *PfCipher) Encrypt(message string) string {
 				secondY = 0
 			}
 
+			// if two letters/runes are on the same col
 		} else if firstY == secondY {
+			// Letter should be replaced by the one at the bottom
+			// adding one to the row to achieve this
 			firstX++
 			secondX++
 
@@ -241,6 +250,8 @@ func (p *PfCipher) Encrypt(message string) string {
 			if secondX > matrixSize-1 {
 				secondX = 0
 			}
+
+			// In case of rectangle formation
 		} else {
 			firstY, secondY = secondY, firstY
 		}
@@ -252,7 +263,7 @@ func (p *PfCipher) Encrypt(message string) string {
 	return string(encryptedMsg)
 }
 
-// Decrypts the provdid message 
+// Decrypts the provdid message
 func (p *PfCipher) Decrypt(message string) string {
 	decryptedMsg := make([]rune, 0, len(message))
 	messageRune := []rune(message)
@@ -261,9 +272,10 @@ func (p *PfCipher) Decrypt(message string) string {
 		pair := messageRune[i : i+2]
 		firstX, firstY, secondX, secondY := p.extractLocationFromPair(pair)
 
-		// Case of same row
+		// if two letters/runes are on the same row
 		if firstX == secondX {
-			// based on pf algorithm, the letter should be replace with the one to the left
+			// based on pf algorithm, the letter should be replaced with the one to the left
+			// we shift one the left
 			firstY--
 			secondY--
 
@@ -275,8 +287,10 @@ func (p *PfCipher) Decrypt(message string) string {
 				secondY = matrixSize - 1
 			}
 
-			// Case of same column
+			// if two letters/runes are on the same col
 		} else if firstY == secondY {
+			// The letter should be replaced with the one at the top
+			// we deduct one from the row idx
 			firstX--
 			secondX--
 
@@ -308,16 +322,16 @@ func main() {
 	alphabetLetters := GetAlphabetLettersWihtoutJ()
 	keyword := "SUPERSPY"
 
-	// messageToEncrypt := "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
-	// messageToEncrypt := "HIPXPOPOTOMONSTROSESQUIPPEDALIOPHOBIAX"
+	messageToEncrypt := "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
 	messageToDecrypt := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
 	pfCipher := NewPfCipher()
 	pfCipher.SetUpMatrix(keyword, alphabetLetters)
 
-	// encryptedMsg := pfCipher.Encrypt(messageToEncrypt)
-	// fmt.Println(encryptedMsg)
-	// fmt.Println(encryptedMsg == messageToDecrypt)
+	fmt.Println("original message: ", messageToEncrypt)
+	encryptedMsg := pfCipher.Encrypt(messageToEncrypt)
+	fmt.Println("encrypted: ", encryptedMsg)
+	fmt.Println(encryptedMsg == messageToDecrypt)
 
 	decryptedMsg := pfCipher.Decrypt(messageToDecrypt)
 	fmt.Println(decryptedMsg)
