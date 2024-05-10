@@ -36,8 +36,12 @@ function createSquare(keyword) {
  * Preprocess the ecrypted message by settinhg characters to be in pairs
  * @param {string} encryptedMessage - the encrypted message to preprocess
  * @returns {Array} - an array of strings that contains the pairs of characters
+ * @throws {Error} - if the encrypted message contains characters other than uppercase letters
  */
 function preprocessEncryption(encryptedMessage) {
+    if (!/^[A-Z]+$/.test(encryptedMessage)) {
+        throw new Error('Check your message! EncryptedMessage must only contain uppercase letters');
+    }
     const pairs = [];
     // According to the rules of the Playfair cipher
     // the encrypted message must have even number of characters
