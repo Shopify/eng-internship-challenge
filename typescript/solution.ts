@@ -15,11 +15,11 @@ function createTable(keyword: string){
 
     for(let j=0; j<5; j++){
       if(keywordIdx<keyword.length){ // adding letters from keyword into table
-        let letter = keyword.at(keywordIdx)
+        let letter = keyword.charAt(keywordIdx)
 
         while(letter && seenLetters.has(letter)){//making sure letter is unique
           keywordIdx++
-          letter = keyword.at(keywordIdx)
+          letter = keyword.charAt(keywordIdx)
         }
         if(!letter) throw new Error("Letter not found")
 
@@ -29,10 +29,10 @@ function createTable(keyword: string){
 
         keywordIdx++
       }else{ //adding letters from alphabet into table
-        let letter = alphabetWithoutJ.at(alphabetIdx)
+        let letter = alphabetWithoutJ.charAt(alphabetIdx)
         while(letter && seenLetters.has(letter)){//making sure letter is unique
           alphabetIdx++
-          letter = alphabetWithoutJ.at(alphabetIdx)
+          letter = alphabetWithoutJ.charAt(alphabetIdx)
         }
         if(!letter) throw new Error("Letter not found")
 
@@ -48,8 +48,8 @@ function createTable(keyword: string){
 }
 
 function decryptDiagram(diagram: string){
-  const letter1 = diagram.at(0)
-  const letter2 = diagram.at(1)
+  const letter1 = diagram.charAt(0)
+  const letter2 = diagram.charAt(1)
 
   if(!letter1 || !letter2 ) throw new Error("Letter not found")
 
@@ -77,7 +77,7 @@ function decryptMessage(encryptedMessage: string, keyword: string){
 
   createTable(keyword)
   for(let i=1; i<encryptedMessage.length; i+=2){
-    const diagram = encryptedMessage.at(i-1) +""+ encryptedMessage.at(i)
+    const diagram = encryptedMessage.charAt(i-1) +""+ encryptedMessage.charAt(i)
     result += decryptDiagram(diagram).replace("X", "")
   }
 
