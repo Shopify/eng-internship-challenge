@@ -1,5 +1,4 @@
 const encryptedText = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
-const answerText = "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA";
 const cipherKey = "SUPERSPY";
 
 // Original keyTable Matrix
@@ -12,8 +11,8 @@ const cipherKey = "SUPERSPY";
 // ];
 
 /**
- * Transposed keyTable for coordinate system to be in format: [x][y].
- * Otherwise, coordinates are flipped.
+ * Transposed keyTable for coordinate system to be in format: [x][y],
+ * otherwise, coordinates are flipped.
  */
 const keyTable = [
     ["S", "Y", "F", "L", "T"],
@@ -135,7 +134,9 @@ function decryptColumnRule(l1, l2) {
     // Wrap around
     if (newFirstCoords[1] < 0) {
         newFirstCoords[1] = 4;
-        newSecondCoords[1] = 4;
+    }
+    if (newSecondCoords[1] < 0) {
+        newFirstCoords[1] = 4;
     }
 
     const decFirstLetter = keyTable[newFirstCoords[0]][newFirstCoords[1]];
@@ -158,6 +159,8 @@ function decryptRowRule(l1, l2) {
     // Wrap around
     if (newFirstCoords[0] < 0) {
         newFirstCoords[0] = 4;
+    }
+    if (newSecondCoords[0] < 0) {
         newSecondCoords[0] = 4;
     }
 
