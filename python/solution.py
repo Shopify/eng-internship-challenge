@@ -97,7 +97,7 @@ class Cipher:
             text: string to be divided into bigrams of its characters.
 
         Returns:
-            bigrams of text.
+            bigrams: bigrams of text.
         """
 
         text = text.upper()
@@ -115,7 +115,6 @@ class Cipher:
             bigrams.append((text[i], 'X'))
         
         return bigrams
-
 
 
 if __name__ == '__main__':
