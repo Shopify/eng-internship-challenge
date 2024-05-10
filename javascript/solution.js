@@ -104,15 +104,13 @@ function crackPlayfair(keyword, encryptedMessage) {
             decryptedMessage += square[secondLetterRow * 5 + firstLetterCol];
         }
     }
-    console.log(decryptedMessage);
-
     // remove "X"s from the decrypted message
     decryptedMessage = decryptedMessage.replaceAll("X", "");
-
-    console.log(decryptedMessage);
     return decryptedMessage;
 }
-// Test the function
-// createSquare("SUPERSPY");
-// preprocessEncryption("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV");
-crackPlayfair("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV");
+
+// test the function
+console.log(crackPlayfair("", "CBNVNYSC")); // "BALLOON;
+console.log(crackPlayfair("", "PBDUPBDQOPPO")); // "MEETMEATNOON;
+console.log(crackPlayfair("LIZARD", "EIAUSUMY")); // "BALLOON;
+// crackPlayfair("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV");
