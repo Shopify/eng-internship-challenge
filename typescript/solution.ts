@@ -5,7 +5,6 @@ const message: string = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 const cipher: string = "SUPERSPY";
 
 // Generate key table
-const seen: Set<string> = new Set();
 const keys: string[] = [...new Set(`${cipher}ABCDEFGHIKLMNOPQRSTUVWXYZ`.split(""))]
 
 let keyTable: string[][] = []
@@ -51,6 +50,7 @@ for (const token of tokens) {
     if (letter1 === letter2) {
         newLetter1 = letter1
     } else if (col1 === col2) {
+        // JavaScript modulo returns negative numbers for negative inputs so we first offset to a positive number 
         newLetter1 = keyTable[(row1 - 1 + KEY_TABLE_HEIGHT) % KEY_TABLE_HEIGHT][col1]
         newLetter2 = keyTable[(row2 - 1 + KEY_TABLE_HEIGHT) % KEY_TABLE_HEIGHT][col2]
     } else if (row1 === row2) {
