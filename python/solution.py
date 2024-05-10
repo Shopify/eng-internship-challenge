@@ -19,7 +19,7 @@ def generate_pairs(encrypted):
         a = encrypted[i]
         b = 'X' if i+1 >= len(encrypted) or encrypted[i+1]==a else encrypted[i+1]
         pad_encrypted += a+b
-        i = i + 1 if b=='X' else i+2
+        i = i + 1 if i+1 >= len(encrypted) or encrypted[i+1]==a else i+2
 
     return [pad_encrypted[i:i + 2] for i in range(0, len(pad_encrypted), 2)]
 
