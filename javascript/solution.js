@@ -61,7 +61,7 @@ const keyTableMap = {
 
 /**
  * Decrypts playfair cipher encrypted text.
- * @param {String} encryptedText 
+ * @param {String} encryptedText
  * @returns String - decrypted text
  */
 function playfairDecryptor(encryptedText) {
@@ -136,7 +136,7 @@ function decryptColumnRule(l1, l2) {
         newFirstCoords[1] = 4;
     }
     if (newSecondCoords[1] < 0) {
-        newFirstCoords[1] = 4;
+        newSecondCoords[1] = 4;
     }
 
     const decFirstLetter = keyTable[newFirstCoords[0]][newFirstCoords[1]];
