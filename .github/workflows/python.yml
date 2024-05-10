@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # Specify the Python version here
+          python-version: '3.9'  # Specify the Python version here
 
       - name: Set Environment Variable
         run: echo "TEST_ANSWER=${{ secrets.TEST_ANSWER }}" >> $GITHUB_ENV
