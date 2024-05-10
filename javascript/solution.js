@@ -1,4 +1,11 @@
 /**
+ * This program decrypts an encrypted message using the Playfair cipher
+ * Date: 2024-05-10
+ * @author: Ge Xu
+ */
+
+
+/**
  * Create a 5 x 5 Playfair square using the given keyword
  * This 5 x 5 square is represented as a string of 25 characters
  * 
@@ -110,7 +117,9 @@ function crackPlayfair(keyword, encryptedMessage) {
 }
 
 // test the function
-console.log(crackPlayfair("", "CBNVNYSC")); // "BALLOON;
-console.log(crackPlayfair("", "PBDUPBDQOPPO")); // "MEETMEATNOON;
-console.log(crackPlayfair("LIZARD", "EIAUSUMY")); // "BALLOON;
-// crackPlayfair("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV");
+// console.log(crackPlayfair("", "CBNVNYSC")); // "BALLOON;
+// console.log(crackPlayfair("", "PBDUPBDQOPPO")); // "MEETMEATNOON;
+// console.log(crackPlayfair("LIZaRD", "EIAUSUMY")); // "BALLOON;
+
+// run the program
+console.log(crackPlayfair("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"));
