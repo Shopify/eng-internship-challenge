@@ -43,16 +43,51 @@ class Cipher:
         Decrypt an encrypted message given a key.
         Args:
             encryptedMessage: encrypted message to be decrypted.
-
         Returns:
             decryptedMessage: decrypted message.
         """
 
-        decryptedMessage = ''
-        
+        decryptedMessage = []
         bigrams = self.__buildBigrams(encryptedMessage)
-        
 
+        for first, second in bigrams:
+            xFirst, yFirst = self.gridCollection[first]
+            xSecond, ySecond= self.gridCollection[second]
+            
+            if xFirst == xSecond: # Same row
+                firstDecryptedChar = self.cipherGrid[xFirst][yFirst - 1] if yFirst - 1 >= 0 else self.cipherGrid[xFirst][-1]
+                secondDecryptedChar = self.cipherGrid[xSecond][ySecond - 1] if ySecond - 1 >= 0 else self.cipherGrid[xSecond][-1]
+
+            elif yFirst == ySecond: # Same column
+                firstDecryptedChar = self.cipherGrid[xFirst - 1][yFirst] if xFirst >= 0 else self.cipherGrid[-1][yFirst]
+                secondDecryptedChar = self.cipherGrid[xSecond - 1][ySecond] if xSecond >= 0 else self.cipherGrid[-1][ySecond]
+
+            else: # rectangle form
+                firstDecryptedChar = self.cipherGrid[xFirst][ySecond]
+                secondDecryptedChar = self.cipherGrid[xSecond][yFirst]
+            
+            decryptedMessage.append(firstDecryptedChar)
+            decryptedMessage.append(secondDecryptedChar)
+        
+        processedDecryptedMessage = self.__processMessage(decryptedMessage)
+
+        return processedDecryptedMessage
+
+    def __processMessage(self, text: List[str]) -> str:
+        """
+        Clean the text from any 'X'. Note that this assumes no letter 'X' was present in the initial text.
+        Args:
+            text: string to be cleared from letter 'X'.
+        Returns:
+            processedText: string cleared from letter 'X'
+        """
+
+        processedText = []
+        for char in text:
+            if char == 'X':
+                continue
+            processedText.append(char)
+        return ''.join(processedText)
 
 
     def __buildBigrams(self, text: str) -> List[Tuple[str, str]]:
@@ -89,5 +124,5 @@ if __name__ == '__main__':
     cipherName = "Playfair"
 
     cipher = Cipher(key=key, cipherName=cipherName)
-    print(cipher.gridCollection)
     message = cipher.decrypt(encryptedMessage)
+    print(message)
