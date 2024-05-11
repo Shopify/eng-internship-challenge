@@ -38,7 +38,7 @@ This repo is designed to run a test against your work to ensure the correct decr
 
 #### Python Instructions
 
-Can edit line 58 and 59 respectively to change the Encrypted Text as well as the key
+Can edit line 59 and 60 respectively to change the Encrypted Text as well as the key
 
 ```bash
 cd python
