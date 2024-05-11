@@ -35,3 +35,12 @@ Ensure your code is properly commented and formatted for readability and ease-of
 Upon completion of the challenge, create a PR of your work and compare it against the original Assessment Repo's `main` branch. Submit a link to your PR with your internship application in the "Notes" field. 
 
 This repo is designed to run a test against your work to ensure the correct decrypted string is outputted to the console when executing your code. Admins on this repo will deploy the test manually only after you have submitted your PR.
+
+#### Python Instructions
+
+Can edit line 58 and 59 respectively to change the Encrypted Text as well as the key
+
+```bash
+cd python
+python3 solution.py
+```
