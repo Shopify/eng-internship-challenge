@@ -13,13 +13,22 @@ def filter(keyString):
     filteredKey = ''.join(filteredKey)
     return filteredKey
 
-
+def createMatrix(cipherString):
+    matrix = []
+    for i in range(0, len(cipherString), 5):
+        subString = cipherString[i:i+5]
+        row = []
+        for char in subString:
+            row.append(char)
+        matrix.append(row)
+    return matrix
 
 def decryptMsg(encryptedMsg, cipherKey):
     # Construct 5x5 matrix and ensure removal of duplicate letters/non alphabetical letters
     filteredCipher = filter(cipherKey)
-    print(filteredCipher)    
-    
+    # Create a 5x5 matrix using a 2D array in python    
+    matrix = createMatrix(filteredCipher)
+    print(matrix)
 
 
 def main():
