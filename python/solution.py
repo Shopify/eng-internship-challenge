@@ -43,8 +43,10 @@ def decrypt_pair(pair, matrix):
 
 # Function that decrypts the cipher using the key provided
 def decrypt(cipher, key):
+    # Remove spaces and lowercase for both key and cipher
+    key = key.upper().replace(' ', '')
+    cipher = cipher.upper().replace(' ', '') 
     matrix = create_matrix(key)
-    cipher = cipher.upper().replace(' ', '') # remove spaces and lowercase
     decrypted_text = ""
 
     i = 0
