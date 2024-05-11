@@ -6,8 +6,8 @@ def create_matrix(key):
     used_chars = set() # Track used chars to avoid duplicate letters
     # Fill the matrix with characters from the key
     for char in key:
-        if char not in used_chars:
-            matrix.append(char)
+        if char not in used_chars: # account for case where key may be lowercase but readme instructions want everything in uppercase
+            matrix.append(char) 
             used_chars.add(char)
     
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # Omit J from the alphabet
@@ -44,6 +44,7 @@ def decrypt_pair(pair, matrix):
 # Function that decrypts the cipher using the key provided
 def decrypt(cipher, key):
     matrix = create_matrix(key)
+    cipher = cipher.upper().replace(' ', '') # remove spaces and lowercase
     decrypted_text = ""
 
     i = 0
