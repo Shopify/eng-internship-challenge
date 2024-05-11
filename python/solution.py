@@ -28,7 +28,6 @@ def locateIndicesOfPair(matrix, char):
     for i, row in enumerate(matrix):
         for j, column in enumerate(row):
             if char == column:
-                print (char, i , j)
                 return i, j
 
 def decryptMsg(encryptedMsg, cipherKey):
@@ -45,9 +44,38 @@ def decryptMsg(encryptedMsg, cipherKey):
         secondChar = pair[1]
         firstRow, firstColumn = locateIndicesOfPair(matrix, firstChar)
         secondRow, secondColumn = locateIndicesOfPair(matrix, secondChar)
-                
 
+        # Now compare the indices based on reverse ruling
+        # If same row, translated letter is directly to the left (wrap around if needed)
+        newFirstChar = ""
+        newSecondChar = ""
+        if firstRow == secondRow:
+            if firstColumn == 0:
+                newFirstChar = matrix[firstRow][4]
+            else:
+                newFirstChar = matrix[firstRow][firstColumn-1]
+            if secondColumn == 0:
+                newSecondChar = matrix[secondRow][4]
+            else:
+                newSecondChar = matrix[secondRow][secondColumn-1]
 
+        # If same column, translated letter is directly above (wrap around if needed)
+        elif firstColumn == secondColumn:
+            if firstRow == 0:
+                newFirstChar = matrix[4][firstColumn]
+            else:
+                newFirstChar = matrix[firstRow-1][firstColumn]
+            if secondRow == 0:
+                newFirstChar = matrix[4][secondColumn]
+            else:
+                newFirstChar = matrix[secondRow-1][secondColumn]
+
+        # If neither, a rectangle is made, and translated letter is the opposite corner of rectangle
+        else:
+            newFirstChar = matrix[firstRow][secondColumn]
+            newSecondChar = matrix[secondRow][firstColumn]
+
+        print(newFirstChar, newSecondChar)
 
 def main():
     # Variables
