@@ -28,7 +28,10 @@ def decryptMsg(encryptedMsg, cipherKey):
     filteredCipher = filter(cipherKey)
     # Create a 5x5 matrix using a 2D array in python    
     matrix = createMatrix(filteredCipher)
-    print(matrix)
+    # Now, we need to go through the encrypted message with 2 letters at a time, and using the reverse ruling, we can decrypt the message
+    for i in range(0, len(encryptedMsg), 2):
+        pair = encryptedMsg[i:i+2]
+        print(pair)
 
 
 def main():
