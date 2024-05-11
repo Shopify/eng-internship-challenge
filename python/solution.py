@@ -23,15 +23,30 @@ def createMatrix(cipherString):
         matrix.append(row)
     return matrix
 
+def locateIndicesOfPair(matrix, char):
+    # Need to loop through the entire matrix to find the exact position of each character given  
+    for i, row in enumerate(matrix):
+        for j, column in enumerate(row):
+            if char == column:
+                print (char, i , j)
+                return i, j
+
 def decryptMsg(encryptedMsg, cipherKey):
     # Construct 5x5 matrix and ensure removal of duplicate letters/non alphabetical letters
     filteredCipher = filter(cipherKey)
     # Create a 5x5 matrix using a 2D array in python    
     matrix = createMatrix(filteredCipher)
     # Now, we need to go through the encrypted message with 2 letters at a time, and using the reverse ruling, we can decrypt the message
+    decryptedPairs = []
     for i in range(0, len(encryptedMsg), 2):
         pair = encryptedMsg[i:i+2]
-        print(pair)
+        # Manually, we can just look at the matrix to see rows and column values, but for our implementation we will instead get the exact row and column indices and compare them
+        firstChar = pair[0]
+        secondChar = pair[1]
+        firstRow, firstColumn = locateIndicesOfPair(matrix, firstChar)
+        secondRow, secondColumn = locateIndicesOfPair(matrix, secondChar)
+                
+
 
 
 def main():
