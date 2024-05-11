@@ -51,6 +51,30 @@ def generate_key_table(cipher_key):
             break
     return key_table
 
+def break_encrypted_message_into_digrams(encrypted_message):
+    """
+    Breaks the encrypted message into digrams (pairs of consecutive characters).
+
+    Parameters:
+    - encrypted_message (str): The encrypted message to be broken into digrams.
+
+    Returns:
+    - list of str: A list containing the digrams extracted from the encrypted message.
+    """
+    # Check if the encrypted message has an even number of characters
+    if len(encrypted_message) % 2 != 0:
+        raise ValueError("Encrypted message length must be even")
+    
+    # Initialize an empty list to store digrams
+    digrams = []
+    
+    # Iterate through the encrypted message by pairs of characters
+    for i in range(0, len(encrypted_message) - 1, 2):
+        digram = encrypted_message[i:i+2]  # Extract a digram
+        digrams.append(digram)    # Add the digram to the list
+    
+    return digrams
 
 if __name__ == "__main__":
-    key_table = generate_key_table("playfair example")
+    # key_table = generate_key_table("playfair example")
+    digrams = break_encrypted_message_into_digrams(ENCRYPTED_MESSAGE)
