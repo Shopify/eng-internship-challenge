@@ -1,13 +1,25 @@
-def decryptMsg(encryptedMsg, cipherKey):
-    # Construct 5x5 matrix and ensure removal of duplicate letters/non alphabetical letters
+def filter(keyString):
     charSet = set()
     filteredKey = []
-    for char in cipherKey:
+    for char in keyString:
         if char not in charSet:
             charSet.add(char)
             filteredKey.append(char)
+    # Now append the alphabet without repeating letters
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # drop J from alphabet for 5x5 matrix to fit as per playfair ruling
+    for char in alphabet:
+        if char not in filteredKey:
+            filteredKey.append(char)
     filteredKey = ''.join(filteredKey)
-    print(filteredKey)
+    return filteredKey
+
+
+
+def decryptMsg(encryptedMsg, cipherKey):
+    # Construct 5x5 matrix and ensure removal of duplicate letters/non alphabetical letters
+    filteredCipher = filter(cipherKey)
+    print(filteredCipher)    
+    
 
 
 def main():
