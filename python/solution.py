@@ -1,7 +1,6 @@
 def main():
-    print("Placeholder")
-
-
+    encryptedMsg = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    cipherKey = "SUPERSPY"
 
 if __name__ == "__main__":
     main()
