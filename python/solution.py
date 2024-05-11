@@ -75,7 +75,15 @@ def decryptMsg(encryptedMsg, cipherKey):
             newFirstChar = matrix[firstRow][secondColumn]
             newSecondChar = matrix[secondRow][firstColumn]
 
-        print(newFirstChar, newSecondChar)
+        decryptedPairs.append(newFirstChar)
+        decryptedPairs.append(newSecondChar)
+    # Now we must remove the X for duplicate letters
+    for char in decryptedPairs:
+        if char == "X":
+            decryptedPairs.remove(char)
+    # Now we join the string into the password
+    spyPassword = ''.join(decryptedPairs)
+    print(spyPassword)
 
 def main():
     # Variables
