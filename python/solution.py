@@ -29,6 +29,14 @@ def locateIndicesOfPair(matrix, char):
         for j, column in enumerate(row):
             if char == column:
                 return i, j
+            
+def removeSpecialChars(string):
+    specialChars = "!\"#$%&'()*+,-./:;<=>?@[\\]^ _`{|}~ "
+    filteredString = string
+    for char in string:
+        if char in specialChars:
+            filteredString = filteredString.replace(char, "")
+    return filteredString
 
 def decryptMsg(encryptedMsg, cipherKey):
     # Construct 5x5 matrix and ensure removal of duplicate letters/non alphabetical letters
@@ -77,19 +85,27 @@ def decryptMsg(encryptedMsg, cipherKey):
 
         decryptedPairs.append(newFirstChar)
         decryptedPairs.append(newSecondChar)
-    # Now we must remove the X for duplicate letters
+        
+    # Now we must remove the X for duplicate letters as well as special characters including spaces
     for char in decryptedPairs:
         if char == "X":
             decryptedPairs.remove(char)
+
     # Now we join the string into the password
     spyPassword = ''.join(decryptedPairs)
+    spyPassword = spyPassword.upper()
     print(spyPassword)
 
 def main():
     # Variables
     encryptedMsg = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     cipherKey = "SUPERSPY"
-
+    # Cleanup the encrypted message and cipher text before processing
+    encryptedMsg = removeSpecialChars(encryptedMsg)
+    cipherKey = removeSpecialChars(cipherKey)
+    cipherKey = cipherKey.upper()
+    encryptedMsg = encryptedMsg.upper()
+    
     # Plan: The playfair cipher has an encryption and decryption process, from understanding the 
     # encryption process we can proceed to decrypting it.
 
