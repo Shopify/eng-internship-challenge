@@ -51,6 +51,7 @@ def find_char_in_key_table(key_table, char):
 def decrypt_message(encrypted_message, key):
     decrypted_message = ""
     key_table = generate_key_table(key)
+    encrypted_message = encrypted_message.upper()
     
     for i in range(0, len(encrypted_message), 2):
         char1 = encrypted_message[i]
