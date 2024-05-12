@@ -1,4 +1,14 @@
-def generate_key_table(key):
+def generate_key_table(key: str) -> str:
+    """
+    Generate a key table for the Playfair Cipher.
+
+    Args:
+        key (str): The key for the cipher.
+
+    Returns:
+        str: The key table.
+    """
+
     # Cleaning text
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
     key = key.upper().replace("J", "I")
@@ -12,7 +22,17 @@ def generate_key_table(key):
 
     return key_table
 
-def create_letter_pairs(text):
+def create_letter_pairs(text: str) -> list[str]:
+    """
+    Create pairs of letters from the input text.
+
+    Args:
+        text (str): The input text.
+
+    Returns:
+        list: A list of letter pairs.
+    """
+
     # Cleaning text
     text = text.upper().replace("J", "I")
     text = "".join([i for i in text if i.isalnum()])
@@ -24,7 +44,18 @@ def create_letter_pairs(text):
     # Creating pairs
     return [text[i : i + 2] for i in range(0, len(text), 2)]
 
-def decrypt(pair, key_table):
+def decrypt(pair: str, key_table: str) -> str:
+    """
+    Decrypt a pair of letters using the key table.
+
+    Args:
+        pair (str): The pair of letters to decrypt.
+        key_table (str): The key table.
+
+    Returns:
+        str: The decrypted pair of letters.
+    """
+
     # Finding the position of the letters in the key table
     x, y = pair
     row_x, col_x = divmod(key_table.index(x), 5)
@@ -47,7 +78,18 @@ def decrypt(pair, key_table):
     # Returning the decrypted pair    
     return key_table[row_x * 5 + col_x] + key_table[row_y * 5 + col_y]
 
-def playfair_cipher(text, key):
+def playfair_cipher(text: str, key: str) -> str:
+    """
+    Decrypt text using the Playfair Cipher.
+
+    Args:
+        text (str): The text to decrypt.
+        key (str): The key for the cipher.
+
+    Returns:
+        str: The decrypted text.
+    """
+
     # Generating key table and creating pairs
     key_table = generate_key_table(key)
     pairs = create_letter_pairs(text)
