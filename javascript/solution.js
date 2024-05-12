@@ -43,3 +43,26 @@ function createPairs(encryptedText) {
     return pairs;
 }
 
+/**
+ * Finds the row and column index of a given value in the cipher matrix.
+ * 
+ * @param {Array<Array<string>>} matrix - The cipher matrix to search.
+ * @param {string} value - The value to search for in the matrix.
+ * @returns {Array<number>} An array containing the row and column index of the value.
+ *                           If the value is not found, returns [-1, -1].
+ */
+function findMatrixIndex(matrix, value) {
+
+    for (let i = 0; i < matrix.length; i++) {
+        // Find the index of the value in the current row
+        let j = matrix[i].indexOf(value);
+        // If the value is found in the row, return its row and column index
+        if (j !== -1) {
+            return [i, j];
+        }
+    }
+    // If the value is not found in the matrix, return [-1, -1]
+    return [-1, -1];
+}
+
+
