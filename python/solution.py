@@ -43,12 +43,12 @@ def process_pairs(pairs, polybius):
             pair[1] = polybius[pair_1_corner]
 
 def main():
-    key = "playfair example"
+    key = "SUPERSPY"
     key =  clean_key(key)
 
-    cipher_text = "BMODZBXDNABEKUDMUIXMMOUVIF"
+    cipher_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
-    queue = deque([char for char in key + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"]) # REMOVED I,J
+    queue = deque([char for char in key + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
     used = set()
 
     polybius = {}
