@@ -180,11 +180,27 @@ def are_letters_on_same_column(first_letter_pos, second_letter_pos):
     return first_letter_pos[1] == second_letter_pos[1]
 
 def decrypt_digrams(key_table, digrams):
+    """
+    Decrypts a list of digrams using a given key table.
+
+    Parameters:
+    - key_table (dict): The key table containing letter positions.
+    - digrams (list of str): List of digrams to decrypt.
+
+    Returns:
+    - str: Joined string of decrypted digrams.
+    """
     decrypted_digrams = []
+    
+    # Iterate over each digram
     for digram in digrams:
+        # Separate the digram into two letters
         first_letter, second_letter = digram
+        # Get positions of the two letters in the key table
         first_letter_pos = key_table["letters"][first_letter]
         second_letter_pos = key_table["letters"][second_letter]
+        
+        # Decrypt based on the relative positions of the letters
         # Letters are in the same row
         if are_letters_on_same_row(first_letter_pos, second_letter_pos):
             first_letter_swap, second_letter_swap = letters_on_same_row_swap(key_table, first_letter_pos, second_letter_pos)
@@ -194,9 +210,14 @@ def decrypt_digrams(key_table, digrams):
         # Letters are not in the same row or column
         else:
             first_letter_swap, second_letter_swap = rectangle_letters_swap(key_table, first_letter_pos, second_letter_pos)
+            
+        # Combine the decrypted letters into a digram
         decrypted_digram = first_letter_swap + second_letter_swap
         decrypted_digrams.append(decrypted_digram)
-    return decrypted_digrams
+        
+    # Join the decrypted digrams into a single string
+    joined_digrams = ''.join(decrypted_digrams)
+    return joined_digrams
 
 
 if __name__ == "__main__":
