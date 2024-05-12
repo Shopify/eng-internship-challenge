@@ -1,9 +1,10 @@
 class PlayfairCipher():
-    def __init__(self, key:str="", grid_letters:str="ABCDEFGHIKLMNOPQRSTUVWXYZ"): # J is excluded from grid letters
+    def __init__(self, key:str="", grid_letters:str="ABCDEFGHIKLMNOPQRSTUVWXYZ"): 
+        # J is excluded from grid letters. Since I is included in the given secret message, we assume J is skipped as is the convention in Playfair Cipher.
         self.key = key
         self.grid_letters = grid_letters
-        self.grid = [] # stores letters
-        self.indices = {} # stores indices as values, letters as keys
+        self.grid = [] # stores letters to access them in O(1)
+        self.indices = {} # stores indices as values, letters as keys. Allows index access in O(1)
         # create the grid
         self._create_playfair_grid()
 
