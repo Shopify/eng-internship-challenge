@@ -3,6 +3,9 @@ Program to decrypt a message encrpyted using the Playfair cipher
 
 Jerry Cheng
 
+Time Complexity: O(n), where n is the length of the message
+Space Complexity: O(1), since the key table is always 5x5
+
 '''
 
 # These can be changed if we have different input parameters, or if spy city changes their password ;)
