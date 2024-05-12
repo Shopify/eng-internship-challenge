@@ -1,3 +1,30 @@
+/*
+
+Author: Sumit Savaliya 
+Email: sumit.savaliya@dal.ca
+Github: https://www.github.com/sumitx28
+
+Plan:
+1. Generate a 5x5 cipher matrix based on a given secret key.
+2. Break the encrypted text into pairs of characters, adding 'X' if needed to make pairs.
+3. Decrypt each pair by following these rules:
+   - If both characters are in the same row, replace each character with the character to its left, wrapping around if needed.
+   - If both characters are in the same column, replace each character with the character above it, wrapping around if needed.
+   - If the characters form a rectangle, swap them with the characters on the same row but at the opposite corners of the rectangle.
+4. Concatenate the decrypted characters to get the original message.
+5. Output the decrypted message.
+
+ Cipher Matrix:
+  [
+    ["S", "U", "P", "E", "R"],
+    ["Y", "A", "B", "C", "D"],
+    ["F", "G", "H", "I", "K"],
+    ["L", "M", "N", "O", "Q"],
+    ["T", "V", "W", "X", "Z"]
+  ]
+  
+*/
+
 /**
  * Generates a 5x5 cipher matrix based on a given key.
  * 
