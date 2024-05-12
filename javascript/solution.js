@@ -78,7 +78,9 @@ const runDecryption = (encryptedText, key) => {
   const keyTable = createKeyTable(key);
   const decryptedText = decrypt(encryptedText, keyTable);
 
-  return decryptedText;
+  // remove 'X' and spaces from decryptedText
+  const formattedText = decryptedText.replace(/X/g, "").replace(/\s/g, "");
+  return formattedText;
 };
 
 const sampleText = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
