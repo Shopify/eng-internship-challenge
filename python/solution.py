@@ -101,6 +101,23 @@ def letters_on_same_row(key_table, first_letter_pos, second_letter_pos):
     second_letter_swap = key_table["positions"][second_letter_pos[0]][get_immediate_previous_index(second_letter_pos[1])]
     return (first_letter_swap, second_letter_swap)
 
+def letters_on_same_column(key_table, first_letter_pos, second_letter_pos):
+    """
+    Decrypts and returns the swapped digram letters as a tuple, based on the Playfair cipher's same-column rule.
+
+    Parameters:
+    - key_table (dict): The key table dictionary.
+    - first_letter_pos (tuple of int): The position of the first letter in the key table (row, column).
+    - second_letter_pos (tuple of int): The position of the second letter in the key table (row, column).
+
+    Returns:
+    - tuple of str: The decrypted swapped letters as a tuple, following the same-column rule of the Playfair cipher.
+    """
+    # Get the immediate upper letter for each encrypted letter
+    first_letter_swap = key_table["positions"][get_immediate_previous_index(first_letter_pos[0])][first_letter_pos[1]]
+    second_letter_swap = key_table["positions"][get_immediate_previous_index(second_letter_pos[0])][second_letter_pos[1]]
+    return (first_letter_swap, second_letter_swap)
+
 def get_immediate_previous_index(index):
     """
     Returns the immediate previous index position (int) of the key table line (immediate left) or column (immediately upward).
@@ -118,6 +135,7 @@ def get_immediate_previous_index(index):
     return decrypt_index
 
 def decrypt_digrams(key_table, digrams):
+    decrypted_digrams = []
     for digram in digrams:
         first_letter, second_letter = digram
         first_letter_pos = key_table["letters"][first_letter]
@@ -125,9 +143,19 @@ def decrypt_digrams(key_table, digrams):
         # Letters are in the same row
         if first_letter_pos[0] == second_letter_pos[0]:
             first_letter_swap, second_letter_swap = letters_on_same_row(key_table, first_letter_pos, second_letter_pos)
+        # Letters are in the same column
+        elif first_letter_pos[1] == second_letter_pos[1]:
+            first_letter_swap, second_letter_swap = letters_on_same_column(key_table, first_letter_pos, second_letter_pos)
+        else:
+            # TODO implement the rectangle swap
+            pass
         decrypted_digram = first_letter_swap + second_letter_swap
+        decrypted_digrams.append(decrypted_digram)
+    return decrypted_digrams
 
 
 if __name__ == "__main__":
     key_table = generate_key_table(CIPHER_KEY)
     digrams = break_encrypted_message_into_digrams(ENCRYPTED_MESSAGE)
+    decrypted_digrams = decrypt_digrams(key_table, digrams)
+    print(decrypted_digrams)
