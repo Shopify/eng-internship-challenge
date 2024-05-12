@@ -59,13 +59,16 @@ const decrypt = (matrix, encryptedText) => {
     }
   }
 
-  return decryptedText.replace(/X/g, ""); // Remove 'X' added for padding during encryption
+  return decryptedText;
 };
 
 // Main function to decrypt the encryptedText using Playfair cipher
 const playfairDecrypt = (key, encryptedText) => {
-  const matrix = createMatrix(key); // Create matrix from the key
-  return decrypt(matrix, encryptedText); // Decrypt the text using the matrix
+  const matrix = createMatrix(key); // Step 1: Create matrix from the key
+  const decryptedText = decrypt(matrix, encryptedText); // Step 2: Decrypt the text using the matrix
+  const finalText = decryptedText.replace(/X/g, ""); // Step 3: Remove 'X's added for padding during encryption
+
+  return finalText;
 };
 
 // Example usage:
