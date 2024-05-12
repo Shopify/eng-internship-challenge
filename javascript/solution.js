@@ -65,4 +65,40 @@ function findMatrixIndex(matrix, value) {
     return [-1, -1];
 }
 
+/**
+ * Decrypts an array of character pairs using a given cipher matrix.
+ * 
+ * @param {Array<Array<string>>} pairs - The array of character pairs to decrypt.
+ * @param {Array<Array<string>>} matrix - The cipher matrix used for decryption.
+ * @returns {string} The decrypted message.
+ */
+function decryptPairs(pairs, matrix) {
+    let decryptedMessage = "";
+
+    // Decrypt each pair
+    for (let [firstChar, secondChar] of pairs) {
+        // row and column indices of the characters in the matrix
+        let [firstRow, firstCol] = findMatrixIndex(matrix, firstChar);
+        let [secondRow, secondCol] = findMatrixIndex(matrix, secondChar);
+
+        // Decrypt based on the positions of the characters in the matrix
+        if (firstRow === secondRow) {
+            // Same row: replace each character with the character to its left
+            decryptedMessage += matrix[firstRow][(firstCol + 4) % 5];
+            decryptedMessage += matrix[secondRow][(secondCol + 4) % 5];
+        } else if (firstCol === secondCol) {
+            // Same column: replace each character with the character above it
+            decryptedMessage += matrix[(firstRow + 4) % 5][firstCol];
+            decryptedMessage += matrix[(secondRow + 4) % 5][secondCol];
+        } else {
+            // Forming a rectangle: swap characters
+            decryptedMessage += matrix[firstRow][secondCol];
+            decryptedMessage += matrix[secondRow][firstCol];
+        }
+    }
+
+    // Remove any 'X' characters and return the decrypted message
+    return decryptedMessage.replace(/X/g, '');
+}
+
 
