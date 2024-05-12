@@ -12,10 +12,12 @@ class PlayfairCipher():
         self.grid_letters = grid_letters
         self.grid = [] # stores letters
         self.indices = {} # stores indices as values, letters as keys
+        # create the grid
+        self._create_playfair_grid()
 
-    def _create_playfair_grid(self, key:str, grid_letters:str):
+    def _create_playfair_grid(self):
         # Build the grid using a 1D list
-        for c in key + grid_letters: # prepend the key to ensure it is added first
+        for c in self.key + self.grid_letters: # prepend the key to ensure it is added first
             if len(self.grid) == 25:  # size of grid must be 5 x 5
                 break
             if c not in self.indices:
@@ -23,8 +25,7 @@ class PlayfairCipher():
                 self.indices[c] = len(self.grid) - 1
 
     def decrypt(self, message: str) -> str:
-        decoded_message = ""  # append decoded chunks to return
-        self._create_playfair_grid(self.key, self.grid_letters)
+        decoded_message = ""  # append decoded chunks to it
 
         # process by chunks of two letters
         for i in range(0, len(message), 2):
@@ -50,6 +51,42 @@ class PlayfairCipher():
 
         # clean up X's
         return decoded_message.replace("X", "")
+
+    # def decrypt(self, message: str) -> str:
+    #     self._create_playfair_grid(self.key, self.grid_letters)
+    #     decoded_message = ""
+    #     # process by chunks of two:
+    #     for i in range(0, len(message), 2):
+    #         chunk = message[i:i+2]
+    #         # 3 possible scenario: same row, same col, or rectangle:
+    #         # Row is obtained through integer division and Column via the remainder
+    #         # Scenario 1, same row:
+    #         if self.indices[chunk[0]]//5 == self.indices[chunk[1]]//5:
+    #             # wrap around if at the edge:
+    #             diff = 1
+    #             if self.indices[chunk[0]] % 5 == 0:
+    #                 diff = -4
+    #             decoded_message += self.grid[(self.indices[chunk[0]]-diff)]
+    #             decoded_message += self.grid[(self.indices[chunk[1]]-1)]
+    #         # Scenario 2, same column:
+    #         elif self.indices[chunk[0]] % 5 == self.indices[chunk[1]] % 5:
+    #             decoded_message += self.grid[(self.indices[chunk[0]]-5) % 25]
+    #             decoded_message += self.grid[(self.indices[chunk[1]]-5) % 25]
+    #         # rectangle
+    #         else:
+    #             # find width of rectangle:
+    #             width = self.indices[chunk[0]] % 5 - self.indices[chunk[1]] % 5
+    #             decoded_message += self.grid[self.indices[chunk[0]] - width]
+    #             decoded_message += self.grid[self.indices[chunk[1]] + width]
+        
+    #     # clean up X's
+        # msg_list = list(decoded_message)
+        # for idx, c in enumerate(msg_list):
+        #     if idx == len(msg_list)-1 and c == "X":
+        #         return "".join(msg_list[:-1])
+        #     if c == "X":
+        #         msg_list[idx] = msg_list[idx-1]
+        # return "".join(msg_list)
 
 if __name__ == "__main__":
     cipher = PlayfairCipher(key="SUPERSPY")
