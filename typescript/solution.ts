@@ -2,9 +2,7 @@ const encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 const cipherKey = "SUPERSPY";
 const alphabetsWithoutJ = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 const pairs = encryptedMessage.match(/[A-Z]{1,2}/g) || [];
-
 let decryptedMessage = "";
-
 const lookup: Record<string, LetterIndex> = {};
 
 interface LetterIndex {
@@ -35,43 +33,55 @@ function generateMatrix(): string[][] {
 
 const matrix = generateMatrix();
 
-function handleSameRow(index1: LetterIndex, index2: LetterIndex) {
+function handleSameRow(
+  firstLetterIndex: LetterIndex,
+  secondLetterIndex: LetterIndex
+) {
   decryptedMessage +=
-    matrix[index1.row][
-      index1.column - 1 >= 0 ? index1.column - 1 : index1.column + 4
-    ] +
-    matrix[index2.row][
-      index2.column - 1 >= 0 ? index2.column - 1 : index2.column + 4
-    ];
+    matrix[firstLetterIndex.row][(firstLetterIndex.column + 4) % 5] +
+    matrix[secondLetterIndex.row][(secondLetterIndex.column + 4) % 5];
 }
 
-function handleSamecolumn(index1: LetterIndex, index2: LetterIndex) {
+function handleSamecolumn(
+  firstLetterIndex: LetterIndex,
+  secondLetterIndex: LetterIndex
+) {
   decryptedMessage +=
-    matrix[index1.row - 1 >= 0 ? index1.row : index1.row + 4][index1.column] +
-    matrix[index2.row - 1 >= 0 ? index2.row : index2.row + 4][index2.column];
+    matrix[(firstLetterIndex.row + 4) % 5][firstLetterIndex.column] +
+    matrix[(secondLetterIndex.row + 4) % 5][secondLetterIndex.column];
+}
+
+function findIndexOfLetter(letter: string): LetterIndex {
+  const index = lookup[letter];
+  if (!index) {
+    throw new Error(`Character '${letter}' not found in lookup table.`);
+  }
+  return lookup[letter];
 }
 
 pairs.forEach((pair) => {
-  const indexOfL1 = lookup[pair[0]];
-  const indexOfL2 = lookup[pair[1]];
+  const firstLetterIndex = findIndexOfLetter(pair[0]);
+  const secondLetterIndex = findIndexOfLetter(pair[1]);
 
-  if (indexOfL1.row === indexOfL2.row) {
-    handleSameRow(indexOfL1, indexOfL2);
-    return;
+  if (pair.length !== 2) {
+    throw new Error(
+      `Invalid pair '${pair}' encountered in the encrypted message.`
+    );
   }
 
-  if (indexOfL1.column === indexOfL2.column) {
-    handleSamecolumn(indexOfL1, indexOfL2);
-    return;
+  if (firstLetterIndex.row === secondLetterIndex.row) {
+    handleSameRow(firstLetterIndex, secondLetterIndex);
+  } else if (firstLetterIndex.column === secondLetterIndex.column) {
+    handleSamecolumn(firstLetterIndex, secondLetterIndex);
+  } else {
+    decryptedMessage +=
+      matrix[firstLetterIndex.row][secondLetterIndex.column] +
+      matrix[secondLetterIndex.row][firstLetterIndex.column];
   }
-
-  decryptedMessage +=
-    matrix[indexOfL1.row][indexOfL2.column] +
-    matrix[indexOfL2.row][indexOfL1.column];
 });
 
-function sanitizeMessage(message: string) {
-  const sanitizedMessage = message.toUpperCase().replace(/[\sX\xX\W_]/g, "");
-  return sanitizedMessage;
-}
-console.log(sanitizeMessage(decryptedMessage));
+const sanitizedMessage = decryptedMessage
+  .toUpperCase()
+  .replace(/[\sX\xX\W_]/g, "");
+
+console.log(sanitizedMessage);
