@@ -84,6 +84,49 @@ def break_encrypted_message_into_digrams(encrypted_message):
     
     return digrams
 
+def letters_on_same_row(key_table, first_letter_pos, second_letter_pos):
+    """
+    Decrypts and returns the swapped digram letters as a tuple, based on the Playfair cipher's same-row rule.
+
+    Parameters:
+    - key_table (dict): The key table dictionary.
+    - first_letter_pos (tuple of int): The position of the first letter in the key table (row, column).
+    - second_letter_pos (tuple of int): The position of the second letter in the key table (row, column).
+
+    Returns:
+    - tuple of str: The decrypted swapped letters as a tuple, following the same-row rule of the Playfair cipher.
+    """
+    # Get the immediate left letter for each encrypted letter
+    first_letter_swap = key_table["positions"][first_letter_pos[0]][get_immediate_previous_index(first_letter_pos[1])]
+    second_letter_swap = key_table["positions"][second_letter_pos[0]][get_immediate_previous_index(second_letter_pos[1])]
+    return (first_letter_swap, second_letter_swap)
+
+def get_immediate_previous_index(index):
+    """
+    Returns the immediate previous index position (int) of the key table line (immediate left) or column (immediately upward).
+
+    Parameters:
+    - index (int): The index of the key table line or column (0 to 4).
+
+    Returns:
+    - int: The immediate previous index position.
+    """
+    index -= 1
+    if index < 0:
+        index += 5
+    decrypt_index = (index) % 5
+    return decrypt_index
+
+def decrypt_digrams(key_table, digrams):
+    for digram in digrams:
+        first_letter, second_letter = digram
+        first_letter_pos = key_table["letters"][first_letter]
+        second_letter_pos = key_table["letters"][second_letter]
+        # Letters are in the same row
+        if first_letter_pos[0] == second_letter_pos[0]:
+            first_letter_swap, second_letter_swap = letters_on_same_row(key_table, first_letter_pos, second_letter_pos)
+        decrypted_digram = first_letter_swap + second_letter_swap
+
 
 if __name__ == "__main__":
     key_table = generate_key_table(CIPHER_KEY)
