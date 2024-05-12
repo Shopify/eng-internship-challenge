@@ -153,6 +153,32 @@ def get_immediate_previous_index(index):
     decrypt_index = (index) % 5
     return decrypt_index
 
+def are_letters_on_same_row(first_letter_pos, second_letter_pos):
+    """
+    Determine whether two letters are positioned on the same row within the key table.
+
+    Parameters:
+    - first_letter_pos (tuple of int): Position of the first letter in the key table (row, column).
+    - second_letter_pos (tuple of int): Position of the second letter in the key table (row, column).
+
+    Returns:
+    - bool: True if both letters are on the same row, False otherwise.
+    """
+    return first_letter_pos[0] == second_letter_pos[0]
+
+def are_letters_on_same_column(first_letter_pos, second_letter_pos):
+    """
+    Determine whether two letters are positioned on the same column within the key table.
+
+    Parameters:
+    - first_letter_pos (tuple of int): Position of the first letter in the key table (row, column).
+    - second_letter_pos (tuple of int): Position of the second letter in the key table (row, column).
+
+    Returns:
+    - bool: True if both letters are on the same column, False otherwise.
+    """
+    return first_letter_pos[1] == second_letter_pos[1]
+
 def decrypt_digrams(key_table, digrams):
     decrypted_digrams = []
     for digram in digrams:
@@ -160,10 +186,10 @@ def decrypt_digrams(key_table, digrams):
         first_letter_pos = key_table["letters"][first_letter]
         second_letter_pos = key_table["letters"][second_letter]
         # Letters are in the same row
-        if first_letter_pos[0] == second_letter_pos[0]:
+        if are_letters_on_same_row(first_letter_pos, second_letter_pos):
             first_letter_swap, second_letter_swap = letters_on_same_row_swap(key_table, first_letter_pos, second_letter_pos)
         # Letters are in the same column
-        elif first_letter_pos[1] == second_letter_pos[1]:
+        elif are_letters_on_same_column(first_letter_pos, second_letter_pos):
             first_letter_swap, second_letter_swap = letters_on_same_column_swap(key_table, first_letter_pos, second_letter_pos)
         # Letters are not in the same row or column
         else:
