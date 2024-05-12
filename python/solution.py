@@ -57,7 +57,6 @@ def decrypt(code, key_table):
     i = 0
     while i < len(code):
         a, b = positions[code[i]], positions[code[i+1]]
-        decrypted_a, decrypted_b = '', ''
         if a[0] == b[0]:
             decrypted_a = key_table[a[0]][a[1] - 1]
             decrypted_b = key_table[b[0]][b[1] - 1]
@@ -67,6 +66,7 @@ def decrypt(code, key_table):
         else:
             decrypted_a = key_table[a[0]][b[1]]
             decrypted_b = key_table[b[0]][a[1]]
+
         if decrypted_a == 'X':
             result += decrypted_b
         elif decrypted_b == 'X':
