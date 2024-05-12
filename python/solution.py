@@ -15,9 +15,16 @@ def generate_key_table(cipher_key):
     Returns:
     - dict: A dictionary representing the generated key table.
     """
-    # Dictionary to store each letter and its position in the table.
-    # Utilizing a dictionary ensures O(1) complexity for when accessing a letter's position.
-    key_table = {}
+    # Dictionary representing the generated key table.
+    # It consists of two keys:
+    # - "letters": Stores each letter and its position in the table as a dictionary.
+    #   Utilizing a dictionary ensures O(1) complexity for accessing a letter's position.
+    # - "positions": Represents a 5x5 matrix where each element is a letter.
+    #   Utilizing a 5x5 matrix ensures O(1) complexity for accessing a letter with its position.
+    key_table = {
+        "letters": {},
+        "positions": [['' for _ in range(PLAYFAIR_KEY_TABLE_SIZE)] for _ in range(PLAYFAIR_KEY_TABLE_SIZE)]
+    }
     # Set to track used letters to avoid duplicates letters in the key table.
     used_letters = set()
     # Start index of the key table
@@ -33,8 +40,10 @@ def generate_key_table(cipher_key):
         # is an invalid character, we dont add it to the key table
         if uppercase_letter in used_letters or uppercase_letter in INVALID_KEY_CHARACTERS:
             continue
-        # Add the letter and its position as a tuple in the key table
-        key_table[uppercase_letter] = (i, j)
+        # Add the letter and its position as a tuple in the key table dictionary
+        key_table["letters"][uppercase_letter] = (i, j)
+        # Add the letter and its position as a tuple in the key table matrix
+        key_table["positions"][i][j] = uppercase_letter
         # Add the letter to the used letters set and increment the j position 
         # to go to the next position in the matrix
         used_letters.add(uppercase_letter)
@@ -74,6 +83,7 @@ def break_encrypted_message_into_digrams(encrypted_message):
         digrams.append(digram)    # Add the digram to the list
     
     return digrams
+
 
 if __name__ == "__main__":
     key_table = generate_key_table(CIPHER_KEY)
