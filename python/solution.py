@@ -22,7 +22,7 @@ def generate_key_table(key: str) -> str:
 
     return key_table
 
-def create_letter_pairs(text: str) -> list[str]:
+def create_letter_pairs(text: str) -> list:
     """
     Create pairs of letters from the input text.
 
