@@ -30,15 +30,59 @@ const createKeyTable = (key) => {
   return keyTableFormatted;
 };
 
-const decrypt = (encryptedText, keyTable) => {};
+const getKeyTableIndex = (keyTable, char) => {
+  // loop through rows of keyTable
+  for (let i = 0; i < keyTable.length; i++) {
+    // if char found in row, return [i, j] index
+    if (keyTable[i].includes(char)) {
+      return [i, keyTable[i].indexOf(char)];
+    }
+  }
+
+  // if char not found in keyTable, return [-1, -1]
+  return [-1, -1];
+};
+
+const decrypt = (encryptedText, keyTable) => {
+  let decryptedText = "";
+
+  // loop through encryptedText 2 chars at a time
+  for (let i = 0; i < encryptedText.length; i += 2) {
+    // get chars
+    let charA = encryptedText[i];
+    let charB = encryptedText[i + 1];
+
+    // get [row, col] index of each char
+    let [rowA, colA] = getKeyTableIndex(keyTable, charA);
+    let [rowB, colB] = getKeyTableIndex(keyTable, charB);
+
+    if (rowA === rowB) {
+      // same row -> shift left one index
+      decryptedText += keyTable[rowA][(colA + 4) % 5];
+      decryptedText += keyTable[rowA][(colB + 4) % 5];
+    } else if (colA === colB) {
+      // same col -> shift up one index
+      decryptedText += keyTable[(rowA + 4) % 5][colA];
+      decryptedText += keyTable[(rowB + 4) % 5][colA];
+    } else {
+      // rectangular swap
+      decryptedText += keyTable[rowA][colB];
+      decryptedText += keyTable[rowB][colA];
+    }
+  }
+
+  return decryptedText;
+};
 
 const runDecryption = (encryptedText, key) => {
   const keyTable = createKeyTable(key);
-  console.log(keyTable);
+  const decryptedText = decrypt(encryptedText, keyTable);
+
+  return decryptedText;
 };
 
 const sampleText = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 const sampleKey = "SUPERSPY";
 
 const result = runDecryption(sampleText, sampleKey);
-// console.log(result);
+console.log(result);
