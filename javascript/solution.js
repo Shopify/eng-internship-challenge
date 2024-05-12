@@ -101,4 +101,12 @@ function decryptPairs(pairs, matrix) {
     return decryptedMessage.replace(/X/g, '');
 }
 
+// Command Line Runner
+const secretKey = "SUPERSPY";
+const encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 
+const cipherMatrix = generateCipherMatrix(secretKey);
+const encryptedPairs = createPairs(encryptedMessage);
+const decryptedMessage = decryptPairs(encryptedPairs, cipherMatrix);
+
+console.log(decryptedMessage);
