@@ -1,7 +1,8 @@
 def generate_key_table(key):
     # Cleaning text
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
-    key = key.upper().replace(" ", "").replace("J", "I")
+    key = key.upper().replace("J", "I")
+    key = "".join([i for i in key if i.isalnum()])
     key_table = ""
 
     # Create key table
@@ -13,7 +14,8 @@ def generate_key_table(key):
 
 def create_letter_pairs(text):
     # Cleaning text
-    text = text.upper().replace(" ", "").replace("J", "I")
+    text = text.upper().replace("J", "I")
+    text = "".join([i for i in text if i.isalnum()])
 
     # Adding an "X" at the end if the length is odd
     if len(text) % 2 == 1:
