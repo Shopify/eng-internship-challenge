@@ -84,7 +84,7 @@ def break_encrypted_message_into_digrams(encrypted_message):
     
     return digrams
 
-def letters_on_same_row(key_table, first_letter_pos, second_letter_pos):
+def letters_on_same_row_swap(key_table, first_letter_pos, second_letter_pos):
     """
     Decrypts and returns the swapped digram letters as a tuple, based on the Playfair cipher's same-row rule.
 
@@ -101,7 +101,7 @@ def letters_on_same_row(key_table, first_letter_pos, second_letter_pos):
     second_letter_swap = key_table["positions"][second_letter_pos[0]][get_immediate_previous_index(second_letter_pos[1])]
     return (first_letter_swap, second_letter_swap)
 
-def letters_on_same_column(key_table, first_letter_pos, second_letter_pos):
+def letters_on_same_column_swap(key_table, first_letter_pos, second_letter_pos):
     """
     Decrypts and returns the swapped digram letters as a tuple, based on the Playfair cipher's same-column rule.
 
@@ -161,10 +161,10 @@ def decrypt_digrams(key_table, digrams):
         second_letter_pos = key_table["letters"][second_letter]
         # Letters are in the same row
         if first_letter_pos[0] == second_letter_pos[0]:
-            first_letter_swap, second_letter_swap = letters_on_same_row(key_table, first_letter_pos, second_letter_pos)
+            first_letter_swap, second_letter_swap = letters_on_same_row_swap(key_table, first_letter_pos, second_letter_pos)
         # Letters are in the same column
         elif first_letter_pos[1] == second_letter_pos[1]:
-            first_letter_swap, second_letter_swap = letters_on_same_column(key_table, first_letter_pos, second_letter_pos)
+            first_letter_swap, second_letter_swap = letters_on_same_column_swap(key_table, first_letter_pos, second_letter_pos)
         # Letters are not in the same row or column
         else:
             first_letter_swap, second_letter_swap = rectangle_letters_swap(key_table, first_letter_pos, second_letter_pos)
