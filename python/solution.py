@@ -1,9 +1,9 @@
 ENCRYPTED_MESSAGE = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 CIPHER_KEY = "SUPERSPY"
-ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # omit J to reduce the alphabet to fit
 PLAYFAIR_KEY_TABLE_SIZE = 5
 # INVALID_KEY_CHARACTERS in a set to have O(1) search complexity
-INVALID_KEY_CHARACTERS = set([' ', 'X', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?', '`'])
+INVALID_KEY_CHARACTERS = set([' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?', '`'])
 
 def generate_key_table(cipher_key):
     """
@@ -76,5 +76,5 @@ def break_encrypted_message_into_digrams(encrypted_message):
     return digrams
 
 if __name__ == "__main__":
-    # key_table = generate_key_table("playfair example")
+    key_table = generate_key_table(CIPHER_KEY)
     digrams = break_encrypted_message_into_digrams(ENCRYPTED_MESSAGE)
