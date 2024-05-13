@@ -63,6 +63,6 @@ def decrypt(encryptedMsg, keyTable):
 
 # solving the problem
 keyTable = generateKeyTable(cipherKey)
-solution = decrypt(cipherKey, encryptedMsg, keyTable)
+solution = decrypt(encryptedMsg, keyTable)
 # print solution
 print(solution)
