@@ -18,6 +18,7 @@ type PlayfairCipher struct {
 
 type PlayfairMatrix [][]rune
 
+// row, col for each letter
 type LetterLocation struct {
 	X, Y int
 }
@@ -54,6 +55,17 @@ func createEmptyMatrix() PlayfairMatrix {
 		matrix[i] = make([]rune, SIZE)
 	}
 	return matrix
+}
+
+// ensures the cipherText and keyword are of valid lengths
+func (p *PlayfairCipher) validateInput() error {
+	if len(p.Message) == 0 || len(p.Message)%2 != 0 {
+		return fmt.Errorf("cipher text length must be even and non zero length")
+	}
+	if len(p.Keyword) == 0 || len(p.Keyword) > 25 {
+		return fmt.Errorf("keyword length must be between 1 and 25 characters")
+	}
+	return nil
 }
 
 // fills the Playfair matrix with the keyword and remaining alphabet letters
@@ -140,16 +152,6 @@ func (p *PlayfairCipher) decrypt() string {
 	}
 	plainText = p.cleanText(plainText)
 	return plainText
-}
-
-func (p *PlayfairCipher) validateInput() error {
-	if len(p.Message) == 0 || len(p.Message)%2 != 0 {
-		return fmt.Errorf("cipher text length must be even and not zero")
-	}
-	if len(p.Keyword) == 0 || len(p.Keyword) > 25 {
-		return fmt.Errorf("keyword length must be between 1 and 25 characters")
-	}
-	return nil
 }
 
 func main() {
