@@ -44,7 +44,7 @@ func NewPlayfairCipher(msg, kw string) (*PlayfairCipher, error) {
 		return nil, err
 	}
 	cipher.populateMatrix()
-	cipher.populateLetterLocations()
+	cipher.populateLetterPositions()
 	return cipher, nil
 }
 
@@ -104,7 +104,7 @@ func (p *PlayfairCipher) populateMatrix() {
 }
 
 // creates a mapping of each letter to its location in the matrix
-func (p *PlayfairCipher) populateLetterLocations() {
+func (p *PlayfairCipher) populateLetterPositions() {
 	for r := 0; r < SIZE; r++ {
 		for c := 0; c < SIZE; c++ {
 			char := p.Matrix[r][c]
