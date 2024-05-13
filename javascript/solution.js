@@ -5,6 +5,11 @@
 // The rule of decryption is slighyly different from the Wikipedia one (shift right -> shift left when on the same row) according to the solution.test
 // The "X" in the solution is also removed
 
+// The inputs are defined below, above all the other functions
+// The key and message strings are assumed to be consist of UPPER CASE letters according to the README instructions
+let key = 'SUPERSPY';
+let message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV';
+
 function createTable(key)
 {
     let letters = key + 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
@@ -118,9 +123,8 @@ function messageDecrypt(p1, p2, table)
     return decrypted_pair;
 }
 
-let table = createTable('SUPERSPY');
+let table = createTable(key);
 
-let message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV';
 // (3) the plain text (decrypted message) contains 'J'
 message = message.replace(/J/g, 'I');
 let msg_size = message.length;
