@@ -48,6 +48,9 @@ def create_matrix_lookup(keyword):
     for char in alphabet:
         if char not in lookup:
             matrix_append(char)
+
+        if len(lookup) == 25:
+            break
             
     return matrix, lookup
 
