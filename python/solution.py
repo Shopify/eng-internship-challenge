@@ -70,16 +70,16 @@ class Playfair:
             pos2 = mapping.get(digraph[1])
 
             if pos1 and pos2:
-                new_ = ""
+                new_digraph = ""
 
                 if pos1[0] == pos2[0]: # Same row
-                    new_ = self.get_char_at(pos1[0], (pos1[1] - 1) % 5) + self.get_char_at(pos2[0], (pos2[1] - 1) % 5)
+                    new_digraph = self.get_char_at(pos1[0], (pos1[1] - 1) % 5) + self.get_char_at(pos2[0], (pos2[1] - 1) % 5)
                 elif pos1[1] == pos2[1]: # Same col
-                    new_ = self.get_char_at((pos1[0] - 1) % 5, pos1[1]) + self.get_char_at((pos2[0] - 1) % 5, pos2[1])
+                    new_digraph = self.get_char_at((pos1[0] - 1) % 5, pos1[1]) + self.get_char_at((pos2[0] - 1) % 5, pos2[1])
                 else: # Form a rectangle
-                    new_ = self.get_char_at(pos1[0], pos2[1]) + self.get_char_at(pos2[0], pos1[1])
+                    new_digraph = self.get_char_at(pos1[0], pos2[1]) + self.get_char_at(pos2[0], pos1[1])
 
-                decrypted_message += new_
+                decrypted_message += new_digraph
 
         decrypted_message = decrypted_message.replace("X", "")
         return decrypted_message
