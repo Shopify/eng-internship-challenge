@@ -10,6 +10,9 @@ def create_matrix_lookup(keyword):
     Returns:
     tuple: A tuple containing a 5x5 matrix for solving the cipher and a lookup table, 
            which is used to find the position of a char in the matrix in constant time.
+
+    Complexity:
+    Capped at O(1) for time and space, since the matrix and lookup table will always contain max. 25 characters.
     """
 
 
@@ -23,7 +26,7 @@ def create_matrix_lookup(keyword):
         Does not return a value, but mutates the matrix and lookup table.
         """
         nonlocal cur_row
-        if len(matrix[cur_row]) == 5:
+        if len(matrix[cur_row]) >= 5:
             matrix.append([])
             cur_row += 1
 
@@ -70,6 +73,9 @@ def playfair_cipher(text, keyword) -> str:
     - The input text does not contain spaces or special characters.
     - We are deciphering using the convention that 'I' and 'J' are merged within the 5x5 matrix,
       thus any J's in an original text will be deciphered into I.
+
+    Complexity:
+    O(n) time and space, where n is the length of the ciphertext. Linear space is required for the result list.
     """
     result = []
 
