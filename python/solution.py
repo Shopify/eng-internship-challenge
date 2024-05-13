@@ -5,6 +5,8 @@ PLAYFAIR_KEY_TABLE_SIZE = 5
 INSERT_LETTER = 'X'
 # INVALID_KEY_CHARACTERS in a set to have O(1) search complexity
 INVALID_KEY_CHARACTERS = set([' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?', '`'])
+LETTERS_KEY_TABLE = "letters"
+POSITIONS_KEY_TABLE = "positions"
 
 def generate_key_table(cipher_key):
     """
@@ -25,8 +27,8 @@ def generate_key_table(cipher_key):
     # - "positions": Represents a 5x5 matrix where each element is a letter.
     #   Utilizing a 5x5 matrix ensures O(1) complexity for accessing a letter with its position.
     key_table = {
-        "letters": {},
-        "positions": [['' for _ in range(PLAYFAIR_KEY_TABLE_SIZE)] for _ in range(PLAYFAIR_KEY_TABLE_SIZE)]
+        LETTERS_KEY_TABLE: {},
+        POSITIONS_KEY_TABLE: [['' for _ in range(PLAYFAIR_KEY_TABLE_SIZE)] for _ in range(PLAYFAIR_KEY_TABLE_SIZE)]
     }
     # Set to track used letters to avoid duplicates letters in the key table.
     used_letters = set()
@@ -44,9 +46,9 @@ def generate_key_table(cipher_key):
         if uppercase_letter in used_letters or uppercase_letter in INVALID_KEY_CHARACTERS:
             continue
         # Add the letter and its position as a tuple in the key table dictionary
-        key_table["letters"][uppercase_letter] = (i, j)
+        key_table[LETTERS_KEY_TABLE][uppercase_letter] = (i, j)
         # Add the letter and its position as a tuple in the key table matrix
-        key_table["positions"][i][j] = uppercase_letter
+        key_table[POSITIONS_KEY_TABLE][i][j] = uppercase_letter
         # Add the letter to the used letters set and increment the j position 
         # to go to the next position in the matrix
         used_letters.add(uppercase_letter)
@@ -104,8 +106,8 @@ def letters_on_same_row_swap(key_table, first_letter_pos, second_letter_pos):
     Time Complexity: O(1).
     """
     # Get the immediate left letter for each encrypted letter
-    first_letter_swap = key_table["positions"][first_letter_pos[0]][get_immediate_previous_index(first_letter_pos[1])]
-    second_letter_swap = key_table["positions"][second_letter_pos[0]][get_immediate_previous_index(second_letter_pos[1])]
+    first_letter_swap = key_table[POSITIONS_KEY_TABLE][first_letter_pos[0]][get_immediate_previous_index(first_letter_pos[1])]
+    second_letter_swap = key_table[POSITIONS_KEY_TABLE][second_letter_pos[0]][get_immediate_previous_index(second_letter_pos[1])]
     return (first_letter_swap, second_letter_swap)
 
 def letters_on_same_column_swap(key_table, first_letter_pos, second_letter_pos):
@@ -123,8 +125,8 @@ def letters_on_same_column_swap(key_table, first_letter_pos, second_letter_pos):
     Time Complexity: O(1).
     """
     # Get the immediate upper letter for each encrypted letter
-    first_letter_swap = key_table["positions"][get_immediate_previous_index(first_letter_pos[0])][first_letter_pos[1]]
-    second_letter_swap = key_table["positions"][get_immediate_previous_index(second_letter_pos[0])][second_letter_pos[1]]
+    first_letter_swap = key_table[POSITIONS_KEY_TABLE][get_immediate_previous_index(first_letter_pos[0])][first_letter_pos[1]]
+    second_letter_swap = key_table[POSITIONS_KEY_TABLE][get_immediate_previous_index(second_letter_pos[0])][second_letter_pos[1]]
     return (first_letter_swap, second_letter_swap)
 
 def rectangle_letters_swap(key_table, first_letter_pos, second_letter_pos):
@@ -144,8 +146,8 @@ def rectangle_letters_swap(key_table, first_letter_pos, second_letter_pos):
     """
     # Get the letter on the same row respectively but at the other pair of corners of the rectangle
     # for each encrypted letter
-    first_letter_swap = key_table["positions"][first_letter_pos[0]][second_letter_pos[1]]
-    second_letter_swap = key_table["positions"][second_letter_pos[0]][first_letter_pos[1]]
+    first_letter_swap = key_table[POSITIONS_KEY_TABLE][first_letter_pos[0]][second_letter_pos[1]]
+    second_letter_swap = key_table[POSITIONS_KEY_TABLE][second_letter_pos[0]][first_letter_pos[1]]
     return (first_letter_swap, second_letter_swap)
 
 def get_immediate_previous_index(index):
@@ -216,8 +218,8 @@ def decrypt_digrams(key_table, digrams):
         # Separate the digram into two letters
         first_letter, second_letter = digram
         # Get positions of the two letters in the key table
-        first_letter_pos = key_table["letters"][first_letter]
-        second_letter_pos = key_table["letters"][second_letter]
+        first_letter_pos = key_table[LETTERS_KEY_TABLE][first_letter]
+        second_letter_pos = key_table[LETTERS_KEY_TABLE][second_letter]
         
         # Decrypt based on the relative positions of the letters
         # Letters are in the same row
