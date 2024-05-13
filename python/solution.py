@@ -56,7 +56,9 @@ def decrypt(cipherKey, encryptedMsg, keyTable):
             # pairX % 5 finds column position
             decryptedMsg += keyTable[pair1 // 5 * 5 + pair2 % 5]
             decryptedMsg += keyTable[pair2 // 5 * 5 + pair1 % 5]
-    return decryptedMsg
+
+    # remove buffer x's from solution
+    return decryptedMsg.replace("X", "")
 
 
 # solving the problem
