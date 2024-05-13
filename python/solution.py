@@ -13,3 +13,12 @@ matrix = create_matrix(key)  # Corrected function call
 print("Matrix:\n", "\n".join([" ".join(row) for row in matrix]))
 
 
+#RULES FOR DECRYPTION USING PLAYFAIR CIPHER
+# To decrypt using the Playfair Cipher, you need to handle pairs of letters in the ciphertext and apply the following rules based 
+#on their positions in the matrix:
+
+# Same Row: If the pair of letters is in the same row, replace each with the letter immediately to its left (wrap around if necessary).
+# Same Column: If the pair is in the same column, replace each with the letter directly above it (wrap around if necessary).
+# Rectangle: If the pair forms a rectangle, replace each letter with the letter in the same row but from the column of the other 
+#letter in the pair.
+
