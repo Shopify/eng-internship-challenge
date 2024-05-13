@@ -15,6 +15,8 @@ def generate_key_table(cipher_key):
 
     Returns:
     - dict: A dictionary representing the generated key table.
+    
+    Time Complexity: O(n).
     """
     # Dictionary representing the generated key table.
     # It consists of two keys:
@@ -70,6 +72,8 @@ def break_encrypted_message_into_digrams(encrypted_message):
 
     Returns:
     - list of str: A list containing the digrams extracted from the encrypted message.
+    
+    Time Complexity: O(n).
     """
     # Check if the encrypted message has an even number of characters
     if len(encrypted_message) % 2 != 0:
@@ -96,6 +100,8 @@ def letters_on_same_row_swap(key_table, first_letter_pos, second_letter_pos):
 
     Returns:
     - tuple of str: The decrypted swapped letters as a tuple, following the same-row rule of the Playfair cipher.
+    
+    Time Complexity: O(1).
     """
     # Get the immediate left letter for each encrypted letter
     first_letter_swap = key_table["positions"][first_letter_pos[0]][get_immediate_previous_index(first_letter_pos[1])]
@@ -113,6 +119,8 @@ def letters_on_same_column_swap(key_table, first_letter_pos, second_letter_pos):
 
     Returns:
     - tuple of str: The decrypted swapped letters as a tuple, following the same-column rule of the Playfair cipher.
+    
+    Time Complexity: O(1).
     """
     # Get the immediate upper letter for each encrypted letter
     first_letter_swap = key_table["positions"][get_immediate_previous_index(first_letter_pos[0])][first_letter_pos[1]]
@@ -131,6 +139,8 @@ def rectangle_letters_swap(key_table, first_letter_pos, second_letter_pos):
 
     Returns:
     - tuple of str: The decrypted swapped letters as a tuple, following the rectangle swap rule of the Playfair cipher.
+    
+    Time Complexity: O(1).
     """
     # Get the letter on the same row respectively but at the other pair of corners of the rectangle
     # for each encrypted letter
@@ -147,6 +157,8 @@ def get_immediate_previous_index(index):
 
     Returns:
     - int: The immediate previous index position.
+    
+    Time Complexity: O(1).
     """
     index -= 1
     if index < 0:
@@ -164,6 +176,8 @@ def are_letters_on_same_row(first_letter_pos, second_letter_pos):
 
     Returns:
     - bool: True if both letters are on the same row, False otherwise.
+    
+    Time Complexity: O(1).
     """
     return first_letter_pos[0] == second_letter_pos[0]
 
@@ -177,6 +191,8 @@ def are_letters_on_same_column(first_letter_pos, second_letter_pos):
 
     Returns:
     - bool: True if both letters are on the same column, False otherwise.
+    
+    Time Complexity: O(1).
     """
     return first_letter_pos[1] == second_letter_pos[1]
 
@@ -190,6 +206,8 @@ def decrypt_digrams(key_table, digrams):
 
     Returns:
     - str: Joined string of decrypted digrams.
+    
+    Time Complexity: O(n).
     """
     decrypted_digrams = []
     
@@ -230,6 +248,8 @@ def remove_insert_letter_from_decrypted_message(insert_letter, decrypted_message
 
     Returns:
     - str: The final decrypted message with the insert letter removed.
+    
+    Time Complexity: O(n).
     """
     final_decrypted_message = ""
 
