@@ -16,9 +16,9 @@ class CipherMatrix:
     cipher_chars = self.__get_all_cipher_chars()
     self.__populate_matrix(cipher_chars)
 
-  """Removes non-alphabet"""
+  """Removes non-alphabet, replaces 'J' with 'I'"""
   def __clean_cipher_key(self, cipher_key: str) -> str:
-    return "".join([char for char in cipher_key if char.isalpha()])
+    return "".join([char for char in cipher_key if char.isalpha()]).replace("J", "I")
   
   """Populates 2D cipher matrix with cipher chars"""
   def __populate_matrix(self, cipher_chars):
@@ -34,16 +34,12 @@ class CipherMatrix:
   def __get_all_cipher_chars(self):
     cipher_chars = []
     for each_char in self.cipher_key:
-      if 'I/J' not in cipher_chars and each_char in ('I', 'J'):
-        cipher_chars.append('I/J')
-      elif each_char not in cipher_chars and each_char not in ('I', 'J'):
+      if each_char not in cipher_chars:
         cipher_chars.append(each_char.upper())
 
-    for each_letter in string.ascii_uppercase:
-      if each_letter not in cipher_chars and each_letter not in ('I', 'J'):
+    # Replaces 'J' with 'I' to fit in matrix
+    for each_letter in string.ascii_uppercase.replace('J', 'I'):
+      if each_letter not in cipher_chars:
         cipher_chars.append(each_letter)
-      # For 'I' and 'J', 'I/J' is stored in the Cipher Matrix to accommodate its 25-character limit.
-      elif 'I/J' not in cipher_chars and each_letter  in ('I', 'J'):
-        cipher_chars.append('I/J')
 
     return cipher_chars
