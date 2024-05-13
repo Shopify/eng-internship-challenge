@@ -18,7 +18,7 @@ class CipherMatrix:
 
   """Removes non-alphabet, replaces 'J' with 'I'"""
   def __clean_cipher_key(self, cipher_key: str) -> str:
-    return "".join([char for char in cipher_key if char.isalpha()]).replace("J", "I")
+    return "".join([char for char in cipher_key if char.isalpha()]).replace("J", "I").upper()
   
   """Populates 2D cipher matrix with cipher chars"""
   def __populate_matrix(self, cipher_chars):
