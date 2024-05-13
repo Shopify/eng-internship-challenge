@@ -11,7 +11,6 @@ from collections import defaultdict
 
 # typing imports
 from typing import Tuple, List, Final
-from typing_extensions import DefaultDict
 
 class PlayFair:
     def __init__(self, key: str):
@@ -34,7 +33,7 @@ class PlayFair:
 
         # encryption matrix and indicies dictionary
         # store the indicies of the character so that for n -> infinity, it is much more optimized than looping through the matrix to find the index
-        self.indicies: DefaultDict[str, Tuple[int, int]] = defaultdict(lambda: (0, 0))
+        self.indicies = defaultdict(lambda: (0, 0))
         self.matrix: List[List[str]] = [["" for _ in range(self.cols)] for _ in range(self.rows)]
 
         # builds the matrix
