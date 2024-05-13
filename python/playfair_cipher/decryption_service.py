@@ -1,96 +1,110 @@
 from playfair_cipher.cipher_matrix import CipherMatrix
 
-class DecrptionService:
-  def __init__(self, cipherKey) -> None:
-    self.cipherkey=cipherKey
-    self.cipherMatrix = CipherMatrix(cipherKey).get()
+class CharacterPosition:
+  def __init__(self, row: int, column: int):
+    self.row = row
+    self.column = column
 
-  def decrypt(self,message):
-    character_pairs = self.__generateCharacterPairs(message)
-    decrypted_message_indices = self.__findDecryptMessageIndices(character_pairs)
-    decrypted_message = self.__getMessageFromIndices(decrypted_message_indices)
-    revealed_decrypted_message = self.__revealDecryptedMessage(decrypted_message)
+class DecryptionService:
+  def __init__(self, cipher_key: str) -> None:
+    self.cipher_key = cipher_key
+    self.cipher_matrix = CipherMatrix(cipher_key).get()
+
+  def decrypt(self, message: str) -> str:
+    character_pairs = self.__generate_character_pairs(message)
+    decrypted_message_char_positions = self.__find_decrypted_message_char_positions(character_pairs)
+    decrypted_message = self.__get_message_from_char_positions(decrypted_message_char_positions)
+    revealed_decrypted_message = self.__remove_fillers_from_decrypted_message(decrypted_message)
+
     return revealed_decrypted_message
 
-  def __generateCharacterPairs(self, message):
-    character_pairs=[]
-    current_pair=""
-    index=0
-    while index<len(message):
-      if len(current_pair)==1 and current_pair[0]==message[index]:
-        current_pair+="X"
+  def __generate_character_pairs(self, message: str) -> list[str]:
+    character_pairs = []
+    current_pair = ""
+    index = 0
+
+    while index < len(message):
+      if len(current_pair) == 1 and current_pair[0] == message[index]:
+        current_pair += "X"
       else:
-        current_pair+=message[index]
-        index=index+1
-      if len(current_pair)==2:
+        current_pair += message[index]
+        index += 1
+
+      if len(current_pair) == 2:
         character_pairs.append(current_pair)
-        current_pair=""
+        current_pair = ""
+
     return character_pairs
   
-  def __findIndices(self, character_pair):
-    pair_index=[]
-    for each_char in range(2):
+  def __find_position_of_character(self, character: str) -> CharacterPosition:
+    for row in range(0,5):
       for column in range(0,5):
-        for row in range(0,5):
-          if self.cipherMatrix[column][row]==character_pair[each_char]:
-            pair_index.append([column,row])
-          elif character_pair[each_char] in ('I','J') and self.cipherMatrix[column][row] == 'I/J':
-            pair_index.append([column,row])
-    
-    return pair_index
+        if self.cipher_matrix[row][column] == character:
+          return CharacterPosition(row, column)
+        elif character in ('I', 'J') and self.cipher_matrix[row][column] == 'I/J':
+          return CharacterPosition(row, column)
+        
+  def __find_character_at_postition(self, character_position: CharacterPosition):
+    cipher_char = self.cipher_matrix[character_position.row][character_position.column]
+    if cipher_char == 'I/J':
+      cipher_char = 'I'
+    return cipher_char
   
-  def __findDecryptMessageIndices(self, character_pairs):
-    decrypted_message_indices=[]
+  def __get_same_column_decrypted_position(self, message_char: CharacterPosition):
+    return CharacterPosition((message_char.row - 1) % 5 , message_char.column)
+
+  def __get_same_row_decrypted_position(self, message_char: CharacterPosition):
+    return CharacterPosition(message_char.row, (message_char.column - 1) % 5)
+  
+  def __get_rectangle_decrypted_position(self, first_message_char: CharacterPosition, second_message_char: CharacterPosition):
+    return [
+      CharacterPosition(first_message_char.row, second_message_char.column),
+      CharacterPosition(second_message_char.row, first_message_char.column)
+    ]
+
+  def __find_decrypted_message_char_positions(self, character_pairs: list[str]) -> list[CharacterPosition]:
+    decrypted_message_char_positions=[]
 
     for each_character_pair in character_pairs:
-      pair_index=self.__findIndices(each_character_pair)
+      first_character_position = self.__find_position_of_character(each_character_pair[0])
+      second_character_position = self.__find_position_of_character(each_character_pair[1])
       
-      if pair_index[0][1]==pair_index[1][1]:
-        decrypted_message_indices.append(self.__sameColumn(pair_index))
-      elif pair_index[0][0]==pair_index[1][0]:
-        decrypted_message_indices.append(self.__sameRow(pair_index))
+      if first_character_position.column == second_character_position.column:
+        decrypted_message_char_positions.append([
+          self.__get_same_column_decrypted_position(first_character_position),
+          self.__get_same_column_decrypted_position(second_character_position)
+        ])
+      elif first_character_position.row == second_character_position.row:
+        decrypted_message_char_positions.append([
+          self.__get_same_row_decrypted_position(first_character_position),
+          self.__get_same_row_decrypted_position(second_character_position)
+        ])
       else:
-        decrypted_message_indices.append(self.__formsRectangle(pair_index))
-    return decrypted_message_indices
+        decrypted_message_char_positions.append(self.__get_rectangle_decrypted_position(first_character_position, second_character_position))
 
-  def __sameColumn(self,pair_index):
-    new_pair=[[(pair_index[0][0]-1)%5,pair_index[0][1]],[(pair_index[1][0]-1)%5,pair_index[1][1]]]
-    return new_pair
-
-  def __sameRow(self,pair_index):
-    new_pair=[[pair_index[0][0],(pair_index[0][1]-1)%5],[pair_index[1][0],(pair_index[1][1]-1)%5]]
-    return new_pair
-
-    
-  def __formsRectangle(self,pair_index):
-    new_pair=[[pair_index[0][0],pair_index[1][1]],[pair_index[1][0],pair_index[0][1]]]
-    return new_pair
+    return decrypted_message_char_positions
   
-  def __getMessageFromIndices(self, decrypted_message_indices):
-    newDecyptedMessage=""
-    result=self.cipherMatrix
-    for i,each_element in enumerate(decrypted_message_indices):
-        firstCharIndex = each_element[0]
-        e = result[firstCharIndex[0]][firstCharIndex[1]]
-        if e == 'I/J':
-          e = 'I'
-        newDecyptedMessage+=e
-        secondCharIndex = each_element[1]
-        e = result[secondCharIndex[0]][secondCharIndex[1]]
-        if e == 'I/J':
-          e = 'I'
-        newDecyptedMessage+=e
-    return newDecyptedMessage
+  def __get_message_from_char_positions(self, decrypted_message_char_positions: list[CharacterPosition]) -> str:
+    decrypted_message = ""
+
+    for each_element in decrypted_message_char_positions:
+      first_char_position = each_element[0]
+      decrypted_message += self.__find_character_at_postition(first_char_position)
+
+      second_char_position = each_element[1]
+      decrypted_message += self.__find_character_at_postition(second_char_position)
+
+    return decrypted_message
   
-  def __revealDecryptedMessage(self,newDecyptedMessage):
-    index=1
-    while index<len(newDecyptedMessage)-1:
-      if newDecyptedMessage[index]=="X" and newDecyptedMessage[index-1]==newDecyptedMessage[index+1]:
-        newDecyptedMessage=newDecyptedMessage.replace(newDecyptedMessage[index],"")
-      index=index+1
+  def __remove_fillers_from_decrypted_message(self, decrypted_message: str) -> str:
+    index = 1
+    while index < len(decrypted_message) - 1:
+      if decrypted_message[index] == "X" and decrypted_message[index-1] == decrypted_message[index+1]:
+        decrypted_message = decrypted_message.replace(decrypted_message[index], "")
+      index += 1
    
-    if newDecyptedMessage[-1]=="X" and len(newDecyptedMessage)%2==0:
-     newDecyptedMessage=newDecyptedMessage[:-1]
+    if decrypted_message[-1] == "X" and len(decrypted_message) % 2 == 0:
+      decrypted_message = decrypted_message[:-1]
 
-    return(newDecyptedMessage)
+    return decrypted_message
 
