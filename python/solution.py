@@ -2,13 +2,13 @@ import argparse
 DEFAULT_MESSAGE = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 DEFAULT_KEY = "SUPERSPY"
 
-def create_table(key):
+def create_table(cipher_key):
     """
     creates a 5x5 character table from the key provided
 
     key: the key to be used to create the table
     """
-    table_chars = "".join(dict.fromkeys(key + "ABCDEFGHIKLMNOPQRSTUVWXYZ"))
+    table_chars = "".join(dict.fromkeys(cipher_key + "ABCDEFGHIKLMNOPQRSTUVWXYZ"))
     return [table_chars[i:i+5] for i in range(0, 25, 5)]
 
 def create_coordinates_map(table):
