@@ -1,6 +1,6 @@
 # Rachelle De Man Solution
 
-# Cipher Key and Encrypted Message
+# cipher Key and encrypted Message
 cipherKey = "SUPERSPY"
 encryptedMsg = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
@@ -25,7 +25,7 @@ def generateKeyTable(cipherKey):
 
 
 # function to solve encryption
-def decrypt(cipherKey, encryptedMsg, keyTable):
+def decrypt(encryptedMsg, keyTable):
     decryptedMsg = ""
     # we will iterate through the encrypted message in pairs
     for i in range(0, len(encryptedMsg), 2):
@@ -49,7 +49,7 @@ def decrypt(cipherKey, encryptedMsg, keyTable):
             decryptedMsg += keyTable[((pair1 - 1) + (pair1 // 5 == pair1 / 5) * 5) % 25]
             decryptedMsg += keyTable[((pair2 - 1) + (pair2 // 5 == pair2 / 5) * 5) % 25]
 
-        # neither above rules true
+        # final case where letters are not same row or column
         else:
             # Take letter that is in the same row but in the column of the other letter
             # pairX // 5 finds row position, * 5 accounts for string offset for proper positioning
@@ -64,4 +64,5 @@ def decrypt(cipherKey, encryptedMsg, keyTable):
 # solving the problem
 keyTable = generateKeyTable(cipherKey)
 solution = decrypt(cipherKey, encryptedMsg, keyTable)
+# print solution
 print(solution)
