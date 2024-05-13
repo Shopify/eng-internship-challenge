@@ -12,19 +12,19 @@ const (
 type PlayfairCipher struct {
 	Message         string
 	Keyword         string
-	LettersLocation map[rune]*LetterLocation
+	LettersPosition map[rune]*LetterPosition
 	Matrix          PlayfairMatrix
 }
 
 type PlayfairMatrix [][]rune
 
 // row, col for each letter
-type LetterLocation struct {
+type LetterPosition struct {
 	X, Y int
 }
 
-func NewLetterLocation(x, y int) *LetterLocation {
-	return &LetterLocation{
+func NewLetterLocation(x, y int) *LetterPosition {
+	return &LetterPosition{
 		X: x,
 		Y: y,
 	}
@@ -37,7 +37,7 @@ func NewPlayfairCipher(msg, kw string) (*PlayfairCipher, error) {
 	cipher := &PlayfairCipher{
 		Message:         msg,
 		Keyword:         kw,
-		LettersLocation: make(map[rune]*LetterLocation),
+		LettersPosition: make(map[rune]*LetterPosition),
 		Matrix:          createEmptyMatrix(),
 	}
 	if err := cipher.validateInput(); err != nil {
@@ -108,7 +108,7 @@ func (p *PlayfairCipher) populateLetterLocations() {
 	for r := 0; r < SIZE; r++ {
 		for c := 0; c < SIZE; c++ {
 			char := p.Matrix[r][c]
-			p.LettersLocation[char] = NewLetterLocation(r, c)
+			p.LettersPosition[char] = NewLetterLocation(r, c)
 		}
 	}
 }
@@ -133,8 +133,8 @@ func (p *PlayfairCipher) decrypt() string {
 	for i := 0; i < len(cipherText); i += 2 {
 		char1 := rune(cipherText[i])
 		char2 := rune(cipherText[i+1])
-		pos1 := p.LettersLocation[char1]
-		pos2 := p.LettersLocation[char2]
+		pos1 := p.LettersPosition[char1]
+		pos2 := p.LettersPosition[char2]
 
 		// check for same row
 		if pos1.X == pos2.X {
