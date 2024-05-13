@@ -14,7 +14,8 @@ def create_playfair_table(key):
         if c not in seen:
             seen.add(c)
             processed_key += (c)
-    processed_key = processed_key.upper()
+    # Replace all J's with I if needed
+    processed_key = processed_key.replace('J', 'I').upper()
     
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
     key_table = processed_key + ''
@@ -28,21 +29,20 @@ def create_playfair_table(key):
         table.append(key_table[i:i+5])
     return table
 
-def get_position(letter, table):
+def get_positions_map(table):
     """
-    Gets positon/coordinates of the letter in the 5x5 table
+    Maps all letters with its corresponding location on the table
         Paramters:
-            letter (str): The letter we are looking for
             table (2d list): 5x5 table made with the key
         Returns:
-            tuple[int, int] | None: The row and column indices of the letter if found, otherwise None.
+            positions (dict): Dictionary with Key's being the letter and Values being location as a tuple (int, int)
     """
-
+    positions = {}
     for row in range(5):
         for col in range(5):
-            if table[row][col] == letter:
-                return row, col
-    return None
+            positions[table[row][col]] = row, col
+    
+    return positions
 
 def decrypt_playfair(ciphertext, key):
     """
@@ -60,20 +60,23 @@ def decrypt_playfair(ciphertext, key):
     # Create the Playfair key table
     table = create_playfair_table(key)
 
+    # Replace all J's with I if needed
+    ciphertext = ciphertext.upper().replace('J', 'I')
     # Check if length of ciphertext is odd and append 'X' if it is odd
     if len(ciphertext) % 2 != 0:
         ciphertext += 'X'
-    
+
     # Process ciphertext into pairs of letters
     pairs = []
     for i in range(0, len(ciphertext), 2):
         pairs.append(ciphertext[i:i+2].upper())
 
     # Decrypting process
+    positions = get_positions_map(table)
     decrypted_text = ""
     for pair in pairs:
-        r1, c1 = get_position(pair[0], table)
-        r2, c2 = get_position(pair[1], table)
+        r1, c1 = positions[pair[0]]
+        r2, c2 = positions[pair[1]]
 
         if r1 == r2:    # same row:     move left
             decrypted_text += table[r1][c1 - 1]
