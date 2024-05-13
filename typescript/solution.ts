@@ -1,7 +1,13 @@
-function createMatrix(key: string): string[][] {
+interface Position {
+    row: number;
+    col: number;
+}
+
+function createMatrix(key: string): [string[][], Map<string, Position>] {
     const alpha = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
     let matrixKey = "";
     let seen = new Set<string>();
+    let positionMap = new Map<string, Position>();
 
     // add characters from key to matrixKey with no duplicates
     for (let char of key.toUpperCase()) {
@@ -20,15 +26,18 @@ function createMatrix(key: string): string[][] {
 
     let matrix: string[][] = [];
 
-    // create 5x5 matrix
+    // create 5x5 matrix and populate position map
     for (let i = 0; i < 5; i++) {
         matrix.push(matrixKey.slice(i * 5, (i + 1) * 5).split(''));
+        for (let j = 0; j < 5; j++) {
+            positionMap.set(matrix[i][j], { row: i, col: j });
+        }
     }
 
-    return matrix;
+    return [matrix, positionMap];
 }
 
-function decrypt(matrix: string[][], message: string): string {
+function decrypt(matrix: string[][], positionMap: Map<string, Position>, message: string): string {
     let decryptedMessage = '';
     let pairs: string[] = [];
 
@@ -38,8 +47,12 @@ function decrypt(matrix: string[][], message: string): string {
 
     pairs.forEach(pair => {
         let [first, second] = pair.split('');
-        let firstPos = findPosition(matrix, first);
-        let secondPos = findPosition(matrix, second);
+        let firstPos = positionMap.get(first);
+        let secondPos = positionMap.get(second);
+
+        if (!firstPos || !secondPos) {
+            throw new Error(`\"${first}\" or \"${second}\" is not found in the position map`);
+        }
 
         if (firstPos.row === secondPos.row) {
             // same row, go left
@@ -62,26 +75,17 @@ function decrypt(matrix: string[][], message: string): string {
     return decryptedMessage.replace(/X|[^A-Z]/g, '');
 }
 
-function findPosition(matrix: string[][], letter: string): { row: number; col: number } {
-    for (let row = 0; row < 5; row++) {
-        for (let col = 0; col < 5; col++) {
-            if (matrix[row][col] === letter) {
-                return { row, col };
-            }
-        }
-    }
-
-    // error, should never reach here
-    return { row: -1, col: -1 };
-}
-
 function main() {
     const key = "SUPERSPY";
     const message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 
-    const matrix = createMatrix(key);
-    const decryptedText = decrypt(matrix, message);
-    console.log(decryptedText);
+    const [matrix, positionMap] = createMatrix(key);
+    try {
+        const decryptedText = decrypt(matrix, positionMap, message);
+        console.log(decryptedText);
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 main();
