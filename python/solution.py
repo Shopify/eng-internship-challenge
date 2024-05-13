@@ -243,9 +243,31 @@ def remove_insert_letter_from_decrypted_message(insert_letter, decrypted_message
 
     return final_decrypted_message
 
-if __name__ == "__main__":
-    key_table = generate_key_table(CIPHER_KEY)
-    digrams = break_encrypted_message_into_digrams(ENCRYPTED_MESSAGE)
+def playfair_cipher_decrypt(cipher_key, encrypted_message, insert_letter):
+    """
+    Decrypts an encrypted message using the Playfair cipher.
+
+    Parameters:
+    - cipher_key (str): The key used for encryption.
+    - encrypted_message (str): The message encrypted with the Playfair cipher.
+    - insert_letter (str): The insert letter used during encryption.
+
+    Returns:
+    - str: The decrypted message.
+
+    Time Complexity: O(n).
+    """
+    # Generate the key table
+    key_table = generate_key_table(cipher_key)
+    # Break the encrypted message into digrams
+    digrams = break_encrypted_message_into_digrams(encrypted_message)
+    # Decrypt the digrams using the Playfair cipher rules
     decrypted_digrams = decrypt_digrams(key_table, digrams)
-    final_decrypted_message = remove_insert_letter_from_decrypted_message(INSERT_LETTER, decrypted_digrams)
+    # Remove the insert letter from the decrypted message
+    final_decrypted_message = remove_insert_letter_from_decrypted_message(insert_letter, decrypted_digrams)
+    
+    return final_decrypted_message
+
+if __name__ == "__main__":
+    final_decrypted_message = playfair_cipher_decrypt(CIPHER_KEY, ENCRYPTED_MESSAGE, INSERT_LETTER)
     print(final_decrypted_message)
