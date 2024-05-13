@@ -27,7 +27,7 @@ def create_matrix_lookup(keyword):
     return matrix, lookup
 
 # O(n)
-def playfair_cipher(text, keyword):
+def playfair_cipher(text, keyword) -> str:
     result = ""
 
     text = text.upper()
@@ -40,27 +40,29 @@ def playfair_cipher(text, keyword):
         row_1, col_1 = lookup[char_1]
         row_2, col_2 = lookup[char_2]
 
-        new_char_1 = ""
-        new_char_2 = ""
+        new_char_1 = ''
+        new_char_2 = ''
 
         # Decode
         if row_1 == row_2:
-            result += matrix[row_1][(col_1-1)] + matrix[row_2][(col_2-1)]
+            new_char_1 = matrix[row_1][(col_1-1)]
+            new_char_2 = matrix[row_2][(col_2-1)]
         elif col_1 == col_2:
-            result += matrix[(row_1-1)][col_1] + matrix[(row_2-1)][col_2]
+            new_char_1 = matrix[(row_1-1)][col_1]
+            new_char_2 = matrix[(row_2-1)][col_2]
         else:
-            result += matrix[row_1][col_2] + matrix[row_2][col_1]
+            new_char_1 = matrix[row_1][col_2]
+            new_char_2 = matrix[row_2][col_1]
 
-    # print(matrix)
-    print (result)
+        if new_char_1 != 'X':
+            result += new_char_1
+        if new_char_2 != 'X':
+            result += new_char_2
+
     return result
     
-
-    
-    
-
 def __main__():
-    playfair_cipher("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV", "SUPERSPY")
+    print(playfair_cipher("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV", "SUPERSPY"))
 
 if __name__ == "__main__":
     __main__()
