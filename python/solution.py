@@ -19,8 +19,8 @@ def groupLetters(text):
     return grouped    
 
 def makeMatrix():
-    matrix = [['' for i in range(5)] for j in range(5)]
     ROW = COL = 5
+    matrix = [['' for i in range(ROW)] for j in range(COL)]
     letterToCoordinate = {}
     keyIndex = alphabetIndex = 0
 
