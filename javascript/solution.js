@@ -5,7 +5,6 @@
 // The rule of decryption is slighyly different from the Wikipedia one (shift right -> shift left when on the same row) according to the solution.test
 // The "X" in the solution is also removed
 
-
 function createTable(key)
 {
     let letters = key + 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
@@ -30,20 +29,15 @@ function createTable(key)
 
 function simplify(str)
 {
+    let seen = new Set();
     let simplified_str = "";
     let str_size = str.length;
     let curr_idx;
 
-    simplified_str += str[0];
-
-    for (curr_idx = 0; curr_idx < str_size; curr_idx ++) {
-
-        for (let idx = 0; idx < curr_idx; idx ++) {
-            if (str[curr_idx] == str[idx]) {
-                break;
-            } else if (idx == curr_idx - 1) {
-                simplified_str += str[curr_idx];
-            }
+    for (let idx = 0; idx < str.length; idx ++) {
+        if (!seen.has(str[idx])) {
+            seen.add(str[idx]);
+            simplified_str += str[idx];
         }
     }
 
@@ -81,7 +75,7 @@ function messageDecrypt(p1, p2, table)
         } else {
             decrypt_c1 = 4;
         }
-        if (col_2 + 1 >= 0) {
+        if (col_2 - 1 >= 0) {
             decrypt_c2 = col_2 - 1;
         } else {
             decrypt_c2 = 4;
@@ -127,35 +121,34 @@ function messageDecrypt(p1, p2, table)
 let table = createTable('SUPERSPY');
 
 let message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV';
+// (3) the plain text (decrypted message) contains 'J'
+message = message.replace(/J/g, 'I');
 let msg_size = message.length;
-let pair_1_idx, pair_2_idx;
+
+let pair_1_idx;
 let pair;
 let solution = "";
 
-for (pair_1_idx = 0; pair_1_idx < msg_size; pair_1_idx += 2) {
+let skipIncrement = false;
+
+for (pair_1_idx = 0; pair_1_idx < msg_size; pair_1_idx += (skipIncrement ? 0 : 2)) {
+    skipIncrement = false;
     // (2) size of the encrypted message is odd
-    if (pair_1_idx + 1 >= msg_size) {
-        pair_2 = 'X';
-    } else {
-        pair_2_idx = pair_1_idx + 1;
-        pair_2 = message[pair_2_idx];
-    }
-    pair_1 = message[pair_1_idx];
+    let pair_1 = message[pair_1_idx];
+    let pair_2 = (pair_1_idx + 1 < msg_size) ? message[pair_1_idx + 1] : 'X';
     // (1) two letters in the pair are the same
     if (pair_1 == pair_2) {
         pair_2 = 'X';
-        pair_1_idx --;
-    }
-    // (3) the plain text (decrypted message) contains 'J'
-    if (pair_1 == 'J') {
-        pair_1 = 'I';
-    }
-    if (pair_2 == 'J') {
-        pair_2 = 'I';
+        skipIncrement = true;
     }
 
     pair = pair_1 + pair_2;
     solution += messageDecrypt(pair_1, pair_2, table);
+
+    // 'X' is used as a filler, thus the next pair_1_idx should be the original pair_2_idx in this iteration
+    if (skipIncrement) {
+        pair_1_idx++;
+    }
 }
 
 console.log(solution);
