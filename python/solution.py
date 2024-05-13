@@ -1,6 +1,6 @@
 def generate_table (key): # Function to generate Playfair Cipher table with given key
     alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M',
-         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] # We skip the letter J in the alphabet to have 25 letters
     key_chars = []
     for c in key:  # Loop to get all the characters in the key without repetitions
         if c not in key_chars:
