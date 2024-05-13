@@ -65,6 +65,16 @@ func (p *PlayfairCipher) validateInput() error {
 	if len(p.Keyword) == 0 || len(p.Keyword) > 25 {
 		return fmt.Errorf("keyword length must be between 1 and 25 characters")
 	}
+	for _, char := range p.Message {
+		if char < 'A' || char > 'Z' {
+			return fmt.Errorf("invalid character in cipher text: %c", char)
+		}
+	}
+	for _, char := range p.Keyword {
+		if char < 'A' || char > 'Z' {
+			return fmt.Errorf("invalid character in keyword: %c", char)
+		}
+	}
 	return nil
 }
 
