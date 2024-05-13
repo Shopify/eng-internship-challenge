@@ -22,3 +22,12 @@ print("Matrix:\n", "\n".join([" ".join(row) for row in matrix]))
 # Rectangle: If the pair forms a rectangle, replace each letter with the letter in the same row but from the column of the other 
 #letter in the pair.
 
+#creating a helper function to find the position of the letter in the matrix
+def find_position(matrix, char):
+    for x, row in enumerate(matrix):
+        if char in row:
+            return (x, row.index(char))
+    return None  # In case the character is not found
+
+
+
