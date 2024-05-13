@@ -130,4 +130,6 @@ def decrypt_playfair(key, encrypted_string):
     return plaintext.replace('X', '') # We return the decrypted string, after removing the placeholders "X" for double letters
 
 # We decrypt the string and print the result
-print(decrypt_playfair("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"), end="")
+
+if __name__ == '__main__':
+    print(decrypt_playfair("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"))
