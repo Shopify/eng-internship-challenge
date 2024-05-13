@@ -5,9 +5,7 @@ import os
 class TestSolution(unittest.TestCase):
     def test_decryption_output_default(self):
         # Run the solution.py script
-        text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-        keyword = "SUPERSPY"
-        result = subprocess.run(['python3', 'solution.py', text, keyword], text=True, capture_output=True)
+        result = subprocess.run(['python3', 'solution.py'], text=True, capture_output=True)
         
         # Check the output
         expected_output = 'HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA'

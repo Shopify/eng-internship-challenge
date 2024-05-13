@@ -71,7 +71,7 @@ def playfair_cipher(text, keyword) -> str:
     - We are deciphering using the convention that 'I' and 'J' are merged within the 5x5 matrix,
       thus any J's in an original text will be deciphered into I.
     """
-    result = ""
+    result = []
 
     text = text.upper()
     matrix, lookup = create_matrix_lookup(keyword)
@@ -98,11 +98,11 @@ def playfair_cipher(text, keyword) -> str:
             new_char_2 = matrix[row_2][col_1]
 
         if new_char_1 != 'X':
-            result += new_char_1
+            result.append(new_char_1)
         if new_char_2 != 'X':
-            result += new_char_2
+            result.append(new_char_2)
 
-    return result
+    return ''.join(result)
     
 def __main__():
     # Allow for command line arguments when testing from additionaltests.test.py
