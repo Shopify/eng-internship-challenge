@@ -61,7 +61,7 @@ class DecryptionService:
   """Returns character at a given position."""
   def __find_character_at_postition(self, character_position: CharacterPosition):
     cipher_char = self.cipher_matrix[character_position.row][character_position.column]
-    
+
     # This will returns 'I' for both 'I' and 'J', treating them as equivalent.
     if cipher_char == 'I/J':
       cipher_char = 'I'
@@ -131,4 +131,3 @@ class DecryptionService:
       decrypted_message = decrypted_message[:-1]
 
     return decrypted_message
-

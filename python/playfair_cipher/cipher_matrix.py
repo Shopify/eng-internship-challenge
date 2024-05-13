@@ -41,4 +41,3 @@ class CipherMatrix:
         cipher_chars.append('I/J')
 
     return cipher_chars
-  
