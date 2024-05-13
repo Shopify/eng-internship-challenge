@@ -1,3 +1,9 @@
+"""
+Playfair Cipher Decryption Solution
+
+This Python script decrypts messages encrypted using the Playfair cipher. It utilizes a key table represented as a dictionary, where letters serve as keys and their positions as values, along with a 5x5 matrix for letter retrieval based on their positions. This approach ensures O(n) time complexity, as accessing the position of a letter and retrieving a letter by its position takes constant O(1) time. Each function within this script adheres to the Single Responsibility Principle (SRP), contributing to the overall decryption process while maintaining clarity and modularity.
+"""
+
 ENCRYPTED_MESSAGE = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 CIPHER_KEY = "SUPERSPY"
 ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # omit J to reduce the alphabet to fit
@@ -5,6 +11,7 @@ PLAYFAIR_KEY_TABLE_SIZE = 5
 INSERT_LETTER = 'X'
 # INVALID_KEY_CHARACTERS in a set to have O(1) search complexity
 INVALID_KEY_CHARACTERS = set([' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?', '`'])
+# Key values of the playfair key table dictionary
 LETTERS_KEY_TABLE = "letters"
 POSITIONS_KEY_TABLE = "positions"
 
