@@ -37,8 +37,7 @@ class PlayfairCipher:
         '''
         filtered_key = self.filter_duplicate_letters(self.key)
         letters_to_omit = set(filtered_key).union(set("J"))
-        alphabet = self.filter_duplicate_letters(self.ALPHABET,
-                                                 letters_to_omit)
+        alphabet = self.filter_duplicate_letters(self.ALPHABET, letters_to_omit)
         key_table = []
         row = 0
         col = 0
@@ -90,15 +89,11 @@ class PlayfairCipher:
             letter1_row, letter1_col = letter1_location
             letter2_row, letter2_col = letter2_location
             if letter1_row == letter2_row:
-                plaintext += key_table[letter1_row][(letter1_col - 1) %
-                                                    self.COLUMNS]
-                plaintext += key_table[letter2_row][(letter2_col - 1) %
-                                                    self.COLUMNS]
+                plaintext += key_table[letter1_row][(letter1_col - 1) % self.COLUMNS]
+                plaintext += key_table[letter2_row][(letter2_col - 1) % self.COLUMNS]
             elif letter1_col == letter2_col:
-                plaintext += key_table[(letter1_row - 1) %
-                                       self.ROWS][letter1_col]
-                plaintext += key_table[(letter2_row - 1) %
-                                       self.ROWS][letter2_col]
+                plaintext += key_table[(letter1_row - 1) % self.ROWS][letter1_col]
+                plaintext += key_table[(letter2_row - 1) % self.ROWS][letter2_col]
             else:
                 plaintext += key_table[letter1_row][letter2_col]
                 plaintext += key_table[letter2_row][letter1_col]
