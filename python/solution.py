@@ -2,6 +2,7 @@ ENCRYPTED_MESSAGE = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 CIPHER_KEY = "SUPERSPY"
 ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # omit J to reduce the alphabet to fit
 PLAYFAIR_KEY_TABLE_SIZE = 5
+INSERT_LETTER = 'X'
 # INVALID_KEY_CHARACTERS in a set to have O(1) search complexity
 INVALID_KEY_CHARACTERS = set([' ', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', '+', '[', '{', ']', '}', '|', '\\', ';', ':', '\'', '"', ',', '.', '<', '>', '/', '?', '`'])
 
@@ -219,9 +220,32 @@ def decrypt_digrams(key_table, digrams):
     joined_digrams = ''.join(decrypted_digrams)
     return joined_digrams
 
+def remove_insert_letter_from_decrypted_message(insert_letter, decrypted_message):
+    """
+    Removes the insert letter used during encryption from a decrypted message.
+
+    Parameters:
+    - insert_letter (str): The insert letter used during encryption.
+    - decrypted_message (str): The decrypted message containing the insert letter.
+
+    Returns:
+    - str: The final decrypted message with the insert letter removed.
+    """
+    final_decrypted_message = ""
+
+    # Iterate through each letter in the decrypted message
+    for letter in decrypted_message:
+        # If the letter is the insert letter, skip it
+        if letter == insert_letter:
+            continue
+        # Append non-insert letters to the final decrypted message
+        final_decrypted_message += letter
+
+    return final_decrypted_message
 
 if __name__ == "__main__":
     key_table = generate_key_table(CIPHER_KEY)
     digrams = break_encrypted_message_into_digrams(ENCRYPTED_MESSAGE)
     decrypted_digrams = decrypt_digrams(key_table, digrams)
-    print(decrypted_digrams)
+    final_decrypted_message = remove_insert_letter_from_decrypted_message(INSERT_LETTER, decrypted_digrams)
+    print(final_decrypted_message)
