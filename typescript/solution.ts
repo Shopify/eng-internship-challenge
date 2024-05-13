@@ -10,7 +10,7 @@ function createMatrix(key: string): [string[][], Map<string, Position>] {
     let positionMap = new Map<string, Position>();
 
     // add characters from key to matrixKey with no duplicates
-    for (let char of key.toUpperCase()) {
+    for (let char of key) {
         if (!seen.has(char) && alpha.includes(char)) {
             seen.add(char);
             matrixKey += char;
@@ -72,12 +72,20 @@ function decrypt(matrix: string[][], positionMap: Map<string, Position>, message
     });
 
     // clean decrypted message before returning
-    return decryptedMessage.replace(/X|[^A-Z]/g, '');
+    return decryptedMessage.replace(/X/g, '');
+}
+
+function preprocess(input: string): string {
+    // replace J with I and remove special characters
+    return input.toUpperCase().replace(/J/g, 'I').replace(/[^A-Z]/g, '');
 }
 
 function main() {
-    const key = "SUPERSPY";
-    const message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+    let key = "SUPERSPY";
+    let message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+
+    key = preprocess(key);
+    message = preprocess(message);
 
     const [matrix, positionMap] = createMatrix(key);
     try {
