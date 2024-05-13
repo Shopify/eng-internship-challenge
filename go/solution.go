@@ -23,7 +23,7 @@ type LetterPosition struct {
 	X, Y int
 }
 
-func NewLetterLocation(x, y int) *LetterPosition {
+func NewLetterPositon(x, y int) *LetterPosition {
 	return &LetterPosition{
 		X: x,
 		Y: y,
@@ -108,7 +108,7 @@ func (p *PlayfairCipher) populateLetterLocations() {
 	for r := 0; r < SIZE; r++ {
 		for c := 0; c < SIZE; c++ {
 			char := p.Matrix[r][c]
-			p.LettersPosition[char] = NewLetterLocation(r, c)
+			p.LettersPosition[char] = NewLetterPositon(r, c)
 		}
 	}
 }
