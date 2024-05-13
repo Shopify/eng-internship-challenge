@@ -20,12 +20,17 @@ class DecryptionService:
   4. Reveals the final decrypted message.
   """
   def decrypt(self, message: str) -> str:
+    message = self.__clean_message(message)
     character_pairs = self.__generate_character_pairs(message)
     decrypted_message_char_positions = self.__find_decrypted_message_char_positions(character_pairs)
     decrypted_message = self.__get_message_from_char_positions(decrypted_message_char_positions)
     revealed_decrypted_message = self.__remove_fillers_from_decrypted_message(decrypted_message)
 
     return revealed_decrypted_message
+
+  """Removes non-alphabet"""
+  def __clean_message(self, message: str) -> str:
+    return "".join(char for char in message if char.isalpha())
 
   """This function generates pairs for decrypting the provided message. 
     It adds 'X' if the pair consists of the same character and returns a list of pairs.""" 

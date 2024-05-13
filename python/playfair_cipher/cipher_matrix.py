@@ -2,9 +2,9 @@ import string
 
 """The Cipher Matrix includes a 2D list with the Cipher Key's letters and non-repeating alphabet letters."""
 class CipherMatrix:
-  def __init__(self,cipherkey):
+  def __init__(self, cipher_key):
     self.matrix = []
-    self.cipher_key = cipherkey
+    self.cipher_key = self.__clean_cipher_key(cipher_key)
     self.__create()
 
   """Gets the matrix"""
@@ -15,6 +15,10 @@ class CipherMatrix:
   def __create(self):
     cipher_chars = self.__get_all_cipher_chars()
     self.__populate_matrix(cipher_chars)
+
+  """Removes non-alphabet"""
+  def __clean_cipher_key(self, cipher_key: str) -> str:
+    return "".join([char for char in cipher_key if char.isalpha()])
   
   """Populates 2D cipher matrix with cipher chars"""
   def __populate_matrix(self, cipher_chars):
@@ -30,7 +34,9 @@ class CipherMatrix:
   def __get_all_cipher_chars(self):
     cipher_chars = []
     for each_char in self.cipher_key:
-      if each_char not in cipher_chars:
+      if 'I/J' not in cipher_chars and each_char in ('I', 'J'):
+        cipher_chars.append('I/J')
+      elif each_char not in cipher_chars and each_char not in ('I', 'J'):
         cipher_chars.append(each_char.upper())
 
     for each_letter in string.ascii_uppercase:
