@@ -32,3 +32,23 @@ export function createGrid(keyword: string): string[][] {
 
   return grid;
 }
+
+export function splitIntoDigrams(input: string): string[] {
+  const digrams: string[] = [];
+  let i = 0;
+
+  while (i < input.length) {
+      const currentChar = input[i].toUpperCase();
+      const nextChar = i + 1 < input.length ? input[i + 1].toUpperCase() : 'X';
+
+      if (currentChar === nextChar) {
+          digrams.push(currentChar + 'X');
+          i++;
+      } else {
+          digrams.push(currentChar + nextChar)
+          i += 2;
+      }
+  }
+
+  return digrams
+}

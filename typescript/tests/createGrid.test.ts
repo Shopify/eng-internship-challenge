@@ -1,4 +1,4 @@
-import { createGrid } from './solution';
+import { createGrid } from '../solution';
 
 describe('createPlayfairGrid', () => {
     it('should create a 5x5 grid with the keyword "SUPERSPY"', () => {
