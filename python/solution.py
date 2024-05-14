@@ -1,4 +1,6 @@
-def create_playfair_grid(key: str) -> list[list[str]]:
+from typing import List, Tuple
+
+def create_playfair_grid(key: str) -> List[List[str]]:
     """Creates a 5 x 5 grid for the playfair cipher.
     
     Parameters
@@ -8,7 +10,7 @@ def create_playfair_grid(key: str) -> list[list[str]]:
 
     Returns
     --------
-    list[list[str]]
+    List[List[str]]
         The grid of characters.
     """
 
@@ -45,14 +47,14 @@ def create_playfair_grid(key: str) -> list[list[str]]:
     return result
 
 
-def find_char_index(char: str, grid: list[list[str]]) -> tuple[int, int]: 
+def find_char_index(char: str, grid: List[List[str]]) -> Tuple[int, int]: 
     """Returns the row and column indices of the `char` in the 2D `grid`.
 
     Parameters
     ----------
     `char`: str
         The target character.
-    `grid`: list[list[str]]
+    `grid`: List[List[str]]
         The search space grid where the charcter is to be found.
 
     Raises
@@ -62,7 +64,7 @@ def find_char_index(char: str, grid: list[list[str]]) -> tuple[int, int]:
 
     Returns
     -------
-    tuple[int, int]:
+    Tuple[int, int]:
         The row and column index of the target character in the grid.
 
     Notes on complexity
