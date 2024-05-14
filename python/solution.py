@@ -35,8 +35,10 @@ def decrypt(key, ciphertext):
     ciphertext: The text to be decoded
     """
     matrix = playfair_matrix(key)
+    # We store the plaintext in an array to append in O(1) amortized time, then convert to a string only after we are done appending
     plaintext = []
     letter_to_matrix_position = {}
+    # Use a dictionary to check the row and column of each letter in the future in O(1) time
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
             letter_to_matrix_position[matrix[i][j]]=[i,j]
@@ -62,6 +64,7 @@ def decrypt(key, ciphertext):
             plaintext.append(matrix[(row_first - 1) % 5][col_first] + matrix[(row_second - 1) % 5][col_second])
         else:
             plaintext.append(matrix[row_first][col_second] + matrix[row_second][col_first])
+    # Return the final plaintext with X removed
     return ''.join(plaintext).replace("X","")
 
 if __name__ == "__main__":
