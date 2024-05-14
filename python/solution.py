@@ -6,7 +6,7 @@ def generate_key_matrix(key):
     table_input = key.upper() + alphabet
 
     for char in table_input:
-        if char not in seen:
+        if char not in seen and char.isalpha():
             seen.add(char)
             key_matrix[idx // 5][idx % 5] = char
             idx += 1
@@ -38,6 +38,7 @@ def decrypt_playfair(ciphertext, key):
             plaintext += key_matrix[row1][col2] + key_matrix[row2][col1]
 
     plaintext = plaintext.replace("X", "")
+    plaintext = plaintext.replace(" ", "")
 
     return plaintext
 
