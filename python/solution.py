@@ -59,3 +59,14 @@ def decrypt_message(ciphertext, matrix):
     return plaintext
 
 
+#the key that will be used to decrypt
+key = "SUPERSPY"
+#the text that needs to be decrypted
+ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+#getting the matrix by sending in the key as parameter
+matrix = create_matrix(key)
+#send the encrypted text and matrix as parameters to get the decrypted text back
+decrypted_text = decrypt_message(ciphertext, matrix)
+
+#should give the decrypted text now
+print("Decrypted Message:", decrypted_text)
