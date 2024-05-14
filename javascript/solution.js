@@ -23,6 +23,7 @@ function createPlayfairCipher(key, encryptedString){
 
     // Decrypting the encrypted string using the matrix
     var decryptedString = decryptPlayfair(encryptedString, matrix);
+    decryptedString = decryptedString.replace(/[^\w\s]|X/g, '');
     return decryptedString;
 }
 
