@@ -1,3 +1,5 @@
+# Written By Kevin Lin on May 11th, 2024 for shopify OA
+
 def generate_cipher_key(key):
     # Define the alphabet, excluding 'J' and keeping 'X' for padding and separation
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
@@ -53,11 +55,7 @@ def playfair_decrypt(key, text):
     return ''.join(clean_message)
 
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <encrypted_string>")
-    else:
-        encrypted_message = sys.argv[1]
-        key = "SUPERSPY" #make this modular for other potentially used keys
-        decrypted_message = playfair_decrypt(key, encrypted_message)
-        print(decrypted_message)
+    encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    key = "SUPERSPY" #make this modular for other potentially used keys
+    decrypted_message = playfair_decrypt(key, encrypted_message)
+    print(decrypted_message)
