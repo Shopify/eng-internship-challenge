@@ -1,4 +1,3 @@
-
 def main():
     encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV" # encrypted message provided
     decodedMessage = "" # string to represent the decoded message which we can append to after iterating through each pair of letters in the encrypted message
@@ -11,7 +10,7 @@ def main():
                 ['T', 'V', 'W', 'X', 'Z']]
 
 
-    # initialize a hash map for efficient constant time look up of indices  of each letter since each letter appears once --> takes O(n^2) space complexity
+    # initialize a hash map for efficient constant time look up of indices  of each letter since each letter appears once --> takes O(5^2) space complexity -> constant space
     dictIndex = {}
     for i in range(len(keyTable)):
         for j in range(len(keyTable[0])):
@@ -63,6 +62,8 @@ def main():
         decodedMessage += curPair
     
     print(decodedMessage)
+    return decodedMessage
+    # overall time complexity = O(n) , where n is the length of the encoded message and space complexity is O(n) for auxiliary space from deocded message
 
 
 if __name__ == '__main__':
