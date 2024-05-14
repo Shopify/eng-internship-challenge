@@ -28,8 +28,13 @@ def solution(message, key):
             ans += polybiusString[snd-5]
         # same row rule
         elif fst//5 == snd//5:
-            ans += polybiusString[fst-1]
-            ans += polybiusString[snd-1]
+            if fst%5 == 0: fstIdx = fst+4
+            else: fstIdx = fst-1
+            if snd%5 == 0: sndIdx = snd+4
+            else: sndIdx = snd-1
+
+            ans += polybiusString[fstIdx]
+            ans += polybiusString[sndIdx]
         else:
             # width of rect
             w = abs(fst%5 - snd%5)
