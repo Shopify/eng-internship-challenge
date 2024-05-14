@@ -52,3 +52,47 @@ export function splitIntoDigrams(input: string): string[] {
 
   return digrams
 }
+
+export function decryptDigram(digram: string, grid: string[][]): string {
+  const [char1, char2] = digram.toUpperCase().split('');
+  let decryptedDigram = '';
+
+  let pos1: [number, number] | undefined;
+  let pos2: [number, number] | undefined;
+  for (let i = 0; i < grid.length; i++) {
+      const row = grid[i];
+      const col1 = row.indexOf(char1);
+      const col2 = row.indexOf(char2);
+      if (col1 !== -1) pos1 = [i, col1];
+      if (col2 !== -1) pos2 = [i, col2];
+  }
+
+  if (pos1 && pos2) {
+      if (pos1[0] === pos2[0]) { // Same row
+          decryptedDigram += grid[pos1[0]][(pos1[1] - 1 + 5) % 5]; 
+          decryptedDigram += grid[pos2[0]][(pos2[1] - 1 + 5) % 5]; 
+      } else if (pos1[1] === pos2[1]) { // Same column
+          decryptedDigram += grid[(pos1[0] - 1 + 5) % 5][pos1[1]]; 
+          decryptedDigram += grid[(pos2[0] - 1 + 5) % 5][pos2[1]]; 
+      } else { // Not same row or column
+          decryptedDigram += grid[pos1[0]][pos2[1]];
+          decryptedDigram += grid[pos2[0]][pos1[1]];
+      }
+  }
+
+  return decryptedDigram;
+}
+
+export function assembleDecryptedMessage(decryptedDigrams: string[]): string {
+  let decryptedMessage = "";
+
+  for (const digram of decryptedDigrams) {
+      decryptedMessage += digram.toUpperCase();
+  }
+
+  return decryptedMessage;
+}
+
+
+
+
