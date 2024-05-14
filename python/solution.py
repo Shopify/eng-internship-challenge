@@ -31,7 +31,7 @@ def shift_up(index):
 
 # Outputs a decrypted playfair cypher given the encrypted message and the used playfair table
 def decrypt(message, key):
-    process_input(sys.argv[1])
+    process_input(message)
     table = create_playfair_table(key)
 
 
@@ -106,7 +106,11 @@ def create_playfair_table(key):
 # The key to the cypher
 key = "SUPERSPY"
 # Take in the input from commandline
-input = sys.argv[1]
+input = ""
+if (len(sys.argv) == 1):
+    input = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+else:
+    input = sys.argv[1]
 result = decrypt(input, key)
 # No spaces, X's or special characters should be present in the output
 result = result.replace("X", "")
