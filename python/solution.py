@@ -55,8 +55,12 @@ def decrypt_pair(pair, matrix):
 def decrypt_message(ciphertext, matrix):
     plaintext = ''
     for i in range(0, len(ciphertext), 2):
-        plaintext += decrypt_pair(ciphertext[i:i+2], matrix)
-    return plaintext
+        part = decrypt_pair(ciphertext[i:i+2], matrix)
+        if part.endswith('X'):  # Assuming 'X' is not expected to appear naturally at the end
+            part = part[:-1]  # Remove the trailing 'X'
+        plaintext += part
+    return plaintext.strip('X')  # Additional stripping if 'X' used as padding at the end
+
 
 
 #the key that will be used to decrypt
