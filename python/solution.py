@@ -1,7 +1,4 @@
 def solution(message, key):
-    # replace J's in message with I
-    message = message.replace("J", "I")
-
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
 
     # create polybius string
