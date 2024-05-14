@@ -1,4 +1,19 @@
 def playfair_cipher(key, encrypted):
+    """Decrypts the Playfair Cipher
+
+    Parameters
+    ----------
+    key : str
+        The key used to create the Playfair grid
+    encrypted : str
+        The encrypted message that needs to be decrypted
+
+    Returns
+    -------
+    decrypted : str
+        The decrypted message
+
+   """
     # Ensure the key and encrypted text is all UPPER CASE
     key.upper()
     encrypted.upper()
@@ -10,16 +25,13 @@ def playfair_cipher(key, encrypted):
     pairs = [encrypted[i : i + 2] for i in range(0, len(encrypted), 2)]
     
     # For each pair in pairs
-    decrypted_pairs = []
+    decrypted = ""
     for pair in pairs:
         # Lookup first and second letter in the dict to get the coordinates of each
         first_coords = grid_dict[pair[0]]
         second_coords = grid_dict[pair[1]]
-        # Compare the two coordinates, determine which rule applies, update pairs string with new pair string deencrypted
-        determine_rule(first_coords, second_coords, decrypted_pairs, grid)
-   
-    # Collapse the pairs structure into one string
-    decrypted = ''.join(decrypted_pairs)
+        # Compare the two coordinates, determine which rule applies, and add new decrypted pair string
+        decrypted += determine_rule(first_coords, second_coords, grid)
     
     # Ensure the string does not have spaces, the letter "X", or special characters
     decrypted = decrypted.replace(' ', '').replace('X', '')
@@ -30,6 +42,21 @@ def playfair_cipher(key, encrypted):
     
     
 def create_grid(key):
+    """Creates a 5x5 grid
+
+    Parameters
+    ----------
+    key : str
+        The key used to create the Playfair grid
+
+    Returns
+    -------
+    grid : list
+        The 5x5 Playfair grid
+    grid_dict : dict
+        The dict containing coordinates of each letter
+
+   """
     # Define variables
     letters = []
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -59,19 +86,39 @@ def create_grid(key):
     return grid, grid_dict
 
 
-def determine_rule(first_coords, second_coords, decrypted_pairs, grid):
+def determine_rule(first_coords, second_coords, grid):
+    """Determines the rule to apply, and decrypts the pair of letters
+
+    Parameters
+    ----------
+    first_coords : tuple
+        The coordinates of the pairs' first letter in the grid
+    second_coords : tuple
+        The coordinates of the pairs' second letter in the grid
+    grid : list
+        The 5x5 Playfair grid
+
+    Returns
+    -------
+    decrypted_pair : str
+        The decrypted pair of letters
+
+   """
+    decrypted_pair = ""
     # 1) ROWS EQUAL
     if first_coords[0] == second_coords[0]:
         # Keep the same row, and move left 1 column for both coordinates
-        decrypted_pairs.append(grid[first_coords[0]][first_coords[1] - 1] + grid[second_coords[0]][second_coords[1] - 1])
+        decrypted_pair = grid[first_coords[0]][first_coords[1] - 1] + grid[second_coords[0]][second_coords[1] - 1]
     # 2) COLUMNS EQUAL
     if first_coords[1] == second_coords[1]:
         # Keep the same column, and move up 1 row for both coordinates
-        decrypted_pairs.append(grid[first_coords[0] - 1][first_coords[1]] + grid[second_coords[0] - 1][second_coords[1]]) 
+        decrypted_pair = grid[first_coords[0] - 1][first_coords[1]] + grid[second_coords[0] - 1][second_coords[1]]
     # 3) NOTHING EQUAL
     if first_coords[0] != second_coords[0] and first_coords[1] != second_coords[1]:
         # Keep the same row, swap column values
-        decrypted_pairs.append(grid[first_coords[0]][second_coords[1]] + grid[second_coords[0]][first_coords[1]])
+        decrypted_pair = grid[first_coords[0]][second_coords[1]] + grid[second_coords[0]][first_coords[1]]
+    
+    return decrypted_pair
 
 
 if __name__ == '__main__':
