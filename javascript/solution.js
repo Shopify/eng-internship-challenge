@@ -1,4 +1,4 @@
-export function generateKeyMatrix(key) {
+function generateKeyMatrix(key) {
   //matrix needs to be 5x5
   const size = 5;
   let matrix = new Array(size).fill().map(() => new Array(size).fill(null));
@@ -37,7 +37,7 @@ export function generateKeyMatrix(key) {
 }
 
 //find the position of a character within the matrix
-export function findPosition(matrix, char) {
+function findPosition(matrix, char) {
   char = char.toLowerCase();
   for (let row = 0; row < matrix.length; row++) {
     for (let col = 0; col < matrix[0].length; col++) {
@@ -49,7 +49,7 @@ export function findPosition(matrix, char) {
   return null;
 }
 
-export function decrypt(matrix, encryptedText) {
+function decrypt(matrix, encryptedText) {
   encryptedText = encryptedText.replace(/j/g, "i").toLowerCase();
   let decryptedText = "";
   if (encryptedText.length % 2 !== 0) {
