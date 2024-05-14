@@ -1,6 +1,8 @@
+from typing import Dict, List, Tuple
+
 # takes the cipher key
 # returns the 5x5 table which is used for encrypting/decrypting
-def make_key_table(key: str) -> list[str]:
+def make_key_table(key: str) -> List[str]:
     key = key.upper() #make sure it is uppercase
     
     if not key.isalpha(): raise Exception("Cipher key has unknown characters.") #throw exception if the value is invalid
@@ -32,7 +34,7 @@ def make_key_table(key: str) -> list[str]:
 # takes the key table with the cipher
 # returns (row,col) tuple for every unique letter
 # relies on the fact that every letter is unique otherwise map is useless
-def get_positions(table: list[str]) -> dict[str, tuple[int]]:
+def get_positions(table: List[str]) -> Dict[str, Tuple[int]]:
     positions: dict[str, tuple[int]] = {}
 
     for i in range(5):
@@ -44,7 +46,7 @@ def get_positions(table: list[str]) -> dict[str, tuple[int]]:
     
 # takes the encrypted message and the key cipher table (5x5 only)
 # returns the decrypted message
-def decrypt_message(message: str, key_table: list[str]) -> str:
+def decrypt_message(message: str, key_table: List[str]) -> str:
     if not message.isalpha(): raise Exception("Encrypted message has unknown characters. ") # stop program if message cannot be understood
 
     message = message.upper()
