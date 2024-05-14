@@ -88,11 +88,13 @@ export function assembleDecryptedMessage(decryptedDigrams: string[]): string {
 
   for (const digram of decryptedDigrams) {
       decryptedMessage += digram.toUpperCase();
+      
   }
+
+  decryptedMessage = decryptedMessage.replace(/X/g, '');
 
   return decryptedMessage;
 }
-
 
 
 
