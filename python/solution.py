@@ -19,7 +19,7 @@ def createKeyTable(keyword: str) -> list[list[str]]:
     while True:
         while chr(alphaIdx) in chars:
             alphaIdx += 1
-        # 'I' and 'J' are interchangeable so 'J' will never be in the table
+        # 'I' and 'J' are interchangeable so 'J' should never be in the table, hence skip 'J'
         if chr(alphaIdx) == 'J':
             alphaIdx += 1
         resultTable[currRow][currCol] = chr(alphaIdx)
@@ -35,16 +35,16 @@ def createKeyTable(keyword: str) -> list[list[str]]:
 def decrypt(string: str, keyword: str) -> str:
     dim = 5
     table = createKeyTable(keyword) # decryption table
-    locationMap = {table[i][j]: (i, j) for i in range(dim) for j in range(dim)} # map each letter to its location in the table
+    locationMap = {table[i][j]: (i, j) for i in range(dim) for j in range(dim)} # map each letter to its location in the descryption table
     # remove spaces in string
     string = string.upper().replace(" ", "")
     result = []
     for i in range(0, len(string), 2):
-        x1, y1 = locationMap[string[i]] # location of first letter in table
-        x2, y2 = locationMap[string[i+1]] # location of second letter in table
+        x1, y1 = locationMap[string[i]] # location of first letter in the descryption table
+        x2, y2 = locationMap[string[i+1]] # location of second letter in the descryption table
         # case 1: same row 
         if x1 == x2:
-            result.append(table[x1][y1-1] if y1-1>=0 else table[x1][dim - 1])
+            result.append(table[x1][y1-1] if y1-1>=0 else table[x1][dim - 1]) # wraps to the last letter of row or col if the new index is out of range
             result.append(table[x2][y2-1] if y2-1>=0 else table[x2][dim - 1])
         # case 2: same col
         elif y1 == y2:
