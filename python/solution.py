@@ -18,10 +18,9 @@ def decrypt_playfair(given_key, encrypted_message):
             key.append(i)
 
     # Making list of letters to fill in playfair square, starting with key followed by rest of alphabet (without duplicates)
-    playfair_letters = []
+    playfair_letters = key
     # Note: alphabet has no 'J' because there would be too many letters for 5x5 matrix, so 'I' can be interpreted as 'J' depending on context of decrypted message
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    playfair_letters.extend(key)
     for i in alphabet:
         if i not in key:
             playfair_letters.append(i)
@@ -46,11 +45,12 @@ def decrypt_playfair(given_key, encrypted_message):
                 if letter==playfair_square[i][j]:
                     return j # Returns column number of letter
 
-    # Defining function to find modulus 5, considering overflow of letter position when shifting across row or col
+    # Defining function to find modulus 5, considering overflow of letter position when shifting letters across row or col
     def mod5(n):
         if n<0:
-            n+=5
-        return n%5
+            return 4 # Since the only possible value out of bounds would be -1
+        else:
+            return n
 
 
     # Iterating over the encrypted message by splitting it into pairs of characters and evaluating each pair to swap letters accordingly
@@ -58,20 +58,20 @@ def decrypt_playfair(given_key, encrypted_message):
     for i in range(0, len(encrypted_message), 2):
         char1 = encrypted_message[i]
         char2 = encrypted_message[i+1]
-        # Case 1: if letters are on same row of playfair square, shift left and add to decrypted message
+        # Case 1: if letters are on same row of playfair square, shift each letter left and add to decrypted message
         if searchrow(char1)==searchrow(char2):
             decrypted_message+=playfair_square[searchrow(char1)][mod5(searchcol(char1)-1)]
             decrypted_message+=playfair_square[searchrow(char2)][mod5(searchcol(char2)-1)]
-        # Case 2: if letters are on same column of playfair square, shift up and add to decrypted message
+        # Case 2: if letters are on same column of playfair square, shift each letter up and add to decrypted message
         elif searchcol(char1)==searchcol(char2):
             decrypted_message+=playfair_square[mod5(searchrow(char1)-1)][searchcol(char1)]
             decrypted_message+=playfair_square[mod5(searchrow(char2)-1)][searchcol(char2)]
         # Case 3: if letters form a box shape on playfair square, swap the columns of the characters and add to decrypted message
-        elif searchcol(char1)!=searchcol(char2) and searchrow(char1)!=searchrow(char2):
+        else:
             decrypted_message+=playfair_square[searchrow(char1)][searchcol(char2)]
             decrypted_message+=playfair_square[searchrow(char2)][searchcol(char1)]
 
-    # Removing all X's from decrypted messsage
+    # Removing all filler X's from decrypted messsage
     decrypted_message=decrypted_message.replace('X', '')
 
     return decrypted_message
