@@ -83,7 +83,3 @@ const buildKeyString = (input) => {
 }
 let a = decrypt("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV", "SUPERSPY");
 console.log(a);
-let b = decrypt("gatlmzclrqt", "mo0234*(#$na   rchy");
-console.log(b);
-let c = decrypt("GRVOIFAYFPPCHV", "PLAYFAIRCIPHER");
-console.log(c);
