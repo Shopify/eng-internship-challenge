@@ -31,3 +31,22 @@ def find_position(matrix, char):
 
 
 
+#create a function to decrypt a pair of letters using the matrix
+def decrypt_pair(pair, matrix):
+    row1, col1 = find_position(matrix, pair[0])
+    row2, col2 = find_position(matrix, pair[1])
+
+    if row1 == row2:
+        # Same row, shift left
+        col1 = (col1 - 1) % 5
+        col2 = (col2 - 1) % 5
+    elif col1 == col2:
+        # Same column, shift up
+        row1 = (row1 - 1) % 5
+        row2 = (row2 - 1) % 5
+    else:
+        # Rectangle, swap columns
+        col1, col2 = col2, col1
+
+    return matrix[row1][col1] + matrix[row2][col2]
+
