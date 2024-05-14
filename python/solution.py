@@ -105,7 +105,8 @@ def decrypt_given_table(message: str, table: List[str]) -> str:
     if len(decrypted) >= 1 and decrypted[-1] == 'X':
         decrypted = decrypted[:-1]
     
-    return decrypted
+    # output must have no X's
+    return decrypted.replace('X', '')
 
 
 def full_decrypt(message: str, key: str) -> str:
