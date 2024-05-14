@@ -57,10 +57,9 @@ if __name__ == '__main__':
 
     # Decrypt the message
     grid = generate_grid(key)
-    print(grid)
     decrypted_message = decrypt(encrypted_message, grid)
     
     # Remove the 'X' characters
     decrypted_message = decrypted_message.replace('X', '')
-    
+
     print(decrypted_message)
