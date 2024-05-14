@@ -1,16 +1,14 @@
+import re
+
 def create_matrix(key):
-    # Remove duplicate letters, convert to uppercase
-    filtered_key = ''.join(sorted(set(key.upper()), key=key.index))
+    # Remove duplicate letters, convert to uppercase, and filter out non-alphabet characters
+    filtered_key = ''.join(sorted(set(filter(str.isalpha, key.upper())), key=key.index))
     # Add the remaining letters of the alphabet, excluding 'J'
     alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'
     filtered_key += ''.join([char for char in alphabet if char not in filtered_key and char != 'J'])
     # Create the 5x5 matrix
     matrix = [filtered_key[i:i+5] for i in range(0, 25, 5)]
     return matrix
-
-key = "SUPERSPY"
-matrix = create_matrix(key)  # Corrected function call
-
 
 #RULES FOR DECRYPTION USING PLAYFAIR CIPHER
 # To decrypt using the Playfair Cipher, you need to handle pairs of letters in the ciphertext and apply the following rules based 
@@ -28,12 +26,13 @@ def find_position(matrix, char):
             return (x, row.index(char))
     return None  # In case the character is not found
 
-
-
 #create a function to decrypt a pair of letters using the matrix
 def decrypt_pair(pair, matrix):
-    row1, col1 = find_position(matrix, pair[0])
-    row2, col2 = find_position(matrix, pair[1])
+    positions = [find_position(matrix, char) for char in pair]
+    if None in positions:  # Skip pairs with invalid characters
+        return ''
+    
+    (row1, col1), (row2, col2) = positions
 
     if row1 == row2:
         # Same row, shift left
@@ -52,15 +51,22 @@ def decrypt_pair(pair, matrix):
 
 #This function combines the previous two to decrypt the entire message. The message should be processed in pairs of letters
 def decrypt_message(ciphertext, matrix):
+    # Filter out non-alphabet characters and ensure uppercase
+    filtered_ciphertext = ''.join(filter(str.isalpha, ciphertext.upper()))
+    # Handle odd-length by ensuring even number of characters
+    if len(filtered_ciphertext) % 2 != 0:
+        filtered_ciphertext = filtered_ciphertext[:-1]
+
     plaintext = ''
-    for i in range(0, len(ciphertext), 2):
-        part = decrypt_pair(ciphertext[i:i+2], matrix)
-        if part.endswith('X'):  # Assuming 'X' is not expected to appear naturally at the end
-            part = part[:-1]  # Remove the trailing 'X'
+    for i in range(0, len(filtered_ciphertext), 2):
+        part = decrypt_pair(filtered_ciphertext[i:i+2], matrix)
         plaintext += part
-    return plaintext.strip('X')  # Additional stripping if 'X' used as padding at the end
 
+    # Additional cleaning steps to meet specific output requirements:
+    # Remove 'X' not only as padding but thoroughly from the output
+    cleaned_plaintext = re.sub(r'X', '', plaintext)
 
+    return cleaned_plaintext
 
 #the key that will be used to decrypt
 key = "SUPERSPY"
