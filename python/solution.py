@@ -1,4 +1,4 @@
-def keyTable(keyword: str) -> list[list[str]]:
+def createKeyTable(keyword: str) -> list[list[str]]:
     if len(keyword) > 25:
         raise Exception("Length of keyword exceeds decryption table size")
     keyword = keyword.upper().replace(" ", "").replace("J", "I")
@@ -34,7 +34,7 @@ def keyTable(keyword: str) -> list[list[str]]:
 
 def decrypt(string: str, keyword: str) -> str:
     dim = 5
-    table = keyTable(keyword) # decryption table
+    table = createKeyTable(keyword) # decryption table
     locationMap = {table[i][j]: (i, j) for i in range(dim) for j in range(dim)} # map each letter to its location in the table
     # remove spaces in string
     string = string.upper().replace(" ", "")
