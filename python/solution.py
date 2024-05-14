@@ -1,16 +1,14 @@
-from typing import Dict, List, Tuple
-
 # takes the cipher key
 # returns the 5x5 table which is used for encrypting/decrypting
-def make_key_table(key: str) -> List[str]:
+def make_key_table(key: str):
     key = key.upper() #make sure it is uppercase
     
     if not key.isalpha(): raise Exception("Cipher key has unknown characters.") #throw exception if the value is invalid
 
-    letters: str = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
-    notTaken: set[str] = set(letters) # the set of characters that have not been put in the table yet
+    letters = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+    notTaken = set(letters) # the set of characters that have not been put in the table yet
 
-    key_table: list[str] = [["" for i in range(5)] for j in range(5)] # the table to fill and return
+    key_table = [["" for i in range(5)] for j in range(5)] # the table to fill and return
 
     row, col = 0,0 
 
@@ -34,19 +32,19 @@ def make_key_table(key: str) -> List[str]:
 # takes the key table with the cipher
 # returns (row,col) tuple for every unique letter
 # relies on the fact that every letter is unique otherwise map is useless
-def get_positions(table: List[str]) -> Dict[str, Tuple[int]]:
-    positions: dict[str, tuple[int]] = {}
+def get_positions(table):
+    positions = {}
 
     for i in range(5):
         for j in range(5):
-            let: str = table[i][j]
+            let = table[i][j]
             positions[let] = (i, j) # set the let position to be the index tuple (i,j)
     
     return positions
     
 # takes the encrypted message and the key cipher table (5x5 only)
 # returns the decrypted message
-def decrypt_message(message: str, key_table: List[str]) -> str:
+def decrypt_message(message, key_table):
     if not message.isalpha(): raise Exception("Encrypted message has unknown characters. ") # stop program if message cannot be understood
 
     message = message.upper()
@@ -60,13 +58,13 @@ def decrypt_message(message: str, key_table: List[str]) -> str:
         if len(message) % 2 == 1: message+='X'
 
 
-    pairs: list[str] = [] # holds the pairs of the split string, will be used to decrypt
+    pairs = [] # holds the pairs of the split string, will be used to decrypt
     for i in range(0, len(message)-1, 2):
         pairs.append(message[i] + message[i+1])
     
     positions = get_positions(key_table) # get the positions map for each letter for fast lookup
 
-    result: str = ""
+    result = ""
     for pair in pairs: 
         let1, let2 = pair[0], pair[1]
 
