@@ -10,7 +10,6 @@ def create_matrix(key):
 
 key = "SUPERSPY"
 matrix = create_matrix(key)  # Corrected function call
-print("Matrix:\n", "\n".join([" ".join(row) for row in matrix]))
 
 
 #RULES FOR DECRYPTION USING PLAYFAIR CIPHER
@@ -73,4 +72,4 @@ matrix = create_matrix(key)
 decrypted_text = decrypt_message(ciphertext, matrix)
 
 #should give the decrypted text now
-print("Decrypted Message:", decrypted_text)
+print(decrypted_text)
