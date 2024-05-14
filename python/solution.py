@@ -50,3 +50,12 @@ def decrypt_pair(pair, matrix):
 
     return matrix[row1][col1] + matrix[row2][col2]
 
+
+#This function combines the previous two to decrypt the entire message. The message should be processed in pairs of letters
+def decrypt_message(ciphertext, matrix):
+    plaintext = ''
+    for i in range(0, len(ciphertext), 2):
+        plaintext += decrypt_pair(ciphertext[i:i+2], matrix)
+    return plaintext
+
+
