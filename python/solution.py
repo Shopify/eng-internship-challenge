@@ -11,7 +11,7 @@ def generate_table(keyword):
 
     # Table creation block
     table = []
-    remaining_chars = "A"
+    next_available_char = "A"
     k = 0
     for _ in range(5):
         table.append([])
@@ -23,10 +23,10 @@ def generate_table(keyword):
                 continue
             
             # Iterate from the last discovered character until you find the next character that hasn't been discovered
-            while remaining_chars in seen:
-                remaining_chars = chr(ord(remaining_chars) + 1)
-            table[-1].append(remaining_chars)
-            seen.add(remaining_chars)
+            while next_available_char in seen:
+                next_available_char = chr(ord(next_available_char) + 1)
+            table[-1].append(next_available_char)
+            seen.add(next_available_char)
             
     return table
 
@@ -34,11 +34,8 @@ def decrypt(cipher, keyword):
     table = generate_table(keyword)
     decipher = ""
 
-    # Creates two maps:
-    # 1. Alphabet: (row, column) indices of the alphabet
-    # 2. (row, column) indices of the alphabet: Alphabet
+    # Creates a map: Alphabet: (row, column) indices of the alphabet
     char_to_pos = {table[i][j]: (i, j) for i in range(5) for j in range(5)}
-    pos_to_char = {(i, j): table[i][j] for i in range(5) for j in range(5)}
     
     # Inspect the cipher from left to right, 2 characters at a time.
     for i in range(0, len(cipher), 2):
@@ -50,15 +47,15 @@ def decrypt(cipher, keyword):
 
         # If the two characters are in the same row, shift the column positions to the left by 1
         if char1_r == char2_r:
-            decipher += pos_to_char[(char1_r, (char1_c - 1) % 5)] + pos_to_char[(char2_r, (char2_c - 1) % 5)]
+            decipher += table[char1_r][char1_c-1] + table[char2_r][char2_c - 1]
             
         # If the two characters are in the same column, shift the row positions upwards by 1
         elif char1_c == char2_c:
-            decipher += pos_to_char[((char1_r - 1) % 5, char1_c)] + pos_to_char[((char2_r - 1) % 5, char2_c)]
+            decipher += table[char1_r - 1][char1_c] + table[char2_r - 1][char2_c]
         
         # If none of the above conditions apply, swap their column positions
         else:
-            decipher += pos_to_char[(char1_r, char2_c)] + pos_to_char[(char2_r, char1_c)]
+            decipher += table[char1_r][char2_c] + table[char2_r][char1_c]
     
     # Remove all "X" in the decipher
     return decipher.replace("X", "")
