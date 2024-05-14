@@ -96,5 +96,21 @@ export function assembleDecryptedMessage(decryptedDigrams: string[]): string {
   return decryptedMessage;
 }
 
+function main() {
+  const keyword = "SUPERSPY";
+  const encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+
+  const grid = createGrid(keyword);
+
+  const encryptedDigrams = splitIntoDigrams(encryptedMessage);
+
+  const decryptedDigrams = encryptedDigrams.map(digram => decryptDigram(digram, grid));
+
+  const decryptedMessage = assembleDecryptedMessage(decryptedDigrams);
+
+  console.log(decryptedMessage);
+}
+
+main();
 
 
