@@ -67,4 +67,5 @@ function decryptPlayfairCipher(key, message) {
   return decryptedMessage;
 }
 
-decryptPlayfairCipher('SUPERSPY', 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV');
+const decryptedMessage = decryptPlayfairCipher('SUPERSPY', 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV');
+console.log(decryptedMessage);
