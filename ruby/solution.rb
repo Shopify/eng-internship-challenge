@@ -5,7 +5,7 @@
 def matrix_generator(key)
     key = key.upcase
     unique = ""
-    seen = []       # since there are only 25 alphabets, looping through "seen" is always O(1) 
+    seen = []
 
     # Remove duplicate characters from the key and handle 'J' (Traditionally combined with 'I')
     key.each_char do |char|
@@ -33,6 +33,11 @@ def matrix_generator(key)
     matrix
 end
 
+# Decrypt a Playfair cipher
+#
+# @param text [String] The encrypted text
+# @param matrix [Array<Array<String>>] The matrix used to encrypt the text
+# @return [String] The decrypted text
 def decrypt_playfair(text, matrix)
     # TODO:
     # -- check length and add letter if necessary
@@ -54,22 +59,24 @@ def decrypt_playfair(text, matrix)
     end
 
     res = []
-    pairs = text.chars.each_slice(2).map(&:join)
-    
+    pairs = text.chars.each_slice(2).map(&:join)    # Split the text into pairs of characters   
 
+    # Decrypt pairs of characters based on their positions in the matrix
     pairs.each do |pair|
         a, b = pair.chars
         row_a, col_a = position[a]
         row_b, col_b = position[b]
-        # puts "#{a}: #{row_a}, #{col_a}; #{b}: #{row_b}, #{col_b}"    
 
         if row_a == row_b
+            # If the characters are in the same row, shift each character one position to the left within the same row.
             new_a = matrix[row_a][(col_a - 1) % 5]
             new_b = matrix[row_b][(col_b - 1) % 5]
         elsif col_a == col_b
+            # If the characters are in the same column, shift each character one position up within the same column.
             new_a = matrix[(row_a - 1) % 5][col_a]
             new_b = matrix[(row_b - 1) % 5][col_b]
         else
+            # If the characters form a rectangle, swap their columns while keeping their rows unchanged.
             new_a = matrix[row_a][col_b]
             new_b = matrix[row_b][col_a]
         end
@@ -77,11 +84,12 @@ def decrypt_playfair(text, matrix)
         res << new_a << new_b
     end
 
+    # Remove 'X' characters and join the decrypted characters
     decrypted_text = res.reject { |char| char == 'X' }.join
 end
 
-matrix = matrix_generator("SUPERSPY")
+key = "SUPERSPY"
 encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+matrix = matrix_generator(key)
 answer = decrypt_playfair(encrypted_text, matrix)
 puts answer
-
