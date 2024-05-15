@@ -61,8 +61,16 @@ def decrypt_playfair(text, matrix)
         a, b = pair.chars
         row_a, col_a = position[a]
         row_b, col_b = position[b]
-        puts "#{a}: #{row_a}, #{col_a}; #{b}: #{row_b}, #{col_b}"    
+        # puts "#{a}: #{row_a}, #{col_a}; #{b}: #{row_b}, #{col_b}"    
+
+        if row_a != row_b and col_a != col_b
+            new_a = matrix[row_a][col_b]
+            new_b = matrix[row_b][col_a]
+        end
+        res << new_a << new_b
     end
+
+    res
 end
 
 
@@ -70,6 +78,6 @@ end
 matrix = matrix_generator("SUPERSPY")
 encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 answer = decrypt_playfair(encrypted_text, matrix)
-# puts answer
+puts answer
 puts matrix
 
