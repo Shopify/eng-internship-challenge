@@ -1,30 +1,3 @@
-/* 
-This solution will decrypt the cipherText into plainText in two parts:
-
-First, generating the 5*5 keytable.
-  - the table must not contain duplicate letters or non-letter characters
-  - all letters in the table must be uppercase
-
-Then, decrypt the cipherText using the keytable.
-The algorithm used is as follows:
-  For each digram, obtain the keyTable row and col of the 2 letters indiivdually.
-  - if (col1 === col2), replace each letter with the letter ABOVE it (wrapping index 0 --> 4)
-      - ie. letter1: keyTable[row1][(col1 + 4) % 5] & letter2: keyTable[row2][(col2 + 4) % 5]
-  - if (row1 === row2), replace each letter with the letter to its LEFT (wrapping index 0 --> 4)
-      - ie. letter1: keyTable[(row1 + 4) % 5][col1] & letter2: keyTable[(row2 + 4) % 5][col2]
-  - if neither, swap the columns of the 2 letters
-      - ie. letter1: keyTable[row1][col2] & letter2: keyTable[row2][col1]
-
-
-Rationale for representing the 5x5 keytable as a 2D vs. 1D array:
-  - 2D array is more intuitive to visualize and access
-  - Does not rely on math (ie. modulus) to denote element indices
-  - 2D array is more difficult to populate when generating keytable (looping vs. appending via .push())
-
-  However, 2D array was chosen since the keytable is generated only 
-  once yet indexed multiple times.
-*/
-
 // HELPER FUNCTIONS:
 function getLetterRowCol(letter, keyTable) {
   for (row = 0; row < keyTable.length; row++) {
@@ -42,10 +15,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 function generateKeyTable(key) {
   // ensure key is all uppercase and contains only unique letter characters
-  //  note: see Pull Request descrition for alternative ways to handle this: "alternate key generation methods"
-  //  note: an alternative way to uppercase all letters is to manipulate the ASCII
-  //  note: an alternative way to remove duplictes is to loop through and compare consecutive letters
-  //  note: an alternative way to regex-removing non-letter characters is to check the ASCII letter range
+  //  note: see Pull Request descrition for "alternate key generation methods"
   key = [...new Set(key.toUpperCase().replace(/[^A-Z]/g, ""))].join("");
 
   // ensure the table is completed with remaining unique letters (not in the key)
