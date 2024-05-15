@@ -2,7 +2,7 @@ import string
 
 # Key for the Playfair cipher
 key = 'SUPERSPY'
-# Remove duplicates from the key
+# Remove duplicates from the given key
 key = "".join(dict.fromkeys(key))
 
 # Encoded text to be decrypted
