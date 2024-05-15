@@ -34,9 +34,9 @@ def matrix_generator(key)
 end
 
 def decrypt_playfair(text, matrix)
-    # plan:
-    # check length and add letter if necessary
-    # create hashtable to store position of each letter in matrix. this will make it faster than iterating through the matrix each time
+    # TODO:
+    # -- check length and add letter if necessary
+    # -- create hashtable to store position of each letter in matrix. this will make it faster than iterating through the matrix each time
     # split ciphertext into pairs of 2
     # iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
     # remove "X" if seen in the result and return the decrypted text.
@@ -44,14 +44,23 @@ def decrypt_playfair(text, matrix)
     # Check if the length of the text is odd and append 'X' if necessary
     text += 'X' if text.length.odd?
 
-    
+    position = {}
 
+    # Create a hash table to store the positions of characters in the matrix
+    matrix.each_with_index do |row, i|
+        row.each_char.with_index do |ch, j|
+            position[ch] = [i, j]
+        end
+    end
+
+    position
 
 end
 
 
 
 matrix = matrix_generator("SUPERSPY")
-encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCVY"
+encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 answer = decrypt_playfair(encrypted_text, matrix)
 puts answer
+puts matrix
