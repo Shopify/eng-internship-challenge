@@ -1,6 +1,8 @@
 KEY = "SUPERSPY"
 MESSAGE = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # omitting J
+
+from pprint import pprint
 
 
 # Search the alphabet for the next unused letter
@@ -118,20 +120,16 @@ def decrypt(msg: str, key: str) -> str:
 
     # split the message into pairs to decrypt
     pairs = split_message(msg)
+    # print(pairs)
     # generate the key table
     table = make_key_table(key)
+    # pprint(table)
 
     # decrypt pairs one at a time
     for p in pairs:
         # get (row, col) locations of both letters
         p0_row, p0_col = get_location(table, p[0])
         p1_row, p1_col = get_location(table, p[1])
-
-        # treat all _X pairs as a duplicate of the first letter
-        # (judgement calls can be made on the final message)
-        dupe = False
-        if p[1] == "X":
-            dupe = True
 
         # determine which case we have for this pair (using encryption instructions):
         # 1.    "If the letters appear on the same row of your table,
@@ -141,17 +139,12 @@ def decrypt(msg: str, key: str) -> str:
         if p0_row == p1_row:
             # to decrypt: replace with letters to their immediate left
             first = get_left(table, p0_row, p0_col)  # first letter
-            # if the second letter is an X, make it a duplicate of the first instead
-            if dupe:
-                second = first
-            # otherwise, find the letter on its left as usual
-            else:
-                second = get_left(table, p1_row, p1_col)
-
-            # add letters to result
+            second = get_left(table, p1_row, p1_col) # second letter
+            
+            # add letters to result, omitting X's
             result += first
-            result += second
-
+            if second != "X":
+                result += second
         # 2.    "If the letters appear on the same column of your table,
         #       replace them with the letters immediately below respectively
         #       (wrapping around to the top side of the column if a letter in the original
@@ -159,16 +152,12 @@ def decrypt(msg: str, key: str) -> str:
         elif p0_col == p1_col:
             # to decrypt: replace with letters immediately above
             first = get_above(table, p0_row, p0_col)  # first letter
-            # if the second letter is an X, make it a duplicate of the first instead
-            if dupe:
-                second = first
-            # otherwise, find the letter above as usual
-            else:
-                second = get_above(table, p1_row, p1_col)
+            second = get_above(table, p1_row, p1_col) # second letter
 
-            # add letters to result
+            # add letters to result, omitting X's
             result += first
-            result += second
+            if second != "X":
+                result += second
         # 3.    If the letters are not on the same row or column,
         #       replace them with the letters on the same row respectively
         #       but at the other pair of corners of the rectangle defined by the original
@@ -176,17 +165,14 @@ def decrypt(msg: str, key: str) -> str:
         #       the one that lies on the same row as the first letter of the plaintext pair.
         else:
             # to decrypt: same as encryption
-            first = table[p0_row][p1_col]
-            # if the second letter is an X, make it a duplicate of the first instead
-            if dupe:
-                second = first
-            # otherwise, find the second letter as usual
-            else:
-                second = table[p1_row][p0_col]
+            first = table[p0_row][p1_col] # first letter
+            second = table[p1_row][p0_col] # second letter
 
-            # add letters to result
+            # add letters to result, omitting X's
             result += first
-            result += second
+            if second != "X":
+                result += second
+    # return decryted string
     return result
 
 
