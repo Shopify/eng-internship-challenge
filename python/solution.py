@@ -106,11 +106,7 @@ def create_playfair_table(key):
 # The key to the cypher
 key = "SUPERSPY"
 # Take in the input from commandline
-input = ""
-if (len(sys.argv) == 1):
-    input = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-else:
-    input = sys.argv[1]
+input = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 result = decrypt(input, key)
 # No spaces, X's or special characters should be present in the output
 result = result.replace("X", "")
