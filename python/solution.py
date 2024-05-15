@@ -2,14 +2,14 @@ import re
 
 
 def diagraph(text):
-    Diagraph = []
+    diagraph = []
     group = 0
     for i in range(2, len(text), 2):
-        Diagraph.append(text[group:i])
+        diagraph.append(text[group:i])
         group = i
 
-    Diagraph.append(text[group:])
-    return Diagraph
+    diagraph.append(text[group:])
+    return diagraph
 
 
 def gen_key_table(cipher_key):
