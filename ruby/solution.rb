@@ -39,12 +39,6 @@ end
 # @param matrix [Array<Array<String>>] The matrix used to encrypt the text
 # @return [String] The decrypted text
 def decrypt_playfair(text, matrix)
-    # TODO:
-    # -- check length and add letter if necessary
-    # -- create hashtable to store position of each letter in matrix. this will make it faster than iterating through the matrix each time
-    # -- split ciphertext into pairs of 2
-    # -- iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
-    # -- remove "X" if seen in the result and return the decrypted text.
 
     # Check if the length of the text is odd and append 'X' if necessary
     text += 'X' if text.length.odd?
@@ -84,8 +78,8 @@ def decrypt_playfair(text, matrix)
         res << new_a << new_b
     end
 
-    # Remove 'X' characters and join the decrypted characters
-    decrypted_text = res.reject { |char| char == 'X' }.join
+    # Remove 'X', 'Spaces' and any special characters that are not uppercase alphabets and join the decrypted characters
+    decrypted_text = res.reject { |char| char == 'X' }.join.upcase.gsub(/[^A-Z]/, '')
 end
 
 key = "SUPERSPY"
