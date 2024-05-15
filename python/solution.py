@@ -3,7 +3,7 @@
 # Shopify Internship Challenge
 
 # a function for creating the matrix
-def create_matrix(keyword):
+def create_matrix(passkey):
     """
     A function which builds the
     matrix by utilizing the given
@@ -11,7 +11,24 @@ def create_matrix(keyword):
     Returns the matrix as a list.
     """
 
-    pass
+    matrix = []
+
+    passkey = passkey.replace('J', 'I')
+
+    # build matrix in steps of 5 for 25 total spaces
+    for i in range(0, len(passkey), 5):
+        matrix.append(passkey[i:i + 5])
+
+    return matrix
+
+
+keyword = "SUPERSPY"
+matrix_result = [
+    ['S', 'U', 'P', 'E', 'R'],
+    ['P', 'Y', 'A', 'B', 'C']
+]
+
+assert create_matrix(keyword) == matrix_result
 
 
 # a function for decryption
@@ -36,6 +53,3 @@ def matrix_position(matrix):
     """
 
     pass
-
-
-# test code
