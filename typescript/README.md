@@ -1,3 +1,4 @@
-Note to the recruiting team: I by accidentally submitted the link to this page instead of my PR
-https://github.com/shanccui/eng-internship-challenge/pull/1
-^my pr is accessible here :), sorry about the inconvenience
+# TypeScript Instructions
+
+- Install all dependencies with the command `npm install`
+- Ensure your code can run in the command-line with the command `ts-node solution.ts` or `npx ts-node solution.ts`
