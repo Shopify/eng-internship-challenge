@@ -1,6 +1,11 @@
 
 
-// Decrypt Playfair Cypher assuming I and J are interchangable
+/*
+    @Param: message: string - Fairplay Cipher encrypted input
+    Given a fairplay cipher in the form of a string as entirely UPPERCASE, the purpose of the function is to
+    decrypt the input and return the decrypted message.
+    The key used to create the grid for decrypting the message is SUPERSPY
+*/
 function decrypt(message:string): string {
     let result: string = "";
 
@@ -25,7 +30,14 @@ function decrypt(message:string): string {
     return result;
 }
 
-//function to decrypt the given bigram using the letterSet and grid
+/*
+    @Param: bigram: string[] - a bigram in the form of a string array
+            grid: string[][] - a two dimensional string array used for decrypting the bigram
+            letterSet:: Map<string,[number,number] - a Map with a string Key representing a letter and an array of two numbers representing the position in the grid
+
+    The purpose is to translate the given bigram using the given grid and letterSet values. 
+    The function returns the decrypted pair of letters in the form of a string
+*/
 function translateBigram(bigram:string[], grid: string[][], letterSet: Map<string,[number,number]>): string {
     let result: string = "";
 
@@ -71,7 +83,8 @@ function translateBigram(bigram:string[], grid: string[][], letterSet: Map<strin
     return result;
 }
 
-// Split encrypted message into bigram
+// @Param: message: string - a string of the encrypted message
+// The purpose of this function is to split the given message into bigrams and return the result as a string array
 function splitMessage(message:string):string[] {
     let result: string[] = [];
     for (let i = 0; i < message.length; i += 2) {
@@ -82,6 +95,14 @@ function splitMessage(message:string):string[] {
 
 
 
+/*
+    @Param key: string - a key word/string used for creating the grid needed for decryption
+           letterSet: Map<string,[number,number] - a Map of string -> number pair where the key represents a letter and the number pair as the position in the grid
+
+    The purpose is to create a grid given a key as a string and updating the mapping between a string and two numbers.
+    the function returns a 2D string array representing a 5x5 grid that will be used for decryption where grid[i][j], i represents the row and j represents the column.
+
+*/
 // create the playfair grid in the form [[a,b,c,d,e],[f,g,h,i,j],[k,l,m,n,o],[p,q,r,s,t],[u,v,w,x,y]]
 function createGrid(key: string,letterSet: Map<string,[number,number]>): string[][] {
     let j: number = 0; // j - keep track of row to fill
