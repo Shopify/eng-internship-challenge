@@ -30,4 +30,16 @@ describe('createPlayfairGrid', () => {
 
         expect(grid).toEqual(expectedGrid);
     });
+
+    it('should throw an error if the keyword is an empty string', () => {
+        expect(() => createGrid("")).toThrow("Keyword cannot be empty.");
+    });
+
+    it('should throw an error if the keyword is not a string', () => {
+        expect(() => createGrid(123 as any)).toThrow("Keyword must be a string.");
+    });
+
+    it('should throw an error if the keyword contains non-alphabetic characters', () => {
+        expect(() => createGrid("SUP3R!@#")).toThrow("Keyword must only contain alphabetic characters.");
+    });
 });

@@ -1,16 +1,23 @@
-import { assembleDecryptedMessage } from '../solution'; // Import the function to test
+import { assembleDecryptedMessage } from '../solution'; 
 
 describe('assembleDecryptedMessage', () => {
     it('should assemble decrypted digrams into one string without spaces, "X", or special characters', () => {
-        const decryptedDigrams = ['FY', 'YP', 'VB']; // Example decrypted digrams
-        const expectedDecryptedMessage = 'FYYPVB'; // Expected decrypted message
+        const decryptedDigrams = ['FY', 'YP', 'VB']; 
+        const expectedDecryptedMessage = 'FYYPVB'; 
 
-        // Call the function
         const decryptedMessage = assembleDecryptedMessage(decryptedDigrams);
 
-        // Expect the decrypted message to match the expected message
+        
         expect(decryptedMessage).toEqual(expectedDecryptedMessage);
     });
 
-    // Add more test cases as needed
+    it('should remove "X" from the final message', () => {
+      const decryptedDigrams = ['FY', 'XP', 'VB'];
+      const expectedDecryptedMessage = 'FYPVB';
+
+      const decryptedMessage = assembleDecryptedMessage(decryptedDigrams);
+
+      expect(decryptedMessage).toEqual(expectedDecryptedMessage);
+  });
+
 });

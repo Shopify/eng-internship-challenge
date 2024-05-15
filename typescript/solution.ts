@@ -1,52 +1,68 @@
+const GRID_ROW_LENGTH = 5
+
 export function createGrid(keyword: string): string[][] {
+  if (typeof keyword !== 'string') {
+    throw new Error('Keyword must be a string.');
+  }
+  
+  if (!keyword) {
+      throw new Error("Keyword cannot be empty.");
+  }
+
+  if (!/^[A-Z]+$/i.test(keyword)) {
+    throw new Error('Keyword must only contain alphabetic characters.');
+  }
+
   const grid: string[][] = [];
-  const seen: Set<string> = new Set();
-  const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // J is omitted
+  const lettersAdded: Set<string> = new Set();
+  const ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // J is omitted to fit the grid
 
-  let row: string[] = [];
-  for (const char of keyword.toUpperCase()) {
-      if (!seen.has(char) && char !== 'J') {
-          seen.add(char);
-          row.push(char);
-          if (row.length === 5) {
-              grid.push(row);
-              row = [];
-          }
-      }
+  keyword = keyword.toUpperCase();
+
+  function addCharactersToGrid(
+    source: string,
+    lettersAdded: Set<string>,
+    grid: string[][],
+    currentRow: string[]
+  ): string[] {
+    for (const char of source) {
+        if (!lettersAdded.has(char) && char !== 'J') {
+            lettersAdded.add(char);
+            currentRow.push(char);
+            if (currentRow.length === GRID_ROW_LENGTH) {
+                grid.push(currentRow);
+                currentRow = [];
+            }
+        }
+    }
+    return currentRow;
   }
 
-  for (const char of alphabet) {
-      if (!seen.has(char)) {
-          seen.add(char);
-          row.push(char);
-          if (row.length === 5) {
-              grid.push(row);
-              row = [];
-          }
-      }
-  }
+  let currentRow: string[] = [];
+  currentRow = addCharactersToGrid(keyword, lettersAdded, grid, currentRow);
+  currentRow = addCharactersToGrid(ALPHABET, lettersAdded, grid, currentRow);
 
-  if (row.length > 0) {
-      grid.push(row);
+  if (currentRow.length > 0) {
+      grid.push(currentRow);
   }
 
   return grid;
 }
 
-export function splitIntoDigrams(input: string): string[] {
+export function splitIntoDigrams(message: string): string[] {
   const digrams: string[] = [];
-  let i = 0;
+  let index = 0;
 
-  while (i < input.length) {
-      const currentChar = input[i].toUpperCase();
-      const nextChar = i + 1 < input.length ? input[i + 1].toUpperCase() : 'X';
+  while (index < message.length) {
+      const currentChar = message[index].toUpperCase();
+      const nextChar = index + 1 < message.length ? message[index + 1].toUpperCase() : 'X';
 
       if (currentChar === nextChar) {
           digrams.push(currentChar + 'X');
-          i++;
+          index++;
       } else {
           digrams.push(currentChar + nextChar)
-          i += 2;
+          index += 2;
       }
   }
 
@@ -96,9 +112,7 @@ export function assembleDecryptedMessage(decryptedDigrams: string[]): string {
   return decryptedMessage;
 }
 
-function main() {
-  const keyword = "SUPERSPY";
-  const encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+function decryptedMessage(keyword: string, encryptedMessage: string): string {
 
   const grid = createGrid(keyword);
 
@@ -106,11 +120,9 @@ function main() {
 
   const decryptedDigrams = encryptedDigrams.map(digram => decryptDigram(digram, grid));
 
-  const decryptedMessage = assembleDecryptedMessage(decryptedDigrams);
+  const finalMessage = assembleDecryptedMessage(decryptedDigrams);
 
-  console.log(decryptedMessage);
+  return finalMessage
 }
 
-main();
-
-
+console.log(decryptedMessage("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"));
