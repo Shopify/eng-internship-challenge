@@ -77,9 +77,9 @@ class Playfair:
         plaintext = plaintext.replace('X', '')
         return plaintext
 
-#solution!
-key = "SUPERSPY"
-ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-solution = Playfair(key)
-plaintext = solution.decrypt(ciphertext)
-print(plaintext)
+if __name__ == "__main__":
+    key = "SUPERSPY"
+    ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    solution = Playfair(key)
+    plaintext = solution.decrypt(ciphertext)
+    print(plaintext)
