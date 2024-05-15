@@ -1,5 +1,7 @@
 
 import numpy as np
+
+## function to generate the key matrix
 def generate_key(key):
       # make a 2d array
         letters = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
@@ -23,12 +25,16 @@ def generate_key(key):
         key_matrix = key_array.reshape(-1,5)
         return key_matrix
                   
+
+## function to find the row and column of a letter in the matrix
 def find_row_col(letter, key_matrix):
      for i, row_value in enumerate(key_matrix):
           for j, col_value in enumerate(row_value):
                if col_value == letter:
                     return i ,j
-    
+
+
+## function to find the decrypted letters depending on the position of encrypted letters
 def decipher_text(text, key_matrix):
     if len(text) == 1:
          return text
@@ -86,6 +92,7 @@ def main():
            
         print(decryptedMessage)
         return decryptedMessage
+
 
 if __name__ == '__main__':
     main()
