@@ -38,7 +38,7 @@ def decrypt_playfair(text, matrix)
     # -- check length and add letter if necessary
     # -- create hashtable to store position of each letter in matrix. this will make it faster than iterating through the matrix each time
     # -- split ciphertext into pairs of 2
-    # iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
+    # -- iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
     # remove "X" if seen in the result and return the decrypted text.
 
     # Check if the length of the text is odd and append 'X' if necessary
@@ -63,10 +63,17 @@ def decrypt_playfair(text, matrix)
         row_b, col_b = position[b]
         # puts "#{a}: #{row_a}, #{col_a}; #{b}: #{row_b}, #{col_b}"    
 
-        if row_a != row_b and col_a != col_b
+        if row_a == row_b
+            new_a = matrix[row_a][(col_a - 1) % 5]
+            new_b = matrix[row_b][(col_b - 1) % 5]
+        elsif col_a == col_b
+            new_a = matrix[(row_a - 1) % 5][col_a]
+            new_b = matrix[(row_b - 1) % 5][col_b]
+        else
             new_a = matrix[row_a][col_b]
             new_b = matrix[row_b][col_a]
         end
+
         res << new_a << new_b
     end
 
