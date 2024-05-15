@@ -56,6 +56,13 @@ def decrypt_playfair(text, matrix)
     res = []
     pairs = text.chars.each_slice(2).map(&:join)
     
+
+    pairs.each do |pair|
+        a, b = pair.chars
+        row_a, col_a = position[a]
+        row_b, col_b = position[b]
+        puts "#{a}: #{row_a}, #{col_a}; #{b}: #{row_b}, #{col_b}"    
+    end
 end
 
 
@@ -63,6 +70,6 @@ end
 matrix = matrix_generator("SUPERSPY")
 encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 answer = decrypt_playfair(encrypted_text, matrix)
-puts answer
+# puts answer
 puts matrix
 
