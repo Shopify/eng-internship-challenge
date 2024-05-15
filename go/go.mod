@@ -1,3 +1,4 @@
 module solution
 
-go 1.21.5
+// go 1.21.5ـ
+go 1.23
