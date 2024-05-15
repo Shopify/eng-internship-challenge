@@ -25,13 +25,7 @@ def main() -> None:
             new_f_row = adjust_index(f_row - 1)
             new_s_row = adjust_index(s_row - 1)
         else:
-            diff = abs(f_col - s_col)
-            if f_col > s_col:
-                new_f_col = adjust_index(f_col - diff)
-                new_s_col = adjust_index(s_col + diff)
-            else:
-                new_f_col = adjust_index(f_col + diff)
-                new_s_col = adjust_index(s_col - diff)
+            new_f_col, new_s_col = s_col, f_col
 
         decoded_text += playfair_grid[new_f_row][new_f_col]
         decoded_text += playfair_grid[new_s_row][new_s_col]
