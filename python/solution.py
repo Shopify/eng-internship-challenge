@@ -19,16 +19,34 @@ def create_matrix(passkey):
 
     matrix = []
 
+    for x in range(5):
+        row = ['' for x in range(5)]
+        matrix.append(row)
+
     passkey = passkey.replace('J', 'I')
 
-    # padding for cells within 5x5 matrix
-    padding_length = 25 - len(passkey)
-    for i in range(padding_length):
-        passkey += chr(65 + i % 25)
+    # begin adding chars to matrix
+    used_chars = set()
+    row, col = 0, 0
 
-    # build matrix in steps of 5 for 25 total spaces
-    for cell in range(0, 25, 5):
-        matrix.append(list(passkey[cell:cell + 5]))
+    for char in passkey:
+        if char not in used_chars:
+            matrix[row][col] = char
+            used_chars.add(char)
+            col += 1
+            if col == 5:
+                col = 0
+                row += 1
+
+    # add remaining chars
+    for char in string.ascii_uppercase:
+        if char != 'J' and char not in used_chars:
+            matrix[row][col] = char
+            used_chars.add(char)
+            col += 1
+            if col == 5:
+                col = 0
+                row += 1
 
     return matrix
 
@@ -112,11 +130,15 @@ def matrix_position(matrix):
 class TestPlayfair(unittest.TestCase):
 
     def test1(self):
+
         key = "SUPERSPY"
         encrypted = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
         decrypted = "HIPXPOPOTOMONSTROSESQUIPPEDALIOPHOBIAX"
 
         matrix = create_matrix(key)
+        print("matrix:")
+        for row in matrix:
+            print(row)
         decrypted_message = decrypt_message(encrypted, matrix)
 
         self.assertEqual(decrypted_message, decrypted)
