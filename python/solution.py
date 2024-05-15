@@ -1,11 +1,13 @@
 cipher_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 key = "SUPERSPY"
+secret = []
 # Construct the 5x5 grid
 letter_positions = {}
 
+decryption_grid = [[0 for _ in range(5)] for _ in range(5)]
+
 
 def build_decryption_grid():
-    decryption_grid = [[0 for _ in range(5)] for _ in range(5)]
 
     remaining_letters = [
         "A",
@@ -68,33 +70,78 @@ def build_decryption_grid():
             decryption_grid[i][j] = next_letter
             letter_positions[next_letter] = [i, j]
 
-    print(decryption_grid)
-    print(letter_positions)
+    # print(decryption_grid)
+    # print(letter_positions)
 
 
 build_decryption_grid()
-# def solve_message():
-#     index_1, index_2 = 0, 0
-#     while index_2 < len(cipher_text):
-#         # get new characters
-#         char_1 = cipher_text[index_1]
-#         char_2 = cipher_text[index_2]
 
-#         # determine which 3 cases
 
-#         # same row, get letters to the left
-#         if letter_positions[char_1][0] == letter_positions[char_2][0]:
-#             # determine if wrap-around needed
-#             asdf
+def solve_message():
+    # helper variables to make code easier to write and debug
+    row, column = 0, 1
+    c_index_1, c_index_2 = 0, 1
+    while c_index_2 < len(cipher_text):
+        # get new characters
+        c_char_1 = cipher_text[c_index_1]
+        c_char_2 = cipher_text[c_index_2]
 
-#         # same column, get letters above
-#         elif letter_positions[char_1][1] == letter_positions[char_2][1]:
-#             # determine if wrap-around needed
-#             asdf
+        # determine which 3 cases
+        c_char_1_position = letter_positions[c_char_1]
+        c_char_2_position = letter_positions[c_char_2]
 
-#         # diff row or column, need to get rectangle
-#         else:
-#             asdf
+        s_char_1_position = c_char_1_position.copy()
+        s_char_2_position = c_char_2_position.copy()
 
-#         index_1 += 1
-#         index_2 += 1
+        # same row, get letters to the left
+        if c_char_1_position[row] == c_char_2_position[row]:
+            # determine if wrap-around needed by checking if col == 0
+
+            if c_char_1_position[column] == 0:
+                s_char_1_position[column] = len(decryption_grid) - 1
+            else:
+                s_char_1_position[column] = s_char_1_position[column] - 1
+
+            if c_char_2_position[column] == 0:
+                s_char_2_position[column] = len(decryption_grid) - 1
+            else:
+                s_char_2_position[column] = s_char_2_position[column] - 1
+
+        # same column, get letters above
+        elif c_char_1_position[column] == c_char_2_position[column]:
+            # determine if wrap-around needed by checking if row == 0
+            if c_char_1_position[row] == 0:
+                s_char_1_position[row] = len(decryption_grid) - 1
+            else:
+                s_char_1_position[row] = s_char_1_position[row] - 1
+
+            if c_char_2_position[row] == 0:
+                s_char_2_position[row] = len(decryption_grid) - 1
+            else:
+                s_char_2_position[row] = s_char_2_position[row] - 1
+
+        # # diff row or column, need to get other end of rectangle by switching cols
+        else:
+            temp = s_char_1_position[column]
+            s_char_1_position[column] = s_char_2_position[column]
+            s_char_2_position[column] = temp
+
+        secret.append(
+            decryption_grid[s_char_1_position[row]][s_char_1_position[column]]
+        )
+        secret.append(
+            decryption_grid[s_char_2_position[row]][s_char_2_position[column]]
+        )
+
+        c_index_1 += 2
+        c_index_2 += 2
+
+
+solve_message()
+# print("Asdfasdfasdf")
+# print(secret)
+# remove X at some point
+answer = "".join(secret)
+answer_without_x = answer.replace("X", "")
+
+print(answer.replace("X", ""))
