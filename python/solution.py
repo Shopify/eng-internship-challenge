@@ -20,8 +20,6 @@ def decrypt(code: str, key: str) -> str:
     matrix = make_matrix(key)
     return ''.join(decrypt_pair(code[i], code[i + 1], matrix) for i in range(0, len(code), 2)).replace("X", "")
 
-if __name__ == '__main__':
-    code = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-    key = "SUPERSPY"
-    decrypted_message = decrypt(code, key)
-    print(decrypted_message)
+code = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+key = "SUPERSPY"
+print(decrypt(code, key))
