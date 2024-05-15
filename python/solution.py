@@ -93,6 +93,6 @@ class PlayfairCipher:
 
 # example where key = "superspy", text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 if __name__ == '__main__':
-    cipher = PlayfairCipher("superspy")
+    cipher = PlayfairCipher("SUPERSPY")
     decrpyted_message = cipher.decrypt("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV")
     print(decrpyted_message)
