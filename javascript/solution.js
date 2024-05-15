@@ -16,6 +16,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 function generateKeyTable(key) {
   // ensure key is all uppercase and contains only unique letter characters
   //  note: see Pull Request descrition for "alternate key generation methods"
+  //  QUESTION: if 'X' is used to pad digrams, should it be usable in the key?
   key = [...new Set(key.toUpperCase().replace(/[^A-Z]/g, ""))].join("");
 
   // ensure the table is completed with remaining unique letters (not in the key)
@@ -79,10 +80,7 @@ function decryptCipherText(cipherText, key) {
   }
 
   // ensure decrypted string is: all uppercase & contains only letter characters & excludes 'X'
-  plainText = plainText
-    .toUpperCase()
-    .replace(/[^A-Z]/g, "")
-    .replace(/X/g, "");
+  plainText = plainText.toUpperCase().replace(/[^A-Z]|X/g, "");
 
   return plainText;
 }
