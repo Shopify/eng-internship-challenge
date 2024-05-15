@@ -37,7 +37,7 @@ def decrypt_playfair(text, matrix)
     # TODO:
     # -- check length and add letter if necessary
     # -- create hashtable to store position of each letter in matrix. this will make it faster than iterating through the matrix each time
-    # split ciphertext into pairs of 2
+    # -- split ciphertext into pairs of 2
     # iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
     # remove "X" if seen in the result and return the decrypted text.
 
@@ -53,8 +53,9 @@ def decrypt_playfair(text, matrix)
         end
     end
 
-    position
-
+    res = []
+    pairs = text.chars.each_slice(2).map(&:join)
+    
 end
 
 
@@ -64,3 +65,4 @@ encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 answer = decrypt_playfair(encrypted_text, matrix)
 puts answer
 puts matrix
+
