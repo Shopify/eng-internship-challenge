@@ -10,11 +10,11 @@ def decrypt_pair(a: str, b: str, matrix: list[list[str]]) -> str:
 
     ra, ca = pos_dict[a]
     rb, cb = pos_dict[b]
-    if ra == rb: # Same row: shift right
+    if ra == rb: # Same row: shift left
         return matrix[ra][(ca - 1) % 5] + matrix[rb][(cb - 1) % 5]
-    if ca == cb: # Same column: shift down
+    if ca == cb: # Same column: shift up
         return matrix[(ra - 1) % 5][ca] + matrix[(rb - 1) % 5][cb]
-    return matrix[ra][cb] + matrix[rb][ca] # Always this is a box, so apply box rule (same row, opposite corner)
+    return matrix[ra][cb] + matrix[rb][ca] # Always this is a box, so apply inverse box rule (same row, opposite corner)
 
 def decrypt(code: str, key: str) -> str:
     matrix = make_matrix(key)
