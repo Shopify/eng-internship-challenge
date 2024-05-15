@@ -1,6 +1,5 @@
 var key = "SUPERSPY";
 var ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
-ciphertext = "ee".toUpperCase();
 deciphertext = decipher(key, ciphertext);
 console.log(deciphertext);
 
