@@ -203,6 +203,4 @@ def decipher(ciphertext: str, key: str) -> str:
     return remove_character(deciphered, "X")
 
 
-if __name__ == "__main__":
-    # decipher the given text
-    print(decipher("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV", "SUPERSPY"))
+print(decipher("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV", "SUPERSPY"))
