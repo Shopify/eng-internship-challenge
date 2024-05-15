@@ -1,6 +1,9 @@
 # Brittaney Nicole Davis (Nico)
 # 5/14/2024
-# Shopify Internship Challenge
+# Technical Assessment Challenge - Playfair Cipher Solver
+
+import string
+
 
 # --------------------------------
 # matrix creation
@@ -17,30 +20,17 @@ def create_matrix(passkey):
 
     passkey = passkey.replace('J', 'I')
 
+    # padding for cells within 5x5 matrix
+    padding_length = 25 - len(passkey)
+    for i in range(padding_length):
+        passkey += chr(65 + i % 25)
+
     # build matrix in steps of 5 for 25 total spaces
-    for cell in range(0, len(passkey), 5):
+    for cell in range(0, 25, 5):
         matrix.append(list(passkey[cell:cell + 5]))
 
     return matrix
 
-
-# keyword = "SUPERSPY"
-# matrix_result = [
-#     ['S', 'U', 'P', 'E', 'R'],
-#     ['S', 'P', 'Y']
-# ]
-#
-# real_matrix = create_matrix(keyword)
-#
-# print("real:")
-# for row in real_matrix:
-#     print(row)
-#
-# print("expected:")
-# for row in matrix_result:
-#     print(row)
-#
-# assert create_matrix(keyword) == matrix_result
 
 # --------------------------------
 # decryption
@@ -53,7 +43,38 @@ def decrypt_message(message, matrix):
     Returns the message as a string.
     """
 
-    pass
+    decrypted = []
+    msg_upper = ""
+
+    # sift for letters only, then set to upper
+    for letter in message:
+        if letter.isalpha():
+            msg_upper += letter.upper()
+
+    # set original message to uppercase version
+    message = msg_upper
+
+    position_dict = matrix_position(matrix)
+
+    # obtain character pairs
+    for i in range(0, len(message), 2):
+        char_1 = message[i]
+        char_2 = message[i + 1]
+
+        row_1, col_1 = position_dict[char_1]
+        row_2, col_2 = position_dict[char_2]
+
+        if row_1 == row_2:
+            decrypted.append(matrix[row_1][(col_1 - 1) % 5])
+            decrypted.append(matrix[row_2][(col_2 - 1) % 5])
+        elif col_1 == col_2:
+            decrypted.append(matrix[(row_1 - 1) % 5][col_1])
+            decrypted.append(matrix[(row_2 - 1) % 5][col_2])
+        else:
+            decrypted.append(matrix[row_1][col_2])
+            decrypted.append(matrix[row_2][col_1])
+
+    return ''.join(decrypted)
 
 
 # --------------------------------
@@ -69,7 +90,7 @@ def matrix_position(matrix):
 
     position_dict = {}
 
-    # establish rows and columns via
+    # establish rows and columns via length
     matrix_rows = len(matrix)
     matrix_columns = len(matrix[0])
 
@@ -79,35 +100,9 @@ def matrix_position(matrix):
             letter = matrix[i][j]
             position_dict[letter] = (i, j)
 
+    # map each letter to the proper position
+    for letter in string.ascii_uppercase:
+        if letter != 'J' and letter not in position_dict:
+            position_dict[letter] = (-1, -1)
+
     return position_dict
-
-
-# test_matrix = [
-#     ['A', 'B', 'C', 'D', 'E'],
-#     ['F', 'G', 'H', 'I', 'K'],
-#     ['L', 'M', 'N', 'O', 'P'],
-#     ['Q', 'R', 'S', 'T', 'U'],
-#     ['V', 'W', 'X', 'Y', 'Z']
-# ]
-#
-# position_result = {'A': (0, 0), 'B': (0, 1), 'C': (0, 2), 'D': (0, 3), 'E': (0, 4),
-#                    'F': (1, 0), 'G': (1, 1), 'H': (1, 2), 'I': (1, 3), 'K': (1, 4),
-#                    'L': (2, 0), 'M': (2, 1), 'N': (2, 2), 'O': (2, 3), 'P': (2, 4),
-#                    'Q': (3, 0), 'R': (3, 1), 'S': (3, 2), 'T': (3, 3), 'U': (3, 4),
-#                    'V': (4, 0), 'W': (4, 1), 'X': (4, 2), 'Y': (4, 3), 'Z': (4, 4)}
-#
-# real_matrix = matrix_position(test_matrix)
-#
-# print("real:")
-# for row in real_matrix:
-#     print(row)
-#
-# print("expected:")
-# for row in position_result:
-#     print(row)
-#
-# assert real_matrix == position_result
-#
-# print("real vs expected:")
-# for key in sorted(real_matrix.keys()):
-#     print(f"{key}: {real_matrix[key]} vs {position_result[key]}")
