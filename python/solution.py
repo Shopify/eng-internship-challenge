@@ -3,6 +3,7 @@
 # Technical Assessment Challenge - Playfair Cipher Solver
 
 import string
+import unittest
 
 
 # --------------------------------
@@ -106,3 +107,20 @@ def matrix_position(matrix):
             position_dict[letter] = (-1, -1)
 
     return position_dict
+
+
+class TestPlayfair(unittest.TestCase):
+
+    def test1(self):
+        key = "SUPERSPY"
+        encrypted = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+        decrypted = "HIPXPOPOTOMONSTROSESQUIPPEDALIOPHOBIAX"
+
+        matrix = create_matrix(key)
+        decrypted_message = decrypt_message(encrypted, matrix)
+
+        self.assertEqual(decrypted_message, decrypted)
+
+
+if __name__ == '__main__':
+    unittest.main()
