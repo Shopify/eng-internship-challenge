@@ -33,6 +33,15 @@ def matrix_generator(key)
     matrix
 end
 
+def decrypt_playfair(text, matrix)
+    # plan:
+    # check length and add letter if necessary
+    # create hashtable to store position of each letter in matrix. this will make it faster than iterating through the matrix each time
+    # split ciphertext into pairs of 2
+    # iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
+    # remove "X" if seen in the result and return the decrypted text.
+    
+end
 
 
 
