@@ -1,3 +1,6 @@
+import re
+
+
 def diagraph(text):
     Diagraph = []
     group = 0
@@ -50,11 +53,15 @@ def rectangle(key_table, fl_row, fl_col, sl_row, sl_col):
 
 
 def decrypt(encrypted_message, cipher_key):
+    # message needs to be in upper case
     encrypted_message = encrypted_message.upper()
 
+    # group letters in pairs
     message_diagraph = diagraph(encrypted_message)
+    # create polybius square
     key_table = gen_key_table(cipher_key)
 
+    # start solving
     solution = ""
     for letter_pair in message_diagraph:
         # fl = first letter
@@ -72,8 +79,14 @@ def decrypt(encrypted_message, cipher_key):
 
         solution += mapping
 
-    print(solution)
-    solution = solution.replace("X", "")
+    # subsitute special X placeholders (2 cases)
+    indices = re.search(r"([A-Z]{1})X{1}\1", solution)
+    solution = re.sub(r"([A-Z]{1})X{1}\1", indices.group()
+                      [0] + indices.group()[2], solution)
+
+    if len(solution) % 2 == 1 and solution[len(solution) - 1] == "X":
+        solution = solution[0:len(solution)-1]
+
     print(solution)
 
 
