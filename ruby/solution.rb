@@ -40,11 +40,18 @@ def decrypt_playfair(text, matrix)
     # split ciphertext into pairs of 2
     # iterate over each pair, and apply the rules of playfair cipher using the matrix. store the plaintext it in a result variable
     # remove "X" if seen in the result and return the decrypted text.
+
+    # Check if the length of the text is odd and append 'X' if necessary
+    text += 'X' if text.length.odd?
+
     
+
+
 end
 
 
 
-
-outp = matrix_generator("SUPERSPY")
-puts outp
+matrix = matrix_generator("SUPERSPY")
+encrypted_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCVY"
+answer = decrypt_playfair(encrypted_text, matrix)
+puts answer
