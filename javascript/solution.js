@@ -1,37 +1,50 @@
-// Generate Key Table, ommiting 'J' and duplicate characters
-const keyTable = [
-    'S', 'U', 'P', 'E', 'R',
-    'Y', 'A', 'B', 'C', 'D',
-    'F', 'G', 'H', 'I', 'K',
-    'L', 'M', 'N', 'O', 'Q',
-    'T', 'V', 'W', 'X', 'Z'
-];
+// Generate the key table for the Playfair cipher
+function generateKeyTable(keyword) {
+    let keyTable = [];
+    // Alphabet without 'J' as per the rules of the Playfair cipher
+    let alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ';
 
-message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
-let pairs = [];
-
-
-// Split message into pairs of characters
-for (let i = 0; i < message.length; i+=2) {
-    let first = message[i];
-    let second;
-    // Handle odd length message
-    if (i === message.length - 1) {
-        second = 'X';
-    } else {
-        second = message[i + 1];
+    // Add the keyword to the keyTable while removing any duplicate characters
+    for (let char of keyword) {
+        if (!keyTable.includes(char)) {
+            keyTable.push(char);
+        }
     }
-    // If both characters are the same, replace the second character with 'X', and decrement i
-    if (first === second) {
-        second = 'X';
-        i--;
+
+    // Populate the remaining key table
+    for (let char of alphabet) {
+        if (!keyTable.includes(char) && keyTable.length < 25) {
+            keyTable.push(char);
+        }
     }
-    pairs.push([first, second]);
+    return keyTable;
 }
 
+// Function to divide the message into pairs of characters
+function dividePairs(message) {
+    let pairs = [];
+    // Split message into pairs of characters
+    for (let i = 0; i < message.length; i+=2) {
+        let first = message[i];
+        let second;
+        // Handle odd length message
+        if (i === message.length - 1) {
+            second = 'X';
+        } else {
+            second = message[i + 1];
+        }
+        // If both characters are the same, replace the second character with 'X', and decrement i
+        if (first === second) {
+            second = 'X';
+            i--;
+        }
+        pairs.push([first, second]);
+    }
+    return pairs;
+}
 
 // Function to find the position of a character in the keyTable
-function findPosition(char) {
+function findPosition(char, keyTable) {
     for (let row = 0; row < 5; row++) {
         for (let col = 0; col < 5; col++) {
             if (keyTable[row * 5 + col] === char) {
@@ -41,36 +54,39 @@ function findPosition(char) {
     }
 }
 
-// Find the row and column positions of each pair of characters
-positions = [];
-for (let i = 0; i < pairs.length; i++) {
-    const pos1 = findPosition(pairs[i][0]);
-    const pos2 = findPosition(pairs[i][1]);
-    positions.push([pos1, pos2]);
-}
+function decrypt(pairs, keyTable) {
+    let answer = '';
+    for (let i = 0; i < pairs.length; i++) {
+        // Find the positions of the characters in the keyTable in [row, column] format
+        const pos1 = findPosition(pairs[i][0], keyTable);
+        const pos2 = findPosition(pairs[i][1], keyTable);
 
-answer = '';
-for (let i = 0; i < positions.length; i++) {
-    let decryptedString = '';
-    
-    const pos1 = positions[i][0];
-    const pos2 = positions[i][1];
-    
-    if (pos1[0] === pos2[0]) { // Same row, replace each character with the one on its left
-        decryptedString += keyTable[pos1[0] * 5 + (pos1[1] + 4) % 5];
-        decryptedString += keyTable[pos2[0] * 5 + (pos2[1] + 4) % 5];
-    } else if (pos1[1] === pos2[1]) { // Same column, replace each character with the one above it
-        decryptedString += keyTable[((pos1[0] + 4) % 5) * 5 + pos1[1]];
-        decryptedString += keyTable[((pos2[0] + 4) % 5) * 5 + pos2[1]];
-    } else { // Replace each character with the same row but diff column
-        decryptedString += keyTable[pos1[0] * 5 + pos2[1]];
-        decryptedString += keyTable[pos2[0] * 5 + pos1[1]];
+        let decryptedString = '';
+        if (pos1[0] === pos2[0]) { // Same row, replace each character with the one on its left
+            decryptedString += keyTable[pos1[0] * 5 + (pos1[1] + 4) % 5];
+            decryptedString += keyTable[pos2[0] * 5 + (pos2[1] + 4) % 5];
+        } else if (pos1[1] === pos2[1]) { // Same column, replace each character with the one above it
+            decryptedString += keyTable[((pos1[0] + 4) % 5) * 5 + pos1[1]];
+            decryptedString += keyTable[((pos2[0] + 4) % 5) * 5 + pos2[1]];
+        } else { // Replace each character with the same row but diff column
+            decryptedString += keyTable[pos1[0] * 5 + pos2[1]];
+            decryptedString += keyTable[pos2[0] * 5 + pos1[1]];
+        }
+
+        answer += decryptedString;
     }
 
-    answer += decryptedString;
+    // Remove any 'X' characters to clean up the message
+    answer = answer.replace(/X/g, ''); 
+
+    console.log(answer);
 }
 
-// Remove any 'X' characters to clean up the message
-answer = answer.replace(/X/g, ''); 
+function solvePlayfairCipher(message, keyword) {
+    let keyTable = generateKeyTable(keyword);
+    let pairArray = dividePairs(message);
+    decrypt(pairArray, keyTable);
+}
 
-console.log(answer);
+
+solvePlayfairCipher("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV", "SUPERSPY");
