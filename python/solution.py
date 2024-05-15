@@ -2,9 +2,6 @@ KEY = "SUPERSPY"
 MESSAGE = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # omitting J
 
-from pprint import pprint
-
-
 # Search the alphabet for the next unused letter
 # Returns the index of the first letter in ALPHABET that does not belong to free, starting from i
 def search_alphabet(free: set, i: int) -> str:
@@ -120,11 +117,9 @@ def decrypt(msg: str, key: str) -> str:
 
     # split the message into pairs to decrypt
     pairs = split_message(msg)
-    # print(pairs)
     # generate the key table
     table = make_key_table(key)
-    # pprint(table)
-
+    
     # decrypt pairs one at a time
     for p in pairs:
         # get (row, col) locations of both letters
