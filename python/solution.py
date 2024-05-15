@@ -2,7 +2,7 @@
 
 class Solution:
 
-    def generate_table(self, key: str):
+    def generate_tables(self, key: str):
         # We store the table as a dictionary of positions, given as follows:
         # [0  1  2  3  4 ]
         # [5  6  7  8  9 ]
@@ -21,7 +21,7 @@ class Solution:
         all_letters = [chr(ascii) for ascii in range(65, 91) if ascii != 74]
         remaining_letters = [c for c in all_letters if c not in message_unique]
 
-        # Loop through each and assign it to its location in our table
+        # Loop through each letter and assign it to its location in our tables
         ordered_letters = message_unique + remaining_letters
         for i, letter in enumerate(ordered_letters):
             table[letter] = i
@@ -32,7 +32,7 @@ class Solution:
 
     def decrypt(self, message: str, key: str):
         # Get our table from the above function
-        table, inverse_table = self.generate_table(key)
+        table, inverse_table = self.generate_tables(key)
 
         # If our message has odd length, append a "X"
         # if len(message) % 2 != 0:
