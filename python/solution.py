@@ -1,3 +1,5 @@
+# Shopify Eng Intership Challenge
+# Name: Delin Gu
 import string
 
 # generateTable takes the given keyword (and alphabet) and generates an array simulation of the Playfair cipher table and a 
