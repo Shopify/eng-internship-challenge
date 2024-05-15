@@ -31,7 +31,7 @@ def main() -> None:
         decoded_text += playfair_grid[new_s_row][new_s_col]
 
     decoded_text = decoded_text.replace('X', '')
-    print(decoded_text)
+    return(decoded_text)
 
 
 def find_row_col(letter: str) -> tuple[int, int]:
@@ -52,4 +52,4 @@ def adjust_index(index: int) -> int:
 
 
 if __name__ == '__main__':
-    main()
+    print(main())
