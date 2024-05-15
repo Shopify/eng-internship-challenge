@@ -1,14 +1,12 @@
 var key = "SUPERSPY";
 var ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
-deciphertext = decipher(key, ciphertext);
+deciphertext = decipher(key, ciphertext.toUpperCase());
 console.log(deciphertext);
 
 /**
- * Function to generate the 5x5 key square, storing rowIdx and colIdx in a Map
- * using Set to avoid duplicate characters
- * key-value pair example: "S": [0, 0], "U": [0, 1], "P": [0, 2], "E": [0, 3], "R": [0, 4]
+ * Function to generate the 5x5 key square
  * @param {character[]} key the key to create the playfair square
- * @return {Map()} the playfair square map
+ * @return {character[][]} the playfair square
  */
 function creatSquare(key) {
   const rows = 5;
