@@ -10,6 +10,7 @@ const keyTable = [
 message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 let pairs = [];
 
+
 // Split message into pairs of characters
 for (let i = 0; i < message.length; i+=2) {
     let first = message[i];
