@@ -23,7 +23,7 @@ counter = 0
 alpha_counter = 0
 S = set()
 
-# Populate the matrix with the key and remaining alphabet
+# Populate the matrix with the key and remaining alphabet excluding 'J'
 for i in range(len(arr)):
     for j in range(len(arr)):
         if counter < len(key):
