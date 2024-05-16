@@ -7,7 +7,7 @@ describe('solution.ts output', () => {
   it('should print the correct output to the console', async () => {
     const { stdout } = await execAsync('ts-node solution.ts');
 
-    const expected = process.env.TEST_ANSWER;
+    const expected = 'HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA';
     expect(stdout.trim()).toBe(expected);
   });
 });
