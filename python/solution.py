@@ -67,10 +67,10 @@ def playfair_cipher(plaintext, key, mode):
     # Return the result
     return result
 
-# Example usage
-plaintext = 'She sells sea shells at the sea shore'
+# Example usage, must be in UPPER CASE
+plaintext = 'She sells sea shells by the sea shore'
 key = 'superspy'
 ciphertext = playfair_cipher(plaintext, key, 'encrypt')
-print(ciphertext)  # outputs: "ikewenenxlnqlpzslhrybdbofneneinhcv"
+print(ciphertext)  # outputs: "IKENENXLNQLPZSLYJIEXHHXOBEMBZSW"
 decrypted_text = playfair_cipher(ciphertext, key, 'decrypt')
-print(decrypted_text)  # (Note: 'x' is added as padding)
+print(decrypted_text)  # outputs: "SHESELLSSEASHELLSBYTHESEASHORE"
