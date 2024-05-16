@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0"
   }
 }
