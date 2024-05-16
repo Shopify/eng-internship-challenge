@@ -1,12 +1,17 @@
+# A program to solve a playfair cipher.
+
 cipher_text = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 key = "SUPERSPY"
 secret = []
-# Construct the 5x5 grid
+
+# a dictionary for positions of letters in the grid, for faster searching
 letter_positions = {}
 
+# a 5x5 grid to be used to decrypt the cipher
 decryption_grid = [[0 for _ in range(5)] for _ in range(5)]
 
 
+# function to construct the grid
 def build_decryption_grid():
 
     remaining_letters = [
@@ -37,7 +42,8 @@ def build_decryption_grid():
         "Y",
         "Z",
     ]
-    # determine which letter to cut out of remaining letters
+
+    # determine which letter to cut out of remaining letters, I or J
     for c in cipher_text:
         if c == "I":
             remaining_letters.remove("J")
@@ -46,12 +52,13 @@ def build_decryption_grid():
             remaining_letters.remove("I")
             break
 
+    # main loop to populate grid
     key_index = 0
     for i in range(5):
         for j in range(5):
-            # print(decryption_grid)
-            # print(i, j, key_index)
-            # if there are still characters remaining in key, then add them first
+
+            # if there are still characters in the key that haven't been
+            # added to the grid, then add them first
             if key_index < len(key):
 
                 # find next available letter:
@@ -65,35 +72,30 @@ def build_decryption_grid():
                     key_index += 1
                     continue
 
-            # otherwise, add from remaining letters:
+            # once the key has been added, add from remaining leftover letters:
             next_letter = remaining_letters.pop(0)
             decryption_grid[i][j] = next_letter
             letter_positions[next_letter] = [i, j]
 
-    # print(decryption_grid)
-    # print(letter_positions)
 
-
-build_decryption_grid()
-
-
+# function to solve the cipher text
 def solve_message():
     # helper variables to make code easier to write and debug
     row, column = 0, 1
     c_index_1, c_index_2 = 0, 1
+
     while c_index_2 < len(cipher_text):
-        # get new characters
+        # get new characters and positions
         c_char_1 = cipher_text[c_index_1]
         c_char_2 = cipher_text[c_index_2]
 
-        # determine which 3 cases
         c_char_1_position = letter_positions[c_char_1]
         c_char_2_position = letter_positions[c_char_2]
 
         s_char_1_position = c_char_1_position.copy()
         s_char_2_position = c_char_2_position.copy()
 
-        # same row, get letters to the left
+        # case 1: same row, get letters to the left
         if c_char_1_position[row] == c_char_2_position[row]:
             # determine if wrap-around needed by checking if col == 0
 
@@ -107,7 +109,7 @@ def solve_message():
             else:
                 s_char_2_position[column] = s_char_2_position[column] - 1
 
-        # same column, get letters above
+        # case 2: same column, get letters above
         elif c_char_1_position[column] == c_char_2_position[column]:
             # determine if wrap-around needed by checking if row == 0
             if c_char_1_position[row] == 0:
@@ -120,12 +122,13 @@ def solve_message():
             else:
                 s_char_2_position[row] = s_char_2_position[row] - 1
 
-        # # diff row or column, need to get other end of rectangle by switching cols
+        # case 3: diff row or column, get other end of rectangle by switching columns
         else:
             temp = s_char_1_position[column]
             s_char_1_position[column] = s_char_2_position[column]
             s_char_2_position[column] = temp
 
+        # append new characters in order
         secret.append(
             decryption_grid[s_char_1_position[row]][s_char_1_position[column]]
         )
@@ -137,11 +140,11 @@ def solve_message():
         c_index_2 += 2
 
 
+build_decryption_grid()
 solve_message()
-# print("Asdfasdfasdf")
-# print(secret)
-# remove X at some point
+
+# remove X from final result
 answer = "".join(secret)
 answer_without_x = answer.replace("X", "")
 
-print(answer.replace("X", ""))
+print(answer_without_x)
