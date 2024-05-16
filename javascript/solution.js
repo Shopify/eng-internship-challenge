@@ -53,3 +53,29 @@ function generateKeyTable(key) {
 
     return keyT;
 }
+
+
+function search(keyT, a, b) {
+    // Search for the characters of a digraph in the key square and return their position
+    let arr = [0, 0, 0, 0];
+
+    if (a == 'j') {
+        a = 'i';
+    } else if (b == 'j') {
+        b = 'i';
+    }
+
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+	            if (keyT[i][j] == a) {
+                arr[0] = i;
+                arr[1] = j;
+            } else if (keyT[i][j] == b) {
+                arr[2] = i;
+                arr[3] = j;
+            }
+        }
+    }
+
+    return arr;
+}
