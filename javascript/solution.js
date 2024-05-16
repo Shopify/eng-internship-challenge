@@ -82,6 +82,11 @@ function decrypt(text, key) {
 // Function to solve a Playfair Cipher
 function solvePlayfairCipher(message, key) {
 
+    // Add an 'X' if the length of the message is odd.
+    if (message.length % 2 !== 0) {
+        message += 'X';
+    }
+    
     // Decrypt the message
     const decryptedMessage = decrypt(message.toUpperCase(), key.toUpperCase());
 
