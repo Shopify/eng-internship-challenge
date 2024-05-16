@@ -89,6 +89,7 @@ function decryptMessage(pairs, keyTable) {
 function solution(keyword, message) {
     if (keyword === '' || message === '') {
         console.log("invalid parameters provided");
+        reuturn;
     }
     let keyTable = createKeyTable(keyword);
     let pairs = pairCharacters(message);
