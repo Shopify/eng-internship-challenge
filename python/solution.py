@@ -14,6 +14,7 @@ Returns:
         alphabet_coordinates: Dictionary that maps each alphabet to its (row,col) coordinates in the key grid
 """
 def makeGrid(key: str):
+    key = key.upper()
     key_grid = [[0 for _ in range(ROWS)] for _ in range(COLS)]
     key_index = 0
     alphabet_index = 0
@@ -71,7 +72,7 @@ def decrypt(key_grid: list, pairs_array: list, alphabet_coordinates: dict):
         first_alphabet_in_pair, second_alphabet_in_pair = pair
         first_alphabet_row_in_grid, first_alphabet_col_in_grid = alphabet_coordinates[first_alphabet_in_pair]
         second_alphabet_row_in_grid, second_alphabet_col_in_grid = alphabet_coordinates[second_alphabet_in_pair]
-
+        
         if (first_alphabet_row_in_grid == second_alphabet_row_in_grid):
             first_alphabet_decrypted = key_grid[first_alphabet_row_in_grid][(first_alphabet_col_in_grid - 1) % 5]
             second_alphabet_decrypted = key_grid[second_alphabet_row_in_grid][(second_alphabet_col_in_grid - 1) % 5]
