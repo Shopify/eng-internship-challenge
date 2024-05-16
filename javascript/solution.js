@@ -1,6 +1,9 @@
-function Solution () {
+function Solution (playfairKey, playfairCodedMessage) {
     // 1. store key and message in variables
         // make sure they are all uppercase
+
+    let key = playfairKey.toUpperCase().split(" ").join("");
+    let codedMessage = playfairCodedMessage.toUpperCase().split(" ").join("");
 
     // 2. create a 2d array to represent the 5x5 table of letters
         // create empty array to store 2d array
@@ -26,13 +29,13 @@ function Solution () {
 
     // for testing purposes, code should pass with the return looking like this:
 
-    let secretMessage = "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA";
+    let decodedMessage = "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA";
 
-    console.log(secretMessage)
+    console.log(decodedMessage)
     return
 
 }
 
-Solution()
+Solution("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV")
 
 
