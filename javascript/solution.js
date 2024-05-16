@@ -89,5 +89,19 @@ function mod5(a) {
 }
 
 function decrypt(str, keyT) {
-
+    // Function to decrypt
+    let ps = str.length;
+    let i = 0;
+    while (i < ps) {
+        let a = search(keyT, str[i], str[i + 1]);
+        if (a[0] == a[2]) {
+            str = str.slice(0, i) + keyT[a[0]][mod5(a[1] - 1)] + keyT[a[0]][mod5(a[3] - 1)] + str.slice(i + 2);
+        } else if (a[1] == a[3]) {
+            str = str.slice(0, i) + keyT[mod5(a[0] - 1)][a[1]] + keyT[mod5(a[2] - 1)][a[1]] + str.slice(i + 2);
+        } else {
+            str = str.slice(0, i) + keyT[a[0]][a[3]] + keyT[a[2]][a[1]] + str.slice(i + 2);
+        }
+        i += 2;
+    }
+    return str;
 }
