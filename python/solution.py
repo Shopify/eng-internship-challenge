@@ -65,7 +65,7 @@ class PlayfairDecryptor:
 
         """
         Decrypts an entire message by splitting it into pairs, decrypting each pair,
-        and then concatenating the results. Thencleans the message by removing any
+        and then concatenating the results. Then cleans the message by removing any
         padding characters that are not needed.
         :param encrypted_message: The string of the encrypted message.
         :return: The decrypted and cleaned message.
@@ -87,8 +87,8 @@ class PlayfairDecryptor:
 
     def clean_message(self, decrypted_message):
         """
-        Cleans the decrypted message by ensuring it is uppercase, free of spaces, the letter 'X',
-        'Q', and any special characters. This function only retains alphabetic characters that make
+        Cleans the decrypted message by ensuring it is uppercase, free of spaces, the letter 'X'
+        and any special characters. This function only retains alphabetic characters that make
         sense in the context of the decrypted text.
         :param decrypted_message: The decrypted string.
         :return: The cleaned message string.
@@ -98,7 +98,7 @@ class PlayfairDecryptor:
         while i < len(decrypted_message):
             # check if the character is not a special character and not X 
             if decrypted_message[i].isalpha() and decrypted_message[i] not in ('X'):
-                # skip 'X' only if  last character or used to separate duplicate letters
+                # skip X only if  last character or used to separate duplicate letters
                 if decrypted_message[i] in ('X') and (i == len(decrypted_message) - 1 or decrypted_message[i - 1] == decrypted_message[i + 1]):
                     i += 1
                 else:
