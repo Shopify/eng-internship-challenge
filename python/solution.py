@@ -13,10 +13,6 @@
     T V W X Z
 '''
 
-# IK EW EN EN XL NQ LP ZS LE RU MR HE ER YB OF NE IN CH CV
-# IK EW EN EN XL NQ LP ZS LE RU MR HE ER YB OF NE IN CH CV
-# HI P  PO 
-
 table =[["S", "U", "P", "E", "R"],
         ["Y", "A", "B", "C", "D"],
         ["F", "G", "H", "I", "K"],
@@ -26,6 +22,7 @@ table =[["S", "U", "P", "E", "R"],
 encrypted = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 decrypted = ""
 
+# iterate the encrypted string, 2 letters a step
 for i in range(len(encrypted)//2): 
     # declare the positions of the first and second letter in the string pair
     fst = []
