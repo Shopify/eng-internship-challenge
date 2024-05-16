@@ -87,16 +87,24 @@ class PlayfairDecryptor:
 
     def clean_message(self, decrypted_message):
         """
-        Cleans the decrypted message by removing unnecessary padding characters typically 'X' or 'Q'.        :param decrypted_message: The decrypted string.
+        Cleans the decrypted message by ensuring it is uppercase, free of spaces, the letter 'X',
+        'Q', and any special characters. This function only retains alphabetic characters that make
+        sense in the context of the decrypted text.
+        :param decrypted_message: The decrypted string.
         :return: The cleaned message string.
         """
         cleaned_message = ""
         i = 0
         while i < len(decrypted_message):
-            if decrypted_message[i] in ('X', 'Q') and (i == len(decrypted_message) - 1 or decrypted_message[i - 1] == decrypted_message[i + 1]):
-                i += 1
+            # check if the character is not a special character and not X 
+            if decrypted_message[i].isalpha() and decrypted_message[i] not in ('X'):
+                # skip 'X' only if  last character or used to separate duplicate letters
+                if decrypted_message[i] in ('X') and (i == len(decrypted_message) - 1 or decrypted_message[i - 1] == decrypted_message[i + 1]):
+                    i += 1
+                else:
+                    cleaned_message += decrypted_message[i].upper()
+                    i += 1
             else:
-                cleaned_message += decrypted_message[i]
                 i += 1
         return cleaned_message
 
