@@ -10,7 +10,7 @@ function createKeyTable(keyWord) {
 
     // Add the keyword into the key table while disregarding duplicate characters
     for (let character of keyWord) {
-        if (!keyTable.includes(character)) { 
+        if (!keyTable.includes(character.toUpperCase())) { 
             keyTable.push(character.toUpperCase());
         }
     }
