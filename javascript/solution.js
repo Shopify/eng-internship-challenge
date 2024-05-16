@@ -10,6 +10,15 @@ function Solution (playfairKey, playfairCodedMessage) {
     let keyTable = generateKeyTable(key);
 
     // 3. decode message
+
+    let decodedMessage = "";
+    for (let i = 0; i < codedMessage.length; i += 2) {
+        let pair = codedMessage.substr(i, 2);
+        let decodedPair = decodePairs(pair[0], pair[1], keyTable);
+        decodedMessage += decodedPair;
+    }
+
+
         // use nested loops to loop through the key table
         // check to see if letters inside table cells match code message
         // store answers in a new variable
@@ -21,8 +30,6 @@ function Solution (playfairKey, playfairCodedMessage) {
             // incorrect answer = "the decoded message is: HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
 
     // for testing purposes, code should pass with the return looking like this: console.log(decodedMessage)
-
-    let decodedMessage = "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA";
 
     console.log("key", key, "table:", keyTable, "🗝️: ", decodedMessage)
     return
@@ -63,6 +70,41 @@ function generateKeyTable(key) {
     }
 
     return keyTable;
+}
+
+// this function decodes the pairs of letters in the coded message
+function decodePairs(pair1, pair2, keyTable) {
+
+    let pair1Row, pair1Col, pair2Row, pair2Col;
+
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            if (keyTable[i][j] === pair1) {
+                pair1Row = i;
+                pair1Col = j;
+            }
+            if (keyTable[i][j] === pair2) {
+                pair2Row = i;
+                pair2Col = j;
+            }
+        }
+    }
+
+    let decodedPair = "";
+
+    if (pair1Row === pair2Row) {
+        decodedPair += keyTable[pair1Row][(pair1Col - 1 + 5) % 5];
+        decodedPair += keyTable[pair2Row][(pair2Col - 1 + 5) % 5];
+    } else if (pair1Col === pair2Col) { 
+        decodedPair += keyTable[(pair1Row - 1 + 5) % 5][pair1Col];
+        decodedPair += keyTable[(pair2Row - 1 + 5) % 5][pair2Col];
+    } else {
+        decodedPair += keyTable[pair1Row][pair2Col];
+        decodedPair += keyTable[pair2Row][pair1Col];
+    }
+
+    return decodedPair;
+
 }
 
 Solution("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV")
