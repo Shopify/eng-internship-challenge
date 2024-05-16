@@ -87,3 +87,7 @@ function mod5(a) {
     }
     return a % 5;
 }
+
+function decrypt(str, keyT) {
+
+}
