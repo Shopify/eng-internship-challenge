@@ -1,10 +1,13 @@
 function Solution (playfairKey, playfairCodedMessage) {
 
-    let key = playfairKey.toUpperCase().split("").filter((letter, index, self) => self.indexOf(letter) === index).join("").split(" ").join("");
+    // data clean up: ensures that the key and coded message are have the correct formatting and characters
+    let key = playfairKey.replace(/[^a-zA-Z]/g, "").toUpperCase().split("").filter((letter, index, self) => self.indexOf(letter) === index).join("").split(" ").join("");
     let codedMessage = playfairCodedMessage.toUpperCase().split(" ").join("");
 
+    // storing key table in variable (see helper functions below)
     let keyTable = generateKeyTable(key);
 
+    // create variable for decoded message, splits coded message into paurs and decodes each pair (see helper function below)
     let decodedMessage = "";
     for (let i = 0; i < codedMessage.length; i += 2) {
         let pair = codedMessage.substr(i, 2);
@@ -12,6 +15,7 @@ function Solution (playfairKey, playfairCodedMessage) {
         decodedMessage += decodedPair;
     }
 
+    // removes all remaining X's from decoded message, as per instruction
     decodedMessage = decodedMessage.replace(/X/g, '');
 
     console.log(decodedMessage)
@@ -23,14 +27,6 @@ function Solution (playfairKey, playfairCodedMessage) {
 
 // this function generates the 5x5 key table
 function generateKeyTable(key) {
-    // remove duplicate letters in key
-    // create empty array to store 2d array
-    // create variable to keep track of the key string
-    // loop through each cell of 2d array
-    // fill the table using the key & the alphabet (omit letter J)
-    // make sure to never use a letter twice in the table 
-
-    // let cleanKey = key.split('').filter((letter, index, self) => self.indexOf(letter) === index).join('');
 
     let keyTable = [];
     let keyIndex = 0;
@@ -91,6 +87,3 @@ function decodePairs(pair1, pair2, keyTable) {
 }
 
 Solution("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV")
-
-"HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
-"HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
