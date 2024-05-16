@@ -1,7 +1,6 @@
 ALPHABETS = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
 FILLER_CHARACTER = 'X'
-ROWS = 5
-COLS = 5
+ROWS = COLS = 5
 
 def sanitize(text: str):
     return text.upper().replace("J", "I").replace(" ", "")
@@ -19,26 +18,22 @@ Returns:
 def makeGrid(key: str):
     key = sanitize(key)
     key_grid = [[0 for _ in range(ROWS)] for _ in range(COLS)]
-    key_index = 0
-    alphabet_index = 0
-    seen_alphabets = set()
+    key_index = alphabet_index = 0
     alphabet_coordinates= {}
     for row_index in range(ROWS):
         for col_index in range(COLS):
             if (key_index != len(key)):
-                while (key[key_index] in seen_alphabets):
+                while (key[key_index] in alphabet_coordinates):
                     key_index += 1
                 curr_alphabet = key[key_index]
                 key_grid[row_index][col_index] = curr_alphabet
-                seen_alphabets.add(curr_alphabet)
                 alphabet_coordinates[curr_alphabet] = (row_index, col_index)
                 key_index += 1
             else:
-                while(ALPHABETS[alphabet_index] in seen_alphabets):
+                while(ALPHABETS[alphabet_index] in alphabet_coordinates):
                     alphabet_index += 1
                 curr_alphabet = ALPHABETS[alphabet_index]
                 key_grid[row_index][col_index] = curr_alphabet
-                seen_alphabets.add(curr_alphabet)
                 alphabet_coordinates[curr_alphabet] = (row_index, col_index)
                 alphabet_index+=1
 
@@ -63,7 +58,8 @@ def findPairs(encrypted_message: str):
             i += 1
         else:
             pairs_array.append((encrypted_message[i], encrypted_message[i + 1]))
-            i += 2
+            i += 2   
+            
     return pairs_array
 
 """
@@ -89,7 +85,7 @@ def decrypt(key_grid: list, pairs_array: list, alphabet_coordinates: dict):
         else:
             plain_text.append(key_grid[first_row][second_col])
             plain_text.append(key_grid[second_row][first_col])
-
+            
     return ''.join([char for char in plain_text if char != FILLER_CHARACTER])
 
 def main():
