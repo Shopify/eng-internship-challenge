@@ -69,7 +69,6 @@ def decrypt(key_grid: list, pairs_array: list, alphabet_coordinates: dict):
     plain_text = []
     for pair in pairs_array:
         first_alphabet_in_pair, second_alphabet_in_pair = pair
-
         first_alphabet_row_in_grid, first_alphabet_col_in_grid = alphabet_coordinates[first_alphabet_in_pair]
         second_alphabet_row_in_grid, second_alphabet_col_in_grid = alphabet_coordinates[second_alphabet_in_pair]
 
@@ -78,13 +77,11 @@ def decrypt(key_grid: list, pairs_array: list, alphabet_coordinates: dict):
             second_alphabet_decrypted = key_grid[second_alphabet_row_in_grid][(second_alphabet_col_in_grid - 1) % 5]
             plain_text.append(first_alphabet_decrypted)
             plain_text.append(second_alphabet_decrypted)
-
         elif (first_alphabet_col_in_grid == second_alphabet_col_in_grid):
             first_alphabet_decrypted = key_grid[(first_alphabet_row_in_grid - 1) % 5][first_alphabet_col_in_grid]
             second_alphabet_decrypted = key_grid[(second_alphabet_row_in_grid - 1) % 5][second_alphabet_col_in_grid]
             plain_text.append(first_alphabet_decrypted)
             plain_text.append(second_alphabet_decrypted)
-
         else:
             first_alphabet_decrypted = key_grid[first_alphabet_row_in_grid][second_alphabet_col_in_grid]
             second_alphabet_decrypted = key_grid[second_alphabet_row_in_grid][first_alphabet_col_in_grid]
