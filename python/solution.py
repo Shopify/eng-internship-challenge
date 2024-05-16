@@ -1,3 +1,8 @@
+"""
+Author: Nusrath  Syed
+Date: May 15th, 2024
+Purpose: Shopify Internship Challenge - Creating a Playfair Cipher to get a password to the spy club Spy City.
+"""
 def playfair_cipher(plaintext, key, mode):
     """
     Encrypts or decrypts a plaintext using the Playfair Cipher with a given key.
@@ -64,8 +69,8 @@ def playfair_cipher(plaintext, key, mode):
         elif mode == 'decrypt':
             result += decrypt(digraph)
 
-    # Return the result
-    return result
+    # Return the result, converting it to uppercase and removing special characters
+    return result.upper().replace('X', '').replace(' ', '')
 
 # Example usage, must be in UPPER CASE
 plaintext = 'She sells sea shells by the sea shore'
