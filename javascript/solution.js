@@ -114,3 +114,15 @@ function decryptByPlayfairCipher(str, key) {
     let keyT = generateKeyTable(key);
     return decrypt(str, keyT);
 }
+
+function removeXfromDecryptedText(str, result){
+    // Iterate over the characters in the upper case string.
+    for (let i = 0; i < str.length; i++) {
+    // If the current character is not 'x', add it to the result string.
+    if (str[i] !== "X") {
+        result += str[i];
+    }
+}
+
+
+}
