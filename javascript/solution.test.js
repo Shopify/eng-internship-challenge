@@ -5,7 +5,7 @@ describe('solution.js script', () => {
         exec("node solution.js", (error, stdout, stderr) => {
             expect(error).toBeNull();
             expect(stderr).toBe("");
-            expect(stdout.trim()).toBe(process.env.TEST_ANSWER); // trim to remove any extra newlines that console.log might generate
+            expect(stdout.trim()).toBe("HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"); // trim to remove any extra newlines that console.log might generate
             done(); // indicate that this async test is complete
         });
     });
