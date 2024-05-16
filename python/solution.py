@@ -1,7 +1,7 @@
 import re
 
 class Playfair:
-  """Allows for the decrypting of a message encoded with the Playfair cipher"""
+  """Allows for the decrypting of a message encrypted with the Playfair cipher"""
   def __init__(self, encryptedMessage, cipherKey, letterToIgnore="J"):
     """
         Parameters
@@ -107,6 +107,6 @@ class Playfair:
     return leftChar + rightChar    
   
 if __name__ == '__main__':
-  #Create an instance of the class and specify our encoded string, the key, and the leter we want to ignore.
+  #Create an instance of the class and specify our encrypted string, the key, and the leter we want to ignore.
   playfair = Playfair("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV","SUPERSPY","J")  
   print(playfair.decrypt())
