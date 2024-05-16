@@ -26,10 +26,11 @@ def playfair_cipher(plaintext, key, mode):
         if letter not in key_square:
             key_square += letter
 
-    # Split the plaintext into digraphs, padding with 'x' if necessary
-    plaintext = plaintext.lower().replace(' ', '').replace('j', 'i')
+   # Split the plaintext into digraphs, padding with 'x' if necessary
+    plaintext = plaintext.upper().replace('J', 'I').replace(' ', '')  # Convert plaintext to uppercase and replace 'J' with 'I'
+    plaintext = ''.join([char if char.isalpha() else '' for char in plaintext])  # Remove non-alphabetic characters
     if len(plaintext) % 2 == 1:
-        plaintext += 'x'
+        plaintext += 'X'
     digraphs = [plaintext[i:i+2] for i in range(0, len(plaintext), 2)]
 
     # Define the encryption/decryption functions
@@ -73,9 +74,7 @@ def playfair_cipher(plaintext, key, mode):
     return result.upper().replace('X', '').replace(' ', '')
 
 # Example usage, must be in UPPER CASE
-plaintext = 'She sells sea shells by the sea shore'
-key = 'superspy'
-ciphertext = playfair_cipher(plaintext, key, 'encrypt')
-print(ciphertext)  # outputs: "IKENENXLNQLPZSLYJIEXHHXOBEMBZSW"
-decrypted_text = playfair_cipher(ciphertext, key, 'decrypt')
-print(decrypted_text)  # outputs: "SHESELLSSEASHELLSBYTHESEASHORE"
+encrypted_message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
+key = 'SUPERSPY'  # Use the provided key
+decrypted_password = playfair_cipher(encrypted_message, key, 'decrypt')
+print(decrypted_password)  # outputs: "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"

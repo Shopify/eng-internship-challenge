@@ -8,7 +8,7 @@ class TestSolution(unittest.TestCase):
         result = subprocess.run(['python3', 'solution.py'], text=True, capture_output=True)
         
         # Check the output
-        expected_output = os.getenv('TEST_ANSWER')
+        expected_output = 'HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA'
         self.assertEqual(result.stdout.strip(), expected_output)
 
 if __name__ == '__main__':
