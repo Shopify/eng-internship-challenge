@@ -96,12 +96,22 @@ def decrypt_playfair(raw_ciphertext, keyword):
 
     cleaned_plaintext = ""
     #removes extra placeholders
-    for i in range(len(plaintext)):
+    i = 0
+    while i < len(plaintext):
         if i < len(plaintext) - 1 and plaintext[i] == 'X' and plaintext[i-1] == plaintext[i+1]:
-            continue
-        cleaned_plaintext += plaintext[i]
+            i += 1
+        else:
+            cleaned_plaintext += plaintext[i]
+            i += 1
+     # Remove a trailing 'X' if it was added as a placeholder
+    if cleaned_plaintext.endswith('X'):
+        cleaned_plaintext = cleaned_plaintext[:-1]
 
     return cleaned_plaintext
+
+
+
+
 
 
 
