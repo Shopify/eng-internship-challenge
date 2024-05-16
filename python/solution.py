@@ -78,5 +78,43 @@ def find_position(letter, key_square):
     return None
 
 
+def decrypt_pair(pair, key_square):
+    """
+    decrypt_pair decrypts a pair of letters using the Playfair cipher rules.
+    
+    Requires:
+    pair (str): A string of two characters(Must be alphabet characters).
+    key_square (list of list of str): The 5x5 matrix contains the keyword.
+    
+    Returns:
+    str: The decrypted pair of letters as a string.
+    
+    Example:
+    >>> key_square = [['P', 'L', 'A', 'Y', 'F'], ['I', 'R', 'E', 'X', 'M'], ['B', 'C', 'D', 'G', 'H'], ['K', 'N', 'O', 'Q', 'S'], ['T', 'U', 'V', 'W', 'Z']]
+    >>> decrypt_pair('PM', key_square)
+    'AY'
+    """
 
+    # Find positions
+    pos1 = find_position(pair[0], key_square)
+    pos2 = find_position(pair[1], key_square)
+    
+    row1, col1 = pos1
+    row2, col2 = pos2
+    
+    if row1 == row2:
+        # Same row, shift left
+        new_col1 = (col1 - 1) % 5
+        new_col2 = (col2 - 1) % 5
+        decrypted_pair = key_square[row1][new_col1] + key_square[row2][new_col2]
+    elif col1 == col2:
+        # Same column, shift up
+        new_row1 = (row1 - 1) % 5
+        new_row2 = (row2 - 1) % 5
+        decrypted_pair = key_square[new_row1][col1] + key_square[new_row2][col2]
+    else:
+        # Rectangle rule
+        decrypted_pair = key_square[row1][col2] + key_square[row2][col1]
+
+    return decrypted_pair
 
