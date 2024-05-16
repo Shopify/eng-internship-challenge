@@ -63,4 +63,6 @@ for i in range(len(encrypted)//2):
     
     decrypted += (new_fst + new_snd) 
 
+# "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA" is printed here as the expected_output in solution.test.py
+# but the test fails, it seems this print output is not catched, weird..
 print(decrypted)
