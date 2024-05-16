@@ -105,3 +105,12 @@ function decrypt(str, keyT) {
     }
     return str;
 }
+
+function decryptByPlayfairCipher(str, key) {
+    // Function to call decrypt
+    let ks = key.length;
+    key = removeSpaces(toLowerCase(key));
+    str = removeSpaces(toLowerCase(str));
+    let keyT = generateKeyTable(key);
+    return decrypt(str, keyT);
+}
