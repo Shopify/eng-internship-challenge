@@ -9,7 +9,7 @@ class TestSolution(unittest.TestCase):
         print("result is: ", result)
         
         # Check the output
-        expected_output = 'ffs'
+        expected_output = 'HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA'
         self.assertEqual(result.stdout.strip(), expected_output)
 
 if __name__ == '__main__':
