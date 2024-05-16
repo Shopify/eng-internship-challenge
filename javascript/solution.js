@@ -1,3 +1,7 @@
+// Example usage
+let str = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+let key = "SUPERSPY";
+
 function toLowerCase(msg) {
     return msg.toLowerCase();
 }
@@ -39,7 +43,7 @@ function generateKeyTable(key) {
         k += 1;
     }
 
-    
+
     for (let k in dicty) {
         if (dicty[k] == 0) {
             keyT[i][j] = k;
@@ -54,7 +58,6 @@ function generateKeyTable(key) {
     return keyT;
 }
 
-
 function search(keyT, a, b) {
     // Search for the characters of a digraph in the key square and return their position
     let arr = [0, 0, 0, 0];
@@ -67,7 +70,7 @@ function search(keyT, a, b) {
 
     for (let i = 0; i < 5; i++) {
         for (let j = 0; j < 5; j++) {
-	            if (keyT[i][j] == a) {
+            if (keyT[i][j] == a) {
                 arr[0] = i;
                 arr[1] = j;
             } else if (keyT[i][j] == b) {
@@ -115,14 +118,18 @@ function decryptByPlayfairCipher(str, key) {
     return decrypt(str, keyT);
 }
 
-function removeXfromDecryptedText(str, result){
+function removeXfromDecryptedText(temp) {
+    let result = "";
     // Iterate over the characters in the upper case string.
-    for (let i = 0; i < str.length; i++) {
-    // If the current character is not 'x', add it to the result string.
-    if (str[i] !== "X") {
-        result += str[i];
+    for (let i = 0; i < temp.length; i++) {
+        // If the current character is not 'x', add it to the result string.
+        if (temp[i] !== "X") {
+            result += temp[i];
+        }
     }
+    return result;
 }
 
-
-}
+// Decrypted text
+let temp = toUpperCase(decryptByPlayfairCipher(str, key));
+console.log(removeXfromDecryptedText(temp));
