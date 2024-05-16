@@ -29,7 +29,6 @@ def generate_matrix(key) -> list:
           remaining characters of the alphabet (excluding 'j', as it is ommitted from our alphabet set) in order, 
           skipping those already used in the key.
         - character_set is used to keep track of the characters already used in the creation of the matrix.
-        - If 'j' is included in the key, it's treated as 'i'.
         - The matrix is filled row by row.
     """
 
