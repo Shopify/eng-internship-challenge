@@ -3,6 +3,9 @@ FILLER_CHARACTER = 'X'
 ROWS = 5
 COLS = 5
 
+def sanitize(text: str):
+    return text.upper().replace("J", "I").replace(" ", "")
+
 """
 Creates a 5x5 key grid based on provided key and alphabet coordinates
 Grid is populated with alphabets from the key first, then with remaining alphabets (repeating occurrences not added)
@@ -14,7 +17,7 @@ Returns:
         alphabet_coordinates: Dictionary that maps each alphabet to its (row,col) coordinates in the key grid
 """
 def makeGrid(key: str):
-    key = key.upper()
+    key = sanitize(key)
     key_grid = [[0 for _ in range(ROWS)] for _ in range(COLS)]
     key_index = 0
     alphabet_index = 0
@@ -49,12 +52,18 @@ Returns:
     pairs_array: A list of character pairs found in the encrypted message.
 """
 def findPairs(encrypted_message: str):
-    encrypted_message = encrypted_message.upper()
+    encrypted_message = sanitize(encrypted_message)
+    if(len(encrypted_message) % 2 != 0):
+        encrypted_message += FILLER_CHARACTER;
     pairs_array = []
     i = 0
     while (i < len(encrypted_message)):
-        pairs_array.append((encrypted_message[i], encrypted_message[i + 1]))
-        i += 2
+        if(encrypted_message[i] == encrypted_message[i+1]):
+            pairs_array.append(encrypted_message[i], FILLER_CHARACTER)
+            i += 1
+        else:
+            pairs_array.append((encrypted_message[i], encrypted_message[i + 1]))
+            i += 2
     return pairs_array
 
 """
@@ -68,26 +77,18 @@ Returns:
 """
 def decrypt(key_grid: list, pairs_array: list, alphabet_coordinates: dict):
     plain_text = []
-    for pair in pairs_array:
-        first_alphabet_in_pair, second_alphabet_in_pair = pair
-        first_alphabet_row_in_grid, first_alphabet_col_in_grid = alphabet_coordinates[first_alphabet_in_pair]
-        second_alphabet_row_in_grid, second_alphabet_col_in_grid = alphabet_coordinates[second_alphabet_in_pair]
-        
-        if (first_alphabet_row_in_grid == second_alphabet_row_in_grid):
-            first_alphabet_decrypted = key_grid[first_alphabet_row_in_grid][(first_alphabet_col_in_grid - 1) % 5]
-            second_alphabet_decrypted = key_grid[second_alphabet_row_in_grid][(second_alphabet_col_in_grid - 1) % 5]
-            plain_text.append(first_alphabet_decrypted)
-            plain_text.append(second_alphabet_decrypted)
-        elif (first_alphabet_col_in_grid == second_alphabet_col_in_grid):
-            first_alphabet_decrypted = key_grid[(first_alphabet_row_in_grid - 1) % 5][first_alphabet_col_in_grid]
-            second_alphabet_decrypted = key_grid[(second_alphabet_row_in_grid - 1) % 5][second_alphabet_col_in_grid]
-            plain_text.append(first_alphabet_decrypted)
-            plain_text.append(second_alphabet_decrypted)
+    for (first_alphabet, second_alphabet) in pairs_array:
+        first_row, first_col = alphabet_coordinates[first_alphabet]
+        second_row, second_col = alphabet_coordinates[second_alphabet]
+        if (first_row == second_row):
+            plain_text.append(key_grid[first_row][(first_col - 1) % 5])
+            plain_text.append(key_grid[second_row][(second_col - 1) % 5])
+        elif (first_col == second_col):
+            plain_text.append(key_grid[(first_row - 1) % 5][first_col])
+            plain_text.append(key_grid[(second_row - 1) % 5][second_col])
         else:
-            first_alphabet_decrypted = key_grid[first_alphabet_row_in_grid][second_alphabet_col_in_grid]
-            second_alphabet_decrypted = key_grid[second_alphabet_row_in_grid][first_alphabet_col_in_grid]
-            plain_text.append(first_alphabet_decrypted)
-            plain_text.append(second_alphabet_decrypted)
+            plain_text.append(key_grid[first_row][second_col])
+            plain_text.append(key_grid[second_row][first_col])
 
     return ''.join([char for char in plain_text if char != FILLER_CHARACTER])
 
