@@ -32,18 +32,15 @@ def create_playfair_key_square(key):
             seen.add(char)
             unique_characters.append(char)
     
-    #Convert to uppercase
     unique_characters = [char.upper() for char in unique_characters]
     
-    #Replace J with I
     unique_characters = [char.replace('J', 'I') for char in unique_characters]
     
-    #Join characters into a single string
     key = ''.join(unique_characters)
     
     #Combine key with alphabet
     used = set(key)
-    full_key = key + ''.join([ch for ch in ALPHABET if ch not in used])
+    full_key = key + ''.join([ch for ch in alphabet if ch not in used])
     
     matrix = []
     # Iterate the full key
@@ -117,4 +114,44 @@ def decrypt_pair(pair, key_square):
         decrypted_pair = key_square[row1][col2] + key_square[row2][col1]
 
     return decrypted_pair
+
+
+def decrypt_message(message, key):
+    """
+    decrypt_message decrypts all the messages.
+    
+    Requires:
+    - message (str): The message should be formatted as pairs of letters.
+    - key (str): The keyword must be a sequence of alphabet characters without any duplicates.
+    
+    Returns:
+    - str: The decrypted message as a string.
+    
+    Example:
+    >>> key = "PLAYFAIREXAMPLE"
+    >>> message = "BMODZBXDNABEKUDMUIXMMOUVIF"
+    >>> decrypt_message(message, key)
+    'HIDETHEGOLDINTHETREXESTUMP'
+    """
+    # Generate the key square from the key
+    key_square = create_playfair_key_square(key)
+    
+    message = message.replace('J', 'I')
+    
+    decrypted_message = ""
+    for i in range(0, len(message), 2):
+        pair = message[i:i+2]
+        decrypted_pair = decrypt_pair(pair, key_square)
+        decrypted_message += decrypted_pair
+
+    return decrypted_message
+
+#Test
+key = "SUPERSPY"
+encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+
+decrypted_message = decrypt_message(encrypted_message, key)
+print("Decrypted Message:", decrypted_message)
+
+
 
