@@ -55,5 +55,28 @@ def create_playfair_key_square(key):
 
 
 
+def find_position(letter, key_square):
+    """
+    find_position finds the index row and column in maxtrix.
+    
+    Requires:
+    letter (str): Must be a sequence of alphabet characters.
+    key_square (list of list of str): The 5x5 matrix contains the keyword.
+    
+    Returns:
+    tuple: A tuple containing two integers (row_index, column_index)
+    
+    Example:
+    >>> key_square = [['P', 'L', 'A', 'Y', 'F'], ['I', 'R', 'E', 'X', 'M'], ['B', 'C', 'D', 'G', 'H'], ['K', 'N', 'O', 'Q', 'S'], ['T', 'U', 'V', 'W', 'Z']]
+    >>> find_position('Y', key_square)
+    (0, 3)
+    """
+    for row_index, row in enumerate(key_square):
+        if letter in row:
+            column_index = row.index(letter)
+            return (row_index, column_index)
+    return None
+
+
 
 
