@@ -79,3 +79,11 @@ function search(keyT, a, b) {
 
     return arr;
 }
+
+function mod5(a) {
+    // Function to find the modulus with 5
+    if (a < 0) {
+        a += 5;
+    }
+    return a % 5;
+}
