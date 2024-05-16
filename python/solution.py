@@ -146,12 +146,51 @@ def decrypt_message(message, key):
 
     return decrypted_message
 
+
+
+
+def clean_decrypted_message(decrypted_message):
+    """
+    clean_decrypted_message refines the decrypted message by removing 'X' characters that are used to separate double letters or as 
+    placeholders at the end of the message. The output is also converted to uppercase and cleansed of any non-alphabetic characters.
+    
+    Requires:
+    - decrypted_message (str): The initially decrypted message which may contain placeholder or separator 'X' characters.
+    
+    Returns:
+    - str: A cleaned and formatted version of the decrypted message, in uppercase without unnecessary 'X' characters or non-alphabetic symbols.
+    
+    Example:
+    >>> clean_decrypted_message('HIxDETHEGOLDINTHEXTREXESTUMPX')
+    'HIDETHEGOLDINTHETREESTUMP'
+    """
+
+    decrypted_message = decrypted_message.upper()
+    filtered_message = ''.join([char for char in decrypted_message if char.isalpha()])
+
+    # Remove 'X' at the end
+    while len(filtered_message) > 0 and filtered_message[-1] == 'X':
+        filtered_message = filtered_message[:-1]
+
+    # Remove 'X' used for double letters
+    cleaned_message = ""
+    i = 0
+    while i < len(filtered_message):
+        if i + 2 < len(filtered_message) and filtered_message[i] == filtered_message[i + 2] and filtered_message[i + 1] == 'X':
+            cleaned_message += filtered_message[i]
+            i += 2  # Skip the 'X' and move to the next valid character
+        else:
+            cleaned_message += filtered_message[i]
+            i += 1
+
+    return cleaned_message
+
 #Test
 key = "SUPERSPY"
 encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
-decrypted_message = decrypt_message(encrypted_message, key)
-print("Decrypted Message:", decrypted_message)
+decrypted_message = clean_decrypted_message(decrypt_message(encrypted_message, key))
+print(decrypted_message)
 
 
 
