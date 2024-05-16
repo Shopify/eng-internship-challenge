@@ -1,8 +1,15 @@
+let playfairKey = "SUPERSPY";
+let playfairCodedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+
 function Solution (playfairKey, playfairCodedMessage) {
 
-    // data clean up: ensures that the key and coded message are have the correct formatting and characters
+    // data clean up: ensures that the key and coded message have the correct formatting and characters
     let key = playfairKey.replace(/[^a-zA-Z]/g, "").toUpperCase().split("").filter((letter, index, self) => self.indexOf(letter) === index).join("").split(" ").join("");
     let codedMessage = playfairCodedMessage.toUpperCase().split(" ").join("");
+
+    if (codedMessage.length % 2 != 0) {
+        codedMessage += "X"
+    }
 
     // storing key table in variable (see helper functions below)
     let keyTable = generateKeyTable(key);
@@ -86,4 +93,4 @@ function decodePairs(pair1, pair2, keyTable) {
 
 }
 
-Solution("SUPERSPY", "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV")
+Solution(playfairKey, playfairCodedMessage)
