@@ -17,8 +17,8 @@ const fillGrid = (key) => {
     // Alphabet without J 
     const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
 
-    // combine key and alphabet while removing duplicates and any spaces that may have been in the key
-    const gridChars = [...new Set((key + alphabet).split("").map(letter => letter.toUpperCase()).filter(letter => !(letter === " " || letter === "J")))]
+    // combine key and alphabet while removing duplicates, special characters and any spaces that may have been in the key
+    const gridChars = [...new Set((key + alphabet).replace(/[^a-zA-Z ]/g, "").split("").map(letter => letter.toUpperCase()).filter(letter => !(letter === " " || letter === "J")))]
 
 
     // keep track of letter to add to grid
@@ -101,8 +101,8 @@ const decrypt = (message, key) => {
     // Fill grid using the key
     fillGrid(key)
 
-    // remove any spaces from the message and convert to uppercase
-    message = message.split("").filter(letter => letter !== " ").map(letter => letter.toUpperCase()).join("").toString()
+    // remove any spaces or special characters from the message and convert to uppercase
+    message = message.split("").filter(letter => letter !== " ").map(letter => letter.toUpperCase()).join("").toString().replace(/[^a-zA-Z ]/g, "")
     // loop through to split letters into pairs
     for (let i = 0; i < message.length / 2; i++) {
         let index = 0
