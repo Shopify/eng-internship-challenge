@@ -64,6 +64,6 @@ def main():
     key = "SUPERSPY"
     result = decrypt(encrypted_message, key).replace('X','').upper()
     print(result)
-    return result
 
-main()
+if __name__ == "__main__":
+    main()
