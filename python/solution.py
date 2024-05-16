@@ -1,7 +1,7 @@
 import re
 
 class Playfair:
-  """Allows for the decoding of a message encoded with the Playfair cipher"""
+  """Allows for the decrypting of a message encoded with the Playfair cipher"""
   def __init__(self, encryptedMessage, cipherKey, letterToIgnore="J"):
     """
         Parameters
@@ -46,8 +46,8 @@ class Playfair:
           self.gridPositions[chr(charIndex)]=(R,C)
           charIndex += 1
   
-  def decode(self)-> str:
-    """Decodes the encrypted message and returns the decoded string"""   
+  def decrypt(self)-> str:
+    """Decrypts the encrypted message and returns the decrypted string"""   
     
     #Lets check and sanitize the string
     self.encryptedMessage = self.encryptedMessage.replace(" ","").upper()
@@ -70,19 +70,19 @@ class Playfair:
 
       #If in the same column, we substitute the letter with the letter ABOVE it (wrap around to BOTTOM if bounds are exceeded).
       if (left[1]==right[1]):
-        res+=self.decodeColumnPair(left,right)
+        res+=self.decryptColumnPair(left,right)
       #If in the same row, we substitute the letter with the letter to the LEFT of it (wrap around to RIGHT if bounds are exceeded).
       elif (left[0]==right[0]):
-        res+=self.decodeRowPair(left,right)
+        res+=self.decryptRowPair(left,right)
       #Else they form a box, we substitute the ltter with the letter horizontally opposite of the letter in the box.
       else:
-        res+=self.decodeBoxPair(left,right)
+        res+=self.decryptBoxPair(left,right)
         
     #Remove special characters, spaces, Xs and return
     res = re.sub('[^A-Za-z0-9]+', '', res).replace("X","").replace(" ","").upper()
     return res  
   
-  def decodeColumnPair(self, leftPair, rightPair):
+  def decryptColumnPair(self, leftPair, rightPair):
     """Helper to get the decrypted coordinates of a pair of coordinates in the same column"""   
       
     #Account for wrapping
@@ -90,7 +90,7 @@ class Playfair:
     rightChar = self.grid[rightPair[0]-1 % 5] [rightPair[1]]    
     return leftChar + rightChar
   
-  def decodeRowPair(self, leftPair, rightPair):
+  def decryptRowPair(self, leftPair, rightPair):
     """Helper to get the decrypted coordinates of a pair of coordinates in the same row"""     
     
     #Account for wrapping
@@ -98,7 +98,7 @@ class Playfair:
     rightChar = self.grid[rightPair[0]] [rightPair[1]-1 % 5]    
     return leftChar + rightChar
   
-  def decodeBoxPair(self,leftPair,rightPair):    
+  def decryptBoxPair(self,leftPair,rightPair):    
     """Helper to get the decrypted coordinates of a pair of coordinates not in the same row or column"""   
     
     #Just swap the columns to get the right coordinates
@@ -109,4 +109,4 @@ class Playfair:
 if __name__ == '__main__':
   #Create an instance of the class and specify our encoded string, the key, and the leter we want to ignore.
   playfair = Playfair("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV","SUPERSPY","J")  
-  print(playfair.decode())
+  print(playfair.decrypt())
