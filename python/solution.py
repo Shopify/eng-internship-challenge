@@ -2,7 +2,7 @@ import re
 
 class Playfair:
   """Allows for the decrypting of a message encrypted with the Playfair cipher"""
-  def __init__(self, encryptedMessage, cipherKey, letterToIgnore="J"):
+  def __init__(self, cipherKey, letterToIgnore="J"):
     """
         Parameters
         ----------
@@ -12,8 +12,7 @@ class Playfair:
             The key for the cipher
         letterToIgnore : str, optional
             The letter to ignore in the cipher (default J)
-    """
-    self.encryptedMessage = encryptedMessage
+    """    
     self.cipherKey = cipherKey
     self.grid = [[0 for column in range(5)] for row in range(5)]
     self.gridPositions = {}
@@ -46,25 +45,25 @@ class Playfair:
           self.gridPositions[chr(charIndex)]=(R,C)
           charIndex += 1
   
-  def decrypt(self)-> str:
+  def decrypt(self, encryptedMessage)-> str:
     """Decrypts the encrypted message and returns the decrypted string"""   
     
     #Lets check and sanitize the string
-    self.encryptedMessage = self.encryptedMessage.replace(" ","").upper()
-    if not self.encryptedMessage.isalpha():
+    encryptedMessage = encryptedMessage.replace(" ","").upper()
+    if not encryptedMessage.isalpha():
       return "ERROR: The encrypted message must contain ONLY letters!"   
-    if len(self.encryptedMessage) % 2 != 0:
+    if len(encryptedMessage) % 2 != 0:
       return "ERROR: The encrypted message must be an even number of letters!"     
     
     #Set up some variables
     res = ""    
     self.createPlayfairGrid()    
     
-    for i in range(0,len(self.encryptedMessage),2):
+    for i in range(0,len(encryptedMessage),2):
       #Lets get the positions of both the left and right characters of the pair that we are looking at
       try:
-        left = self.gridPositions[self.encryptedMessage[i]]
-        right = self.gridPositions[self.encryptedMessage[i + 1]]
+        left = self.gridPositions[encryptedMessage[i]]
+        right = self.gridPositions[encryptedMessage[i + 1]]
       except KeyError:
         return "ERROR: Key not found. Does your encrypted message contain the letter you want to ignore?"
 
@@ -108,5 +107,7 @@ class Playfair:
   
 if __name__ == '__main__':
   #Create an instance of the class and specify our encrypted string, the key, and the leter we want to ignore.
-  playfair = Playfair("IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV","SUPERSPY","J")  
-  print(playfair.decrypt())
+  encryptedMessage = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+  KEY = "SUPERSPY"
+  playfair = Playfair(KEY,"J")  
+  print(playfair.decrypt(encryptedMessage)) 
