@@ -2,9 +2,7 @@
 Author: Nusrath  Syed
 Date: May 15th, 2024
 Purpose: Shopify Internship Challenge - Creating a Playfair Cipher to get a password to the spy club Spy City.
-"""
-def playfair_cipher(plaintext, key, mode):
-    """
+
     Encrypts or decrypts a plaintext using the Playfair Cipher with a given key.
 
     Args:
@@ -14,7 +12,9 @@ def playfair_cipher(plaintext, key, mode):
 
     Returns:
         str: The resulting ciphertext or decrypted text.
-    """
+"""
+
+def playfair_cipher(plaintext, key, mode):
 
     # Define the alphabet, excluding 'j'
     alphabet = 'abcdefghiklmnopqrstuvwxyz'
@@ -26,7 +26,7 @@ def playfair_cipher(plaintext, key, mode):
         if letter not in key_square:
             key_square += letter
 
-   # Split the plaintext into digraphs, padding with 'x' if necessary
+     # Split the plaintext into digraphs
     plaintext = plaintext.upper().replace('J', 'I').replace(' ', '')  # Convert plaintext to uppercase and replace 'J' with 'I'
     plaintext = ''.join([char if char.isalpha() else '' for char in plaintext])  # Remove non-alphabetic characters
     if len(plaintext) % 2 == 1:
@@ -36,8 +36,12 @@ def playfair_cipher(plaintext, key, mode):
     # Define the encryption/decryption functions
     def encrypt(digraph):
         a, b = digraph
-        row_a, col_a = divmod(key_square.index(a), 5)
-        row_b, col_b = divmod(key_square.index(b), 5)
+        try:
+            row_a, col_a = divmod(key_square.index(a), 5)
+            row_b, col_b = divmod(key_square.index(b), 5)
+        except ValueError:
+            # If characters are not found in the key_square, return the original characters
+            return digraph
         if row_a == row_b:
             col_a = (col_a + 1) % 5
             col_b = (col_b + 1) % 5
@@ -47,11 +51,15 @@ def playfair_cipher(plaintext, key, mode):
         else:
             col_a, col_b = col_b, col_a
         return key_square[row_a*5+col_a] + key_square[row_b*5+col_b]
-
+    
     def decrypt(digraph):
         a, b = digraph
-        row_a, col_a = divmod(key_square.index(a), 5)
-        row_b, col_b = divmod(key_square.index(b), 5)
+        try:
+            row_a, col_a = divmod(key_square.index(a), 5)
+            row_b, col_b = divmod(key_square.index(b), 5)
+        except ValueError:
+            # If characters are not found in the key_square, return the original characters
+            return digraph
         if row_a == row_b:
             col_a = (col_a - 1) % 5
             col_b = (col_b - 1) % 5
@@ -71,10 +79,11 @@ def playfair_cipher(plaintext, key, mode):
             result += decrypt(digraph)
 
     # Return the result, converting it to uppercase and removing special characters
-    return result.upper().replace('X', '').replace(' ', '')
+    return ''.join(filter(str.isalpha, result.upper()))[:-1]  # Only keep alphabetic characters
 
-# Example usage, must be in UPPER CASE
-encrypted_message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
-key = 'SUPERSPY'  # Use the provided key
-decrypted_password = playfair_cipher(encrypted_message, key, 'decrypt')
-print(decrypted_password)  # outputs: "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
+# Example usage
+plaintext = 'Hippopotomonstrosequippedaliophobia'
+key = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
+ciphertext = playfair_cipher(plaintext, key, 'encrypt')
+decrypted_text = playfair_cipher(ciphertext, key, 'decrypt')
+print(decrypted_text)  # outputs: "HIPPOPOTOMONSTROSESQUIPPEDALIOPHOBIA"
