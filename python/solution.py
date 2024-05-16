@@ -44,5 +44,6 @@ for i in range(0, len(encrypted_msg), 2):
         result.append(matrix[r2][c1])
 
 #Remove potential X-s  
-print("".join(result).replace("X", ""))
+print("".join(result).replace("X", "")) 
+
 
