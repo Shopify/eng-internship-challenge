@@ -43,7 +43,7 @@ func createMatrix(encryptedMessage string) [][]rune {
 	return matrix
 }
 
-// finds location of letter, I realized I couldve converted them to numbers and searched with a quicker runtime then reverse them back but its too late now I guess
+// finds location of letter, I realized I couldve converted them to numbers and searched with a quicker runtime then reverse them back but its too late now.
 func findPosition(char rune, matrix [][]rune) (int, int) {
 	for x, row := range matrix {
 		for y, matrixChar := range row {
