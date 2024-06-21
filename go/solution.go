@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	//"strings"
 )
 
 // removeDuplicates removes duplicates from the string and returns a new string
