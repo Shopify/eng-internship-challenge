@@ -14,7 +14,7 @@ def generate_polybius_square(key: str)-> Tuple[List[List[str]], Dict[str, Tuple[
         col = pos % 5
         # Handle special case of I & J
         if char == "I" or char == "J":
-            polybius_square[row][col] = "IJ"
+            polybius_square[row][col] = "I"
             polybius_square_map["I"] = (row, col)
             polybius_square_map["J"] = (row, col)
         else:
