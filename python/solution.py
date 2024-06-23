@@ -40,10 +40,40 @@ def generate_polybius_square(key: str)-> Tuple[List[List[str]], Dict[str, Tuple[
 
     return polybius_square, polybius_square_map
 
+# Decrypt using playfair cipher as shown in the wiki page:
+# https://en.wikipedia.org/wiki/Playfair_cipher#Description
+def decrypt_playfair_cipher(message: str, key: str) -> str:
+    plaintext = ""
+    polybius_square, polybius_square_map = generate_polybius_square(key)
+
+    # Split message into 2 char blocks (message given should be even)
+    assert len(message) % 2 == 0
+    blocks = [message[i*2:i*2+2] for i in range(len(message) // 2)]
+    
+    for block in blocks:
+        first, second = block
+        first_row, first_col = polybius_square_map[first]
+        second_row, second_col = polybius_square_map[second]
+        # If the letters appear on the same row of your table, replace them with the letters to their immediate left respectively (with wrapping).
+        if first_row == second_row:
+            plaintext += polybius_square[first_row][first_col - 1 % 5] + polybius_square[second_row][second_col - 1 % 5]
+        # If the letters appear on the same column of your table, replace them with the letters immediately above respectively (with wrapping).
+        elif first_col == second_col:
+            plaintext += polybius_square[first_row - 1 % 5][first_col] + polybius_square[second_row - 1 % 5][second_col]
+        # If the letters are not on the same row or column, 
+        # replace them with the letters on the same row respectively but at the other pair of corners of the rectangle defined by the original pair. 
+        # The order is important – the first letter of the encrypted pair is the one that lies on the same row as the first letter of the plaintext pair.
+        else:
+            plaintext += polybius_square[first_row][second_col] + polybius_square[second_row][first_col]
+
+    return plaintext
+
 
 def main():
     encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     key = "SUPERSPY"
+
+    return decrypt_playfair_cipher(encrypted_message, key)
 
 if __name__ == "__main__":
     main()
