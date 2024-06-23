@@ -72,11 +72,11 @@ def decrypt_playfair_cipher(message: str, key: str) -> str:
     return plaintext
 
 
-def main():
+def main() -> None:
     encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     key = "SUPERSPY"
 
-    return decrypt_playfair_cipher(encrypted_message, key)
+    print(decrypt_playfair_cipher(encrypted_message, key))
 
 if __name__ == "__main__":
     main()
