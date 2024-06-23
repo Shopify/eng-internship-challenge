@@ -66,6 +66,9 @@ def decrypt_playfair_cipher(message: str, key: str) -> str:
         else:
             plaintext += polybius_square[first_row][second_col] + polybius_square[second_row][first_col]
 
+    # Remove the insert character X
+    plaintext = plaintext.replace("X", "")
+
     return plaintext
 
 
