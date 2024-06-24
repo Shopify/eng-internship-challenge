@@ -32,6 +32,37 @@ def createDigrams(encrypted):
             cur += ch
     return digrams
 
+def getIndex(letter, matrix):
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            if matrix[i][j] == letter:
+                return [i, j]
+
+
+def solve_digram(digram, matrix):
+    indexL1X, indexL1Y = getIndex(digram[0], matrix)
+    indexL2X, indexL2Y = getIndex(digram[1], matrix)
+    
+    result = ""
+
+    # Same row, here we get the letter 1 to the left for each
+    if indexL1X == indexL2X:
+        indexL1Y = (indexL1Y - 1) % 5 # In case it was 0
+        indexL2Y = (indexL2Y - 1) % 5 # In case it was 0
+        result = matrix[indexL1X][indexL1Y] + matrix[indexL2X][indexL2Y]
+
+    # Same column, here we get the letter 1 to the left for each
+    elif indexL1Y == indexL2Y:
+        indexL1X = (indexL1X - 1) % 5 # In case it was 0
+        indexL2X = (indexL2X - 1) % 5 # In case it was 0
+        result = matrix[indexL1X][indexL1Y] + matrix[indexL2X][indexL2Y]
+    
+    # Box method: swap the columns, with the first letter still coming first
+    else:
+        result = matrix[indexL1X][indexL2Y] + matrix[indexL2X][indexL1Y]
+    
+    return result
+
 
         
 
@@ -40,12 +71,13 @@ def solve(encrypted, key):
     matrix = createMatrix(key)
     # Breaks text into pairs of letters and swaps them in a rectangle within that grid
     digrams = createDigrams(encrypted)
-
-
-
-    print(digrams)
-    print(matrix)
-    return encrypted
+    # Solve each of the digrams
+    result = ""
+    for digram in digrams:
+        result += solve_digram(digram, matrix)
+    
+    print(result)
+    return result
 
 
 def main():
