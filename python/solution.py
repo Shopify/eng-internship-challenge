@@ -21,6 +21,7 @@ def createMatrix(key):
 
     return matrix
 
+# Outputs list of digrams given a string
 def createDigrams(encrypted):
     digrams = []
     cur = ""
@@ -28,10 +29,13 @@ def createDigrams(encrypted):
         if len(cur) == 2:
             digrams.append(cur)
             cur = ""
-        else:
-            cur += ch
+        cur += ch
+
+    if len(cur) == 2:
+        digrams.append(cur)
     return digrams
 
+# Find the index (row and column) of the letter in the matrix
 def getIndex(letter, matrix):
     for i in range(len(matrix)):
         for j in range(len(matrix[0])):
@@ -71,6 +75,8 @@ def solve(encrypted, key):
     matrix = createMatrix(key)
     # Breaks text into pairs of letters and swaps them in a rectangle within that grid
     digrams = createDigrams(encrypted)
+    # print(digrams) # Expect IK EW EN EN XL NQ LP ZS LE RU MR HE ER YB OF NE IN CH CV"
+
     # Solve each of the digrams
     result = ""
     for digram in digrams:
