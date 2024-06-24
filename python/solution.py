@@ -7,6 +7,7 @@ def createMatrix(key):
     for ch in key:
         if ch not in letters:
             letters.append(ch)
+   
     # Add rest of alphabet
     for ch in alphabet:
         if ch not in key:
@@ -21,10 +22,12 @@ def createMatrix(key):
 
     return matrix
 
+
 # Outputs list of digrams given a string
 def createDigrams(encrypted):
     digrams = []
     cur = ""
+
     for ch in encrypted:
         if len(cur) == 2:
             digrams.append(cur)
@@ -33,7 +36,9 @@ def createDigrams(encrypted):
 
     if len(cur) == 2:
         digrams.append(cur)
+
     return digrams
+
 
 # Find the index (row and column) of the letter in the matrix
 def getIndex(letter, matrix):
@@ -43,10 +48,10 @@ def getIndex(letter, matrix):
                 return [i, j]
 
 
+# Function to solve an individual digram and output the resulting string
 def solve_digram(digram, matrix):
     indexL1X, indexL1Y = getIndex(digram[0], matrix)
     indexL2X, indexL2Y = getIndex(digram[1], matrix)
-    
     result = ""
 
     # Same row, here we get the letter 1 to the left for each
@@ -68,14 +73,12 @@ def solve_digram(digram, matrix):
     return result
 
 
-        
-
+# Uses helper functions to decrypt the input string
 def solve(encrypted, key):
     # Playfair cypher uses a 5x5 grid of letters of the alphabet
     matrix = createMatrix(key)
     # Breaks text into pairs of letters and swaps them in a rectangle within that grid
     digrams = createDigrams(encrypted)
-    # print(digrams) # Expect IK EW EN EN XL NQ LP ZS LE RU MR HE ER YB OF NE IN CH CV"
 
     # Solve each of the digrams
     result = ""
@@ -85,7 +88,7 @@ def solve(encrypted, key):
     # Clean output:
     result = result.replace('X', '')
     result = ' '.join(result.split())
-    
+
     return result
 
 
