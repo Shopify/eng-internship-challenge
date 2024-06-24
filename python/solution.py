@@ -56,6 +56,10 @@ def decrypt_message(message, keyword):
     key_table = generate_key_table(keyword)
     pairs = preprocess_message(message)
     decrypted_text = ''.join(decrypt_pair(pair, key_table) for pair in pairs)
+    # Remove any 'X's in the string
+    decrypted_text = decrypted_text.replace('X', '')
+    # Ensure the result is entirely uppercase and doesn't include spaces or special characters
+    decrypted_text = ''.join(filter(str.isalpha, decrypted_text))
     return decrypted_text
 
 if __name__ == "__main__":
