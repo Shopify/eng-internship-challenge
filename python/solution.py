@@ -82,7 +82,10 @@ def solve(encrypted, key):
     for digram in digrams:
         result += solve_digram(digram, matrix)
     
-    print(result)
+    # Clean output:
+    result = result.replace('X', '')
+    result = ' '.join(result.split())
+    
     return result
 
 
