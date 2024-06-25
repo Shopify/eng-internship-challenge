@@ -65,11 +65,11 @@ def decrypt_playfair(ciphertext, table):
 
         # Apply Playfair cipher decryption rules
         if row_a == row_b:
-            # If both characters are in the same row, move left (circular)
+            # If both characters are in the same row, move left
             plaintext += table[row_a][(col_a - 1) % 5]
             plaintext += table[row_b][(col_b - 1) % 5]
         elif col_a == col_b:
-            # If both characters are in the same column, move up (circular)
+            # If both characters are in the same column, move up
             plaintext += table[(row_a - 1) % 5][col_a]
             plaintext += table[(row_b - 1) % 5][col_b]
         else:
