@@ -10,7 +10,7 @@ def create_grid(key)
     all_letters = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
 
     # Add both strings together to create the order of letters to check
-    letters_to_add = (key << all_letters).split("").uniq
+    letters_to_add = (key << all_letters).split("").uniq.select{ |letter| "A".ord <= letter.ord && letter.ord <= "Z".ord}
 
     # Fill in grid and coordinates
     letters_to_add.each do |letter|
