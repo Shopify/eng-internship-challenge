@@ -9,7 +9,7 @@ def create_grid(key)
    
     grid = key.chars.each_slice(5).to_a
     return grid
-   end
+end
    
    #Pre-process the encrypted message
    def pre_process(message)
@@ -19,26 +19,35 @@ def create_grid(key)
     i = 0
    
     while i < message.length
-    #Last character - Insert X
-    if i == message.length-1
-    pairs << [message[i], "X"]
-    break
-    end
-   
-    #If the two characters are the same, insert X 
-    if message[i] == message[i+1]
-    pairs << [message[i], "X"]
-    i += 1
-    
-    #If the two characters are different, insert both characters
-    else
-    pairs << [message[i], message[i+1]]
-    i+=2
-    end
+        
+        #Last character - Insert X
+        if i == message.length-1
+            pairs << [message[i], "X"]
+            break
+        end
+        
+        #If the two characters are the same, insert X 
+        if message[i] == message[i+1]
+            pairs << [message[i], "X"]
+            
+        #If the two characters are different, insert both characters as pairs
+        else
+            pairs << [message[i], message[i+1]]
+            i+=1
+        end
+        i+=1
     end
     pairs
-   end
+end
    
-   #Define
+#Find position of letter in the key square - if grid contains the letters searching from row then column
+def find_position(grid, letter)
+    row = grid.index {|r| r.include?(letter)}
+    return nil unless row
+    col = grid[row].index(letter)
+    return row, col
+end
+   
+   
    
    
