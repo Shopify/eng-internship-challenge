@@ -53,7 +53,7 @@ def position(grid, letter)
     return row, col
 end
    
-#Wrap index from beginning to end of the row
+#Wrap index from beginning to end of the row when it gets shifted
 def wrap_around_col(grid, row, col)
     return col % 5
 
@@ -86,4 +86,16 @@ def decrypt_pair(grid,pair)
         return [grid[row1][col2], grid[row2][col1]]
     end
 end
+
+def decryption(message,key)
+    grid = create_grid(key)
+    pairs = pre_process(message)
+    decrypted_pairs = pairs.map{|pair| decrypt_pair(grid, pairs)}
+
+    #Combine into string
+    decrypted_message = decrypted_pairs.flatten.join
+
+    return decrypted_message
+end
+
 
