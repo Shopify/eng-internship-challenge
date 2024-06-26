@@ -1,9 +1,13 @@
 from typing import List, Dict, Tuple
 
+# Encrypted message and cipher key given by Shopify in the Technical Assessment Challenge for the Fall Engineering Intern Cohort, 2024.
 ENCRYPTED_MSG = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 CIPHER_KEY = "SUPERSPY"
 
 def playfair_cipher() -> None:
+    """
+    Implement the Playfair cipher decryption algorithm given the encrypted message and cipher key.
+    """
     # Create the cipher table based off given key
     cipher_table = create_cipher_table(CIPHER_KEY)
     letter_map = map_char_to_table_position(cipher_table)
@@ -13,6 +17,10 @@ def playfair_cipher() -> None:
     print(f"{decrypted_message}")
 
 def create_cipher_table(key: str) -> List[List[str]]:
+    """
+    Create the cipher table based off the given key.
+    """
+    
     ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" # exclude J; it is interchangeable with I
     cipher_table = []
     used_letters = set()
@@ -35,6 +43,10 @@ def create_cipher_table(key: str) -> List[List[str]]:
     return cipher_table
 
 def map_char_to_table_position(table: List[List[str]]) -> Dict[str, Tuple[int, int]]:
+    """
+    Map each letter in the cipher table to its position.
+    """
+    
     letter_to_position = {}
     
     for i, row in enumerate(table):
@@ -47,6 +59,7 @@ def split_into_digrams(message: str) -> List[str]:
     """
     Split the message into digrams (pairs of two letters).
     """
+    
     digrams = []
     i = 0
     
@@ -65,6 +78,10 @@ def split_into_digrams(message: str) -> List[str]:
     return digrams
     
 def decrypt_digrams(digrams: List[str], letter_map: Dict[str, Tuple[int, int]], cipher_table: List[List[str]]) -> str:
+    """
+    Decrypt the digrams using the cipher table and letter map.
+    """
+    
     decrypted_message = []
     
     for digram in digrams:
@@ -89,6 +106,10 @@ def decrypt_digrams(digrams: List[str], letter_map: Dict[str, Tuple[int, int]], 
     return clean_message
 
 def process_letter_in_same_row(row: int, col_1: int, col_2: int, cipher_table: List[List[str]]) -> str:
+    """
+    Process the letters if they are in the same row.
+    """
+    
     # If the letters are in the same row, shift them to the left (decryption), wrap to the right if needed:
     decoded_letter_1 = ""
     decoded_letter_2 = ""
@@ -108,6 +129,10 @@ def process_letter_in_same_row(row: int, col_1: int, col_2: int, cipher_table: L
     return decoded_letter_1 + decoded_letter_2
 
 def process_letter_in_same_col(col: int, row_1: int, row_2: int, cipher_table: List[List[str]]) -> str:
+    """
+    Process the letters if they are in the same column.
+    """
+    
     # If the letters are in the same column, shift them up (decryption), wrap to the bottom if needed
     decoded_letter_1 = ""
     decoded_letter_2 = ""
@@ -126,6 +151,10 @@ def process_letter_in_same_col(col: int, row_1: int, row_2: int, cipher_table: L
     return decoded_letter_1 + decoded_letter_2
 
 def process_letter_as_rectangle(row_1: int, col_1: int, row_2: int, col_2: int, cipher_table: List[List[str]]) -> str:
+    """
+    Process the letters if they are in a rectangle. Squares count.
+    """
+    
     # If the letters are in different rows and columns, eg a rectangle, decrypt them by swapping the columns
     decoded_letter_1 = cipher_table[row_1][col_2]
     decoded_letter_2 = cipher_table[row_2][col_1]
