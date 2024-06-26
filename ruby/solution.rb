@@ -53,6 +53,14 @@ def position(grid, letter)
     return row, col
 end
    
+#Wrap index from beginning to end of the row
+def wrap_around_col(grid, row, col)
+    return col % 5
+
+def wrap_around_row(grid,row,col)
+    return row % 5
+
+
 #Decrypt each pairs of letters
 def decrypt_pair(grid,pair)
     letter1, letter2 = pair
@@ -64,3 +72,18 @@ def decrypt_pair(grid,pair)
         puts "Error: One or more of the letters in the pair #{pair} not found."
         return [nil, nil]
     end
+
+    #if both letters are in the same row/col, shift each letter to either to the left or up
+    if row1 == row2
+        return [grid[row1][wrap_around_col(grid, row1, col1-1)], 
+        grid[row2][wrap_around_col(grid,row2,col2-1)]]
+    
+    elsif col1 == col2
+        return [grid[wrap_around_row(grid,row1-1, col1)][col1],
+        grid[wrap_around_row(grid,row2-1, col2)][col2]]
+    else
+        #swap the letters
+        return [grid[row1][col2], grid[row2][col1]]
+    end
+end
+
