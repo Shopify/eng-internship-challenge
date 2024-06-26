@@ -1,11 +1,6 @@
 # This program solves a Playfair Cipher using matrix-based logic and a hashmap to represent the board.
 import numpy as np
 
-message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
-key = 'SUPERYABCDFGHIKLMNOQTVWXZ'
-
-
-
 # Creates a 2D array where each letter is at its coordinate [i, j] so we can search for letters from an index in O(1) time.
 # Could have made a two-way hashmap, but an array is more memory-efficient.
 def create_array(letters):
@@ -26,23 +21,39 @@ def create_map(letters):
 def digraph(encrypted_msg):
     return [encrypted_msg[i:i+2] for i in range(0, len(encrypted_msg), 2)]
 
+# Method that searches for the two letters in the board and returns the decrypted pair. Calls column_search and row_search.
 def board_search(board_map, board_array, letters):
     global output
     char1, char2 = letters
-    if column_search(board_map, char1, char2) == True:
-        output = output + board_array[(board_map[char1][0] + 1) % 5][board_map[char1][1]] + board_array[(board_map[char2][0] + 1) % 5][board_map[char2][1]]
-    elif row_search(board_map, char1, char2) == True:
-        output = output + board_array[board_map[char1][0]][(board_map[char1][1] - 1) % 5] + board_array[board_map[char2][0]][(board_map[char2][1] - 1) % 5]
+    
+    row1, col1 = board_map[char1]
+    row2, col2 = board_map[char2]
+    
+    # Works by checking if the two letters are in the same row or column and then adding the correct corresponding letters to the output string.
+    # This is done by calling the decrypted letter from the board array using indices from the board hashmap.
+    if column_search(board_map, char1, char2):
+        return (
+            board_array[(row1 + 1) % 5][col1] +
+            board_array[(row2 + 1) % 5][col2])
+    elif row_search(board_map, char1, char2):
+        return (
+            board_array[row1][(col1 - 1) % 5] +
+            board_array[row2][(col2 - 1) % 5]
+        )
     else:
-        output = output + board_array[board_map[char1][0]][board_map[char2][1]] + board_array[board_map[char2][0]][board_map[char1][1]]
-    return output
+        return (
+            board_array[row1][col2] +
+            board_array[row2][col1]
+        )
 
+# Method that checks if two letters are in the same column and returns True if they are.
 def column_search(board, char1, char2):
     if board[char1][1] == board[char2][1]:
         return True
     else:
         return False
 
+# Method that checks if two letters are in the same row and returns True if they are.
 def row_search(board, char1, char2):
     if board[char1][0] == board[char2][0]:
         return True
@@ -50,19 +61,30 @@ def row_search(board, char1, char2):
         return False
     
 
+if __name__ == '__main__':
+    # The message and key for the Playfair Cipher. 'key' refers to the 25-letter matrix order after including the key at the beginning.
+    message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
+    key = 'SUPERYABCDFGHIKLMNOQTVWXZ'
 
-split_msg = digraph(message)
-board_map = create_map(key)
-board_array = create_array(key)
+    # Splitting the message into two-letter pairs.
+    split_msg = digraph(message)
 
-output = ''
-for i in range(len(split_msg)):
+    # Creating the associated board map and array.
+    board_map = create_map(key)
+    board_array = create_array(key)
 
-    board_search(board_map, board_array, split_msg[i])
+    # Initializing the output string to a blank string
+    output = ''
 
-output = output.replace('X', '')
-print(output)
+    # Iterating through the split message and decrypting each pair, then appending it to the 'output' string.
+    for i in range(len(split_msg)):
+        output += board_search(board_map, board_array, split_msg[i])
 
+    # Removing any 'X' characters from the output string.
+    output = output.replace('X', '')
+
+    # Printing the output string.
+    print(output)
 
 
 
