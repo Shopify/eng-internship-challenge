@@ -55,7 +55,7 @@ def decode(square, message):
             val1 = message[i]
             val2 = message[i+1]
 
-            #record the index where val1 exists in the squar
+            #record the index where val1 exists in the square
             val1_index = square.index(val1) 
             val2_index = square.index(val2)
 
