@@ -2,12 +2,20 @@
 Shopify Eng Internship Challenge Playfair Cipher Solution
 Author: Nicholas Chew
 '''
+
 class PlayfairCipherSolver:
 
     # Playfair Cipher Alphabet constant (modified to exclude 'J')
     ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
     
     def __init__(self, keyword: str, dimension: int = 5) -> None:
+        """
+        Initialize the PlayfairCipherSolver with a given keyword and dimension.
+        
+        Args:
+            keyword (str): The keyword used to create the cipher table.
+            dimension (int): The dimension of the cipher table (default 5x5).
+        """
         # Initialize keyword, replacing 'J' with 'I'
         self.keyword = keyword.upper().replace('J', 'I')
 
@@ -21,6 +29,15 @@ class PlayfairCipherSolver:
         self.character_positions = self._map_character_positions()
 
     def _build_cipher_table(self, keyword: str) -> list[list[str]]:
+        """
+        Build the Playfair Cipher table using the keyword.
+        
+        Args:
+            keyword (str): The keyword used to create the cipher table.
+        
+        Returns:
+            list[list[str]]: The 2D list representing the cipher table.
+        """
         unique_characters = set()
         keyword_characters = []
 
@@ -47,6 +64,12 @@ class PlayfairCipherSolver:
         return cipher_table
 
     def _map_character_positions(self) -> dict[str, tuple[int, int]]:
+        """
+        Map each character to its position in the cipher table.
+        
+        Returns:
+            dict[str, tuple[int, int]]: A dictionary mapping characters to their positions.
+        """
         character_positions = {}
 
         # Map each character to its position in the table
@@ -58,9 +81,28 @@ class PlayfairCipherSolver:
         return character_positions
 
     def _find_position(self, character: str) -> tuple[int, int]:
+        """
+        Find the position of a character in the cipher table.
+        
+        Args:
+            character (str): The character to find.
+        
+        Returns:
+            tuple[int, int]: The row and column of the character in the table.
+        """
         return self.character_positions[character]
 
     def _decrypt_pair(self, first_character: str, second_character: str) -> str:
+        """
+        Decrypt a pair of characters using Playfair Cipher rules.
+        
+        Args:
+            first_character (str): The first character of the pair.
+            second_character (str): The second character of the pair.
+        
+        Returns:
+            str: The decrypted pair of characters.
+        """
         row1, col1 = self._find_position(first_character)
         row2, col2 = self._find_position(second_character)
 
@@ -83,6 +125,15 @@ class PlayfairCipherSolver:
         return decrypted_first + decrypted_second
 
     def decrypt(self, ciphertext: str) -> str:
+        """
+        Decrypt the entire ciphertext using Playfair Cipher rules.
+        
+        Args:
+            ciphertext (str): The ciphertext to decrypt.
+        
+        Returns:
+            str: The decrypted plaintext.
+        """
         ciphertext = ciphertext.upper().replace('J', 'I')
 
         # Pad with 'X' if the ciphertext length is odd
