@@ -1,7 +1,7 @@
 # Bi Yi Huang
 
 
-#Create and the fill the 5x5 Playfair grid (Treating all occurences of J as I)
+#Create 5x5 Playfair grid - fill with unique characters from the key followed by the alphabet (omitting J)
 def create_grid(key)
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
     key = key.upcase.gsub("J", "I").chars.uniq.join
@@ -11,55 +11,51 @@ def create_grid(key)
     return grid
 end
    
-   #Pre-process the encrypted message
-   def pre_process(message)
-    message = message.upcase.gsub("J", "I").chars.each_slice(2).to_a
-   
+#Process each charater in encrypted message to form pairs
+def pre_process(message)
+    message = message.upcase.gsub("J", "I").chars
     pairs = []
     i = 0
    
     while i < message.length
         
-        #Last character - Insert X
+        #If Last character, pair it with X
         if i == message.length-1
             pairs << [message[i], "X"]
             break
         end
         
-        #If the two characters are the same, insert X 
+        #If the two characters are the same, insert X between 
         if message[i] == message[i+1]
             pairs << [message[i], "X"]
             
-        #If the two characters are different, insert both characters as pairs
+        #If the two characters are different, both characters become pairs
         else
             pairs << [message[i], message[i+1]]
-            i+=1
+            i+=1 
         end
         i+=1
     end
     pairs
 end
    
-#Find position of letter in the key square - if grid contains the letters searching from row then column
+#Find the position of the letter in the grid (Check from rows then column)
 def position(grid, letter)
-
-    #Printing grid for troubleshooting
-    puts "Grid:"
-    grid.each { |row| puts row.join(' ')}
 
     row = grid.index {|r| r.include?(letter)}
     return nil unless row
     col = grid[row].index(letter)
     return row, col
 end
-   
-#Wrap index from beginning to end of the row when it gets shifted
-def wrap_around_col(grid, row, col)
-    return col % 5
-end
 
+#Ensures row index wraps within grid's boundary
 def wrap_around_row(grid,row,col)
     return row % 5
+end
+   
+#Ensures column index wraps within grid's boundary
+def wrap_around_col(grid, row, col)
+    return col % 5
 end
 
 
@@ -75,40 +71,42 @@ def decrypt_pair(grid,pair)
         return [nil, nil]
     end
 
-    #if both letters are in the same row/col, shift each letter to either to the left or up
-    if row1 == row2
+    if row1 == row2  #if both letters are in the same row, shift left
         return [grid[row1][wrap_around_col(grid, row1, col1-1)], 
         grid[row2][wrap_around_col(grid,row2,col2-1)]]
     
-    elsif col1 == col2
+
+    elsif col1 == col2 #if both letters are in the same column, shift up
         return [grid[wrap_around_row(grid,row1-1, col1)][col1],
         grid[wrap_around_row(grid,row2-1, col2)][col2]]
     else
-        #swap the letters
+        #If both characters different rows and columns, swap them
         return [grid[row1][col2], grid[row2][col1]]
     end
 end
 
+#Decrypt entire messsage
 def decryption(message,key)
     grid = create_grid(key)
     pairs = pre_process(message)
-    decrypted_pairs = pairs.map{|pair| decrypt_pair(grid, pairs)}
+    decrypted_pairs = pairs.map{|pair| decrypt_pair(grid, pair)}
 
-    #Combine into string
-    decrypted_message = decrypted_pairs.flatten.join
+    #Combine into string and remove the filler character 'X'
+    decrypted_message = decrypted_pairs.flatten.join.gsub(/X(?=[A-Z]{2}|$)/, '')
 
     return decrypted_message
 end
 
-#test cases
-def test_cases
+#test case
+def test_case
     encrypted_messages = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     key = "SUPERSPY"
     decrypted_message = decryption(encrypted_messages, key)
     puts decrypted_message
 end
 
+
 #Output message on the command line
 if __FILE__ == $0
-    test_cases
+    test_case
 end
