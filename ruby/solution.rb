@@ -4,8 +4,8 @@
 #Create and the fill the 5x5 Playfair grid (Treating all occurences of J as I)
 def create_grid(key)
     alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
-    key = key.upcase.gsub("J", "I").chars.uniq.join + alphabet
-    key = key.chars.uniq.join
+    key = key.upcase.gsub("J", "I").chars.uniq.join
+    key += (alphabet.chars-key.chars).join
    
     grid = key.chars.each_slice(5).to_a
     return grid
@@ -41,13 +41,26 @@ end
 end
    
 #Find position of letter in the key square - if grid contains the letters searching from row then column
-def find_position(grid, letter)
+def position(grid, letter)
+
+    #Printing grid for troubleshooting
+    puts "Grid:"
+    grid.each { |row| puts row.join(' ')}
+
     row = grid.index {|r| r.include?(letter)}
     return nil unless row
     col = grid[row].index(letter)
     return row, col
 end
    
-   
-   
-   
+#Decrypt each pairs of letters
+def decrypt_pair(grid,pair)
+    letter1, letter2 = pair
+    row1, col1 = position(grid, letter1)
+    row2, col2 = position(grid, letter2)
+
+    #Check if either letter was found in the grid
+    if row1.nil? || row2.nil?
+        puts "Error: One or more of the letters in the pair #{pair} not found."
+        return [nil, nil]
+    end
