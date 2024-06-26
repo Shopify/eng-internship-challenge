@@ -7,14 +7,21 @@ import numpy as np
 message = 'IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV'
 key = 'SUPERYABCDFGHIKLMNOQTVWXZ'
 
-# Creating a 5x5 matrix using the key
-def create_board(board_chars):
-    board = np.array(list(key)).reshape(5, 5)
-    print(board)
+# Creating a hashmap that represents the board where each letter is mapped to its coordinate [i, j]
+def create_board(letters):
+    board_map = {}
+    for i, char in enumerate(letters):
+        row = i // 5
+        col = i % 5
+        board_map[char] = (row, col)
+    return (board_map)
 
 # Method to split the message into two-letter pairs
-def digraph():
-    return [message[i:i+2] for i in range(0, len(message), 2)]
+def digraph(encrypted_msg):
+    return [encrypted_msg[i:i+2] for i in range(0, len(encrypted_msg), 2)]
+
+# split_message = digraph(message)
+
 
 
 
