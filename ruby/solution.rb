@@ -56,9 +56,11 @@ end
 #Wrap index from beginning to end of the row when it gets shifted
 def wrap_around_col(grid, row, col)
     return col % 5
+end
 
 def wrap_around_row(grid,row,col)
     return row % 5
+end
 
 
 #Decrypt each pairs of letters
@@ -98,4 +100,15 @@ def decryption(message,key)
     return decrypted_message
 end
 
+#test cases
+def test_cases
+    encrypted_messages = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    key = "SUPERSPY"
+    decrypted_message = decryption(encrypted_messages, key)
+    puts decrypted_message
+end
 
+#Output message on the command line
+if __FILE__ == $0
+    test_cases
+end
