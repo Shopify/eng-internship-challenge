@@ -117,6 +117,6 @@ def main():
     decoded_message = decode(create_square(keyword), message)
 
 
-
-main()
+if __name__ == '__main__':
+    main()
 
