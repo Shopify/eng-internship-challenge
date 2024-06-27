@@ -1,6 +1,9 @@
 /**
  * A simple program for decrypting Playfair Ciphers. See the below Wiki article
- * for more information.
+ * for more information. Note that this code generally attempts to be scalable
+ * and modifiable for further features, but not to a significant degree (i.e.,
+ * the table could be made into a separate data structure/object for ease of
+ * use if it was used more - e.g., also for encoding).
  *
  * https://en.wikipedia.org/wiki/Playfair_cipher
  *
@@ -18,7 +21,7 @@ type PlayfairTable = [
 ];
 
 /**
- * Generates the require table to encrypt and decrypt Playfair ciphers.
+ * Generates the required table to encrypt and decrypt Playfair ciphers.
  *
  * @param key The key word used to generate the table
  * @param missingLetter The letter to exclude from the Playfair table
@@ -32,20 +35,24 @@ function generateTable(
   pattern: TablePattern = "LEFT_TO_RIGHT" // standard Playfair uses Left to Right fill
 ): PlayfairTable {
   let table: PlayfairTable = [
-    // there's likely a cleaner way to do this using Array.fill(), but the typing makes it difficult
+    // there's likely a cleaner way to do this using Array.fill(), but the typing w/ TS makes it difficult
     [" ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " "],
     [" ", " ", " ", " ", " "],
   ];
-  let remainingLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").reverse(); // alphabet
+  let remainingLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").reverse(); // alphabet as an array
 
   // Ensure the input is all valid
   if (!key.match(/^[A-Z]+$/)) {
-    throw new Error("Playfair key must be made of uppercase letters.");
+    throw new Error(
+      "Playfair key must be made of one or more uppercase letters."
+    );
   } else if (!missingLetter.match(/^[A-Z]$/)) {
     throw new Error("Missing letter must be a single uppercase letter.");
+  } else if (key.indexOf(missingLetter) !== -1) {
+    throw new Error("Missing letter cannot be in Playfair key.");
   }
 
   // Remove the missing letter from the letters to be used in the table
@@ -61,8 +68,18 @@ function generateTable(
       continue;
     }
 
-    // Otherwise, add the letter to the correct spot and remove it from the letters remaining
-    table[Math.floor(curTablePos / 5)][curTablePos % 5] = letter;
+    // Otherwise, add the letter to the correct spot based on the table encoding (order characters are inserted)
+    switch (pattern) {
+      case "LEFT_TO_RIGHT":
+        table[Math.floor(curTablePos / 5)][curTablePos % 5] = letter;
+        break;
+      default:
+        throw new Error(
+          "Currently only the Left to Right table encoding is implemented."
+        );
+    }
+
+    // Remove it from the letters remaining and update the current position pointer
     remainingLetters.splice(letterIndex, 1);
     curTablePos++;
   }
@@ -71,7 +88,7 @@ function generateTable(
   while (remainingLetters.length > 0) {
     let letter = remainingLetters.pop();
 
-    // Satisfy TypeScript
+    // Satisfy TypeScript (letter should always be defined)
     if (typeof letter !== "undefined") {
       table[Math.floor(curTablePos / 5)][curTablePos % 5] = letter;
       curTablePos++;
@@ -81,13 +98,20 @@ function generateTable(
   return table;
 }
 
+/**
+ * Decodes the given message that is encoded using the given Playfair table.
+ *
+ * @param msg The message to be decoded
+ * @param table The Playfair table used for the encoding
+ * @returns The decoded message
+ */
 function decodePlayfair(msg: string, table: PlayfairTable): string {
   let decodedMsg = "";
 
   // Ensure the input is valid
   if (msg.length % 2 !== 0 || !msg.match(/^[A-Z]+$/)) {
     throw new Error(
-      "Encoded message must be even length and made of uppercase letters."
+      "Encoded message must be even length and made of two or more uppercase letters."
     );
   }
 
@@ -135,7 +159,7 @@ function decodePlayfair(msg: string, table: PlayfairTable): string {
     }
   }
 
-  // Remove all of the "X" characters from the decoded message
+  // Remove all of the "X" characters from the decoded message, Xs are used to prevent duplicates
   decodedMsg = decodedMsg.replace(/X/g, "");
 
   return decodedMsg;
