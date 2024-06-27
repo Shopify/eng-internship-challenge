@@ -81,7 +81,94 @@ function generateTable(
   return table;
 }
 
+function decodePlayfair(msg: string, table: PlayfairTable): string {
+  let decodedMsg = "";
+
+  // Ensure the input is valid
+  if (msg.length % 2 !== 0 || !msg.match(/^[A-Z]+$/)) {
+    throw new Error(
+      "Encoded message must be even length and made of uppercase letters."
+    );
+  }
+
+  // Decode each pair of letters based on the Playfair rules
+  for (let i = 0; i < msg.length; i += 2) {
+    // Find where the characters are in the table
+    let char1Indexes = findCharInTable(msg[i], table);
+    let char2Indexes = findCharInTable(msg[i + 1], table);
+
+    // Should not occur, but satisfies TypeScript
+    if (typeof char1Indexes === "undefined") {
+      throw new Error(
+        `Character ${msg[i]} in encoded message does not exist in table.`
+      );
+    } else if (typeof char2Indexes === "undefined") {
+      throw new Error(
+        `Character ${msg[i + 1]} in encoded message does not exist in table.`
+      );
+    }
+
+    // Based on their position, decode each pair
+    if (
+      char1Indexes.row === char2Indexes.row &&
+      char1Indexes.col === char2Indexes.col
+    ) {
+      throw new Error(
+        "Invalid encoded Wayfair message, cannot have a pair of duplicate characters."
+      );
+    } else if (char1Indexes.row === char2Indexes.row) {
+      // If the characters are in the same row, shift left one to decode (with wrap-around)
+      decodedMsg +=
+        table[char1Indexes.row][(char1Indexes.col + 4) % 5] +
+        table[char2Indexes.row][(char2Indexes.col + 4) % 5];
+    } else if (char1Indexes.col === char2Indexes.col) {
+      // If the characters are in the same col, shift up one to decode (with wrap-around)
+      decodedMsg +=
+        table[(char1Indexes.row + 4) % 5][char1Indexes.col] +
+        table[(char2Indexes.row + 4) % 5][char2Indexes.col];
+    } else {
+      // Otherwise, the characters form a rectangle - exchange each letter with the letter on the
+      // opposite side of the same row
+      decodedMsg +=
+        table[char1Indexes.row][char2Indexes.col] +
+        table[char2Indexes.row][char1Indexes.col];
+    }
+  }
+
+  // Remove all of the "X" characters from the decoded message
+  decodedMsg = decodedMsg.replace(/X/g, "");
+
+  return decodedMsg;
+}
+
+/**
+ * Returns the row and col of the char given if it exists in the table, otherwise
+ * returns undefined.
+ *
+ * @param char The character to search for
+ * @param table The 2D table to search
+ * @returns The row and col of the character (if it exists), undefined otherwise
+ */
+function findCharInTable(
+  char: string,
+  table: PlayfairTable
+): { row: number; col: number } | undefined {
+  for (let row = 0; row < table.length; row++) {
+    for (let col = 0; col < table[row].length; col++) {
+      if (char === table[row][col]) {
+        return { row, col };
+      }
+    }
+  }
+
+  return undefined;
+}
+
+// Test code to decode the "super secret message"
 const SECRET_KEY = "SUPERSPY";
 const ENCRYPTED_MSG = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 
-console.log(generateTable(SECRET_KEY));
+const table = generateTable(SECRET_KEY);
+const decodedMsg = decodePlayfair(ENCRYPTED_MSG, table);
+
+console.log(decodedMsg);
