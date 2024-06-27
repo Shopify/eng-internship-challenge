@@ -27,17 +27,18 @@ def construct_table(keyword):
     return playfair_table
 
 
-def locate_letter(letter, table):
+def create_letter_locations(table):
     """
-    This function returns the indices of a letter,
-    given a 5x5 table of letters.
+    This function maps letters to their indices
+    and returns it as a dictionary.
     """
+    letter_locations = {}
 
     for i in range(5):
         for j in range(5):
-            if table[i][j] == letter:
-                return (i, j)
+            letter_locations[table[i][j]] = (i,j)
 
+    return letter_locations
 
 def decrypt_playfair(message, table):
     """
@@ -48,14 +49,15 @@ def decrypt_playfair(message, table):
     i = 0
     j = 1
     decrypted_message = ""
+    letter_locations = create_letter_locations(table)
 
     # Stop once we've reached the end of the message
     while i < len(message) and j < len(message):
         letter1 = message[i]
         letter2 = message[j]
 
-        location1 = locate_letter(letter1, table) # Indices of letter 1
-        location2 = locate_letter(letter2, table) # Indices of letter 2
+        location1 = letter_locations[letter1] # Indices of letter 1
+        location2 = letter_locations[letter2] # Indices of letter 2
 
         # Row and column indices of letter 1 and 2
         l1_row = location1[0]
@@ -106,6 +108,6 @@ def run():
     key = "SUPERSPY"
     message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     table = construct_table(key)
-    print(decrypt_playfair(message, table).replace("X", ""))
+    print(decrypt_playfair(message, table).replace("X", "").replace(" ", "").upper())
 
 run()
