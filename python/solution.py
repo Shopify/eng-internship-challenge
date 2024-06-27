@@ -17,13 +17,14 @@ def generate_table(keyword):
             table_str += c
             letters.add(c)
     
+    # put it in list
     for i in range(0, 25, 5):
         table.append(table_str[i:i+5])
 
     return table
 
 
-# generates the dictionary for letter : position
+# generates the dictionary as letter : position in table
 # returns: dict
 def getPosDict(table):
     pos = {}
