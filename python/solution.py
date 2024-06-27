@@ -104,10 +104,8 @@ def decrypt_playfair(message, table):
         
     return decrypted_message
 
-def run():
+if __name__ == '__main__':
     key = "SUPERSPY"
-    message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     table = construct_table(key)
-    print(decrypt_playfair(message, table).replace("X", "").replace(" ", "").upper())
-
-run()
+    message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+    print(decrypt_playfair(message, table).replace("X", "").replace(" ", ""))
