@@ -2,7 +2,7 @@ import string
 
 
 # Function to generate matrix from a given key
-def generate_playfair_matrix(key):
+def generate_matrix(key):
 
     #Check validity of key
     key = ''.join(char for char in key.upper() if char.isalpha())
@@ -37,7 +37,7 @@ def generate_playfair_matrix(key):
 
 
 # Function to decrypt the message
-def decrypt_message(message):
+def decrypt(message):
 
     # Validate the ciphertext before proceeding
     if len(message) % 2 != 0:
@@ -79,8 +79,8 @@ playfair_key = "SUPERSPY"
 encrypted_message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 
 # Generate the Playfair matrix and mapping
-playfair_matrix, letter_to_cell_mapping = generate_playfair_matrix(playfair_key)
+playfair_matrix, letter_to_cell_mapping = generate_matrix(playfair_key)
 
 # Decrypt the message
-decrypted_message_result = decrypt_message(encrypted_message)
-print(decrypted_message_result)
+decrypted_message = decrypt(encrypted_message)
+print(decrypted_message)
