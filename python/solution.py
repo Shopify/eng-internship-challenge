@@ -64,14 +64,20 @@ def decrypt_playfair(ciphertext, key):
 if __name__ == "__main__":
     ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
     key = "SUPERSPY"
-    decrypted_message = (
-        decrypt_playfair(ciphertext, key)
-        # Ensures decrypt is uppercase
-        .upper()
-        # Removes any Xs
-        .replace("X", "")
-        # Removes empty spaces
-        .replace(" ", "")
+    # Removes special characters
+    decrypted_message = "".join(
+        filter(
+            str.isalpha,
+            (
+                decrypt_playfair(ciphertext, key)
+                # Ensures decrypt is uppercase
+                .upper()
+                # Removes any Xs
+                .replace("X", "")
+                # Removes empty spaces
+                .replace(" ", "")
+            ),
+        )
     )
 
     print(decrypted_message)
