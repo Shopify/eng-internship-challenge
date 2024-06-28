@@ -1,6 +1,3 @@
-const cipherKey = "SUPERSPY";
-const encryptedText = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
-
 const generateGrid = (key: string) => {
   // J is omitted by default
   // If J is in the key, then the last letter that doesn't show up in the key is omitted
@@ -70,5 +67,7 @@ const decryptText = (key: string, encrypted: string) => {
   return decryptedFiltered;
 }
 
+const cipherKey = "SUPERSPY";
+const encryptedText = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 const decrypted = decryptText(cipherKey, encryptedText);
 console.log(decrypted);
