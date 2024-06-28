@@ -66,12 +66,12 @@ def rowRule(table: list[list[str]], first_x: int, first_y: int, second_x: int, s
     new2 = ""
 
     if first_y == 0:
-        new1 = table[first_x][4]
+        new1 = table[first_x][4] # loop around row
     else:
         new1 = table[first_x][first_y - 1]
 
     if second_y == 0:
-        new2 = table[second_x][4]
+        new2 = table[second_x][4] # loop around row
     else:
         new2 = table[second_x][second_y - 1]
     
@@ -95,12 +95,12 @@ def colRule(table: list[list[str]], first_x: int, first_y: int, second_x: int, s
     new2 = ""
 
     if first_x == 0:
-        new1 = table[4][first_y]
+        new1 = table[4][first_y] # loop around column
     else:
         new1 = table[first_x - 1][first_y]
 
     if second_x == 0:
-        new2 = table[4][second_y]
+        new2 = table[4][second_y] # loop around column
     else:
         new2 = table[second_x - 1][second_y]
     
@@ -160,8 +160,8 @@ def main():
             
 
     
-    encryptedString = encryptedString.replace("X", "").replace(" ", "")
-    encryptedString = ''.join(filter(str.isalnum, encryptedString))
+    encryptedString = encryptedString.replace("X", "").replace(" ", "") # remove whitespaces and Xs as required
+    encryptedString = ''.join(filter(str.isalnum, encryptedString)) # remove special characters
     print(encryptedString)
 
 if __name__ == '__main__':
