@@ -20,3 +20,26 @@ def keyword_processor (keyword):
   keyword = keyword.replace('J', 'I')
 
   #Now we must remove any potential duplicates. This is done by 
+  new_value = set()
+  processed_keyword = ""
+
+  for char in keyword:
+    if char not in new_value:
+      new_value.add(char)
+      processed_keyword += char
+  
+  #Build matrix and initalize allphabets variable without the letter 'J'
+  matrix = []
+  alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'
+
+  #Fill the matrix with the keyword and remove common letters between the alphabets and keyword
+  for char in processed_keyword:
+    matrix.append(char)
+    alphabet = alphabet.replace(char, '')
+
+  #Fill the matrix with any uncommon and remaining alphabet letters
+  for char in alphabet:
+    matrix.append(char)
+  return matrix
+
+
