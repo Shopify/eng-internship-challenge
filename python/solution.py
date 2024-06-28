@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Playfair Cipher Decryption
 Author: Christopher Rossi
