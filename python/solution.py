@@ -48,6 +48,8 @@ def playfair_decrypt(ciphertext, key):
 
     # Clean up the decrypted text by removing 'X' used as padding
     decrypted_text = decrypted_text.replace("X", "")
+    decrypted_text = decrypted_text.replace(" ", "")
+
     return decrypted_text
 
 if __name__ == "__main__":

@@ -33,6 +33,7 @@ def generate_matrix(key)
   
     # Clean up the decrypted text by removing 'X' used as padding
     decrypted_text.tr("X", "")
+
   end
   
   if __FILE__ == $PROGRAM_NAME
