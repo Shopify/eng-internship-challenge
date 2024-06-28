@@ -9,116 +9,126 @@ interface Position {
     column: number;
 }
 
-console.log(decode(ENCRYPTED_TEXT, ENCRYPTION_KEY, PADDING));
+class Decryptor {
+    private readonly grid: string[][];
+    private readonly padding: string;
 
-function decode(encryptedText: string, encryptionKey: string, padding: string): string {
-    const grid = generateKeyGrid(encryptionKey);
-    let decryptedText = "";
-
-    for (let i = 0; i < encryptedText.length; i += 2) {
-        const pair = getPair(encryptedText, i);
-        const decryptedPair = decryptPair(pair, grid);
-        decryptedText += decryptedPair;
+    constructor(key: string, padding: string) {
+        this.grid = this.generateKeyGrid(key);
+        this.padding = padding;
     }
 
-    return removePadding(decryptedText, padding);
-}
+    public decode(encryptedText: string): string {
+        let decryptedText = "";
 
-function getPair(string: string, index: number) {
-    return (string[index] + string[index + 1]);
-}
-
-function decryptPair(pair: string, grid: string[][]): string {
-    const [firstLetter, secondLetter] = pair;
-
-    const firstLetterPosition = findLetterPosition(grid, firstLetter);
-    const secondLetterPosition = findLetterPosition(grid, secondLetter);
-
-    if (firstLetterPosition.row === secondLetterPosition.row) {
-        return decryptRow(grid, firstLetterPosition, secondLetterPosition);
-    }
-
-    if (firstLetterPosition.column === secondLetterPosition.column) {
-        return decryptColumn(grid, firstLetterPosition, secondLetterPosition);
-    }
-
-    return decryptRectangle(grid, firstLetterPosition, secondLetterPosition);
-}
-
-
-function decryptRow(grid: string[][], firstPosition: Position, secondPosition: Position): string {
-    let result = "";
-
-    result += grid[firstPosition.row][(firstPosition.column + ROW_SIZE - 1) % ROW_SIZE];
-    result += grid[secondPosition.row][(secondPosition.column + ROW_SIZE - 1) % ROW_SIZE];
-
-    return result;
-}
-
-
-function decryptColumn(grid: string[][], firstPosition: Position, secondPosition: Position): string {
-    let result = "";
-
-    result += grid[(firstPosition.row + ROW_SIZE - 1) % ROW_SIZE][firstPosition.column];
-    result += grid[(secondPosition.row + ROW_SIZE - 1) % ROW_SIZE][secondPosition.column];
-
-    return result;
-}
-
-function decryptRectangle(grid: string[][], firstPosition: Position, secondPosition: Position): string {
-    let result = "";
-
-    result += grid[firstPosition.row][secondPosition.column];
-    result += grid[secondPosition.row][firstPosition.column];
-
-    return result;
-}
-
-function findLetterPosition(grid: string[][], letter: string): Position {
-    for (let i = 0; i < grid.length; i++) {
-        const row = grid[i];
-        const columnIndex = row.indexOf(letter);
-        if (columnIndex !== -1) {
-            return { row: i, column: columnIndex };
-        }
-    }
-
-    throw new Error(`Letter ${letter} not found in the grid!`);
-}
-
-/**
- * 
- * @param key 
- * @returns 
- */
-function generateKeyGrid(key: string): string[][] {
-    // Determine which letters are in the key
-    const keySet = new Set<string>(key);
-    const gridLetters = Array.from(keySet);
-    let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    alphabet = alphabet.replace(OMMITED_LETTER, "");
-
-    for (const letter of alphabet) {
-        if (!keySet.has(letter)) {
-            gridLetters.push(letter);
+        for (let i = 0; i < encryptedText.length; i += 2) {
+            const pair = this.getPair(encryptedText, i);
+            const decryptedPair = this.decryptPair(pair);
+            decryptedText += decryptedPair;
         }
 
-        if (gridLetters.length === (ROW_SIZE * ROW_SIZE)) {
-            break;
+        return this.removePadding(decryptedText);
+    }
+
+    private getPair(string: string, index: number) {
+        return (string[index] + string[index + 1]);
+    }
+
+
+    private decryptPair(pair: string): string {
+        const [firstLetter, secondLetter] = pair;
+
+        const firstPosition = this.findLetterPosition(firstLetter);
+        const secondPosition = this.findLetterPosition(secondLetter);
+
+        if (firstPosition.row === secondPosition.row) {
+            return this.decryptRow(firstPosition, secondPosition);
         }
+
+        if (firstPosition.column === secondPosition.column) {
+            return this.decryptColumn(firstPosition, secondPosition);
+        }
+
+        return this.decryptRectangle(firstPosition, secondPosition);
     }
 
-    const grid: string[][] = [];
+    private decryptRow(firstPosition: Position, secondPosition: Position): string {
+        let result = "";
 
-    for (let i = 0; i < gridLetters.length; i += ROW_SIZE) {
-        const row = gridLetters.slice(i, i + ROW_SIZE);
-        grid.push(row);
+        result += this.grid[firstPosition.row][(firstPosition.column + ROW_SIZE - 1) % ROW_SIZE];
+        result += this.grid[secondPosition.row][(secondPosition.column + ROW_SIZE - 1) % ROW_SIZE];
+
+        return result;
     }
 
-    return grid;
+
+    private decryptColumn(firstPosition: Position, secondPosition: Position): string {
+        let result = "";
+
+        result += this.grid[(firstPosition.row + ROW_SIZE - 1) % ROW_SIZE][firstPosition.column];
+        result += this.grid[(secondPosition.row + ROW_SIZE - 1) % ROW_SIZE][secondPosition.column];
+
+        return result;
+    }
+
+    private decryptRectangle(firstPosition: Position, secondPosition: Position): string {
+        let result = "";
+
+        result += this.grid[firstPosition.row][secondPosition.column];
+        result += this.grid[secondPosition.row][firstPosition.column];
+
+        return result;
+    }
+
+    private findLetterPosition(letter: string): Position {
+        for (let i = 0; i < this.grid.length; i++) {
+            const row = this.grid[i];
+            const columnIndex = row.indexOf(letter);
+            if (columnIndex !== -1) {
+                return { row: i, column: columnIndex };
+            }
+        }
+
+        throw new Error(`Letter ${letter} not found in the grid!`);
+    }
+
+    private generateKeyGrid(key: string): string[][] {
+        // Determine which letters are in the key
+        const keySet = new Set<string>(key);
+        const gridLetters = Array.from(keySet);
+        let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        alphabet = alphabet.replace(OMMITED_LETTER, "");
+
+        for (const letter of alphabet) {
+            if (!keySet.has(letter)) {
+                gridLetters.push(letter);
+            }
+
+            if (gridLetters.length === (ROW_SIZE * ROW_SIZE)) {
+                break;
+            }
+        }
+
+        const grid: string[][] = [];
+
+        for (let i = 0; i < gridLetters.length; i += ROW_SIZE) {
+            const row = gridLetters.slice(i, i + ROW_SIZE);
+            grid.push(row);
+        }
+
+        return grid;
+    }
+
+    private removePadding(text: string) {
+        return text.replace(new RegExp(this.padding, "g"), "");
+    }
 }
 
-function removePadding(text: string, padding: string) {
-    return text.replace(new RegExp(padding, "g"), "");
+function main() {
+    const decryptor = new Decryptor(ENCRYPTION_KEY, PADDING);
+    const decryptedText = decryptor.decode(ENCRYPTED_TEXT);
+    console.log(decryptedText);
 }
+
+main();
 
