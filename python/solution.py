@@ -1,3 +1,6 @@
+# Intership Challenge Solution (6/28/2024)
+# Code written by Bralyn Loach-Perry
+
 def preprocess_input(input_text):
     # Remove spaces and convert to uppercase
     input_text = input_text.replace(" ", "").upper()
