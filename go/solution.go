@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -55,13 +54,30 @@ func decryptPair(c1, c2 rune, keyTable [25]rune) (rune, rune) {
 	return keyTable[row1*5+col2], keyTable[row2*5+col1]
 }
 
-func main() {
-	table := createKeyTable("J")
-	for _, c := range table {
-		fmt.Printf("%c ", c)
+// Finally, we can decrypt any Playfair cipher text using the key and the encrypted text
+func decryptPlayfairCipher(key, text string) string {
+	// Create the key table from the key
+	keyTable := createKeyTable(key)
+	decrypted := ""
+	// For each pair of characters in the text
+	for i := 0; i < len(text); i += 2 {
+		// Get the characters from text
+		c1, c2 := rune(text[i]), rune(text[i+1])
+		// Decrypt the pair of characters using the table
+		d1, d2 := decryptPair(c1, c2, keyTable)
+		// Add the string version of decrypted characters to the result
+		decrypted += string(d1) + string(d2)
 	}
+	// We need to remove the X's that were added for padding
+	decrypted = strings.ReplaceAll(decrypted, "X", "")
 
-	// Test the decryptPair function (checks out)
-	c1, c2 := decryptPair('I', 'Z', table)
-	fmt.Printf("\n%c %c\n", c1, c2)
+	// Return the decrypted text
+	return decrypted
+}
+
+func main() {
+	key := "SUPERSPY"
+	text := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+	decrypted := decryptPlayfairCipher(key, text)
+	println(decrypted)
 }
