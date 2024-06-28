@@ -2,7 +2,8 @@ const cipherKey = "SUPERSPY";
 const encryptedText = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
 
 const generateGrid = (key: string) => {
-  // J is omitted
+  // J is omitted by default
+  // If J is in the key, then the last letter that doesn't show up in the key is omitted
   const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ".split('');
   const keyArr = key.split('');
   
@@ -42,21 +43,29 @@ const decryptText = (key: string, encrypted: string) => {
   }
 
   const decryptedText = digraph.map((charPair: string) => {
+    const getShiftUpIndex = (y: number) => {
+      return (y - 1 + gridHeight) % gridHeight;
+    }
+
+    const getShiftLeftIndex = (x: number) => {
+      return (x - 1 + gridWidth) % gridWidth;
+    }
+
     const {x: x1, y: y1} = getCharPosition(charPair[0]);
     const {x: x2, y: y2} = getCharPosition(charPair[1]);
     
     if(x1 == x2) {
       // Same column, shift up
-      return grid[(y1 - 1 + gridHeight) % gridHeight][x1] + grid[(y2 - 1 + gridHeight) % gridHeight][x2];
+      return grid[getShiftUpIndex(y1)][x1] + grid[getShiftUpIndex(y2)][x2];
     } else if(y1 == y2) {
       //Same row, shift left
-      return grid[y1][(x1 - 1 + gridWidth) % gridWidth] + grid[y2][(x2 - 1 + gridWidth) % gridWidth];
+      return grid[y1][getShiftLeftIndex(x1)] + grid[y2][getShiftLeftIndex(x2)];
     } else {
       return grid[y1][x2] + grid[y2][x1];
     }
   }).join('');
   
-  const decryptedFiltered = decryptedText.split('').filter(c => { return c !== "X"}).join('');
+  const decryptedFiltered = decryptedText.replace(/X/g, '');
 
   return decryptedFiltered;
 }
