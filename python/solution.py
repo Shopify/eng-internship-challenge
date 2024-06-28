@@ -8,7 +8,7 @@ def preprocess_input(input_text):
     i = 0
     while i < len(input_text):
         if i == len(input_text) - 1 or input_text[i] == input_text[i + 1]:
-            digraphs.append(input_text[i] + 'X')
+            # Skip inserting 'X' for consecutive identical characters
             i += 1
         else:
             digraphs.append(input_text[i] + input_text[i + 1])
@@ -48,11 +48,17 @@ def decrypt_digraph(key_square, digraph):
     (row2, col2) = find_position(key_square, char2)
 
     if row1 == row2:
-        return key_square[row1 * 5 + (col1 - 1) % 5] + key_square[row2 * 5 + (col2 - 1) % 5]
+        decrypted_pair = key_square[row1 * 5 + (col1 - 1) % 5] + key_square[row2 * 5 + (col2 - 1) % 5]
     elif col1 == col2:
-        return key_square[((row1 - 1) % 5) * 5 + col1] + key_square[((row2 - 1) % 5) * 5 + col2]
+        decrypted_pair = key_square[((row1 - 1) % 5) * 5 + col1] + key_square[((row2 - 1) % 5) * 5 + col2]
     else:
-        return key_square[row1 * 5 + col2] + key_square[row2 * 5 + col1]
+        decrypted_pair = key_square[row1 * 5 + col2] + key_square[row2 * 5 + col1]
+
+    # Remove any 'X' that might have been added during encryption
+    if 'X' in decrypted_pair:
+        decrypted_pair = decrypted_pair.replace('X', '')
+
+    return decrypted_pair
 
 def decrypt_message(ciphertext, key):
     # Preprocess input and create key square
@@ -66,8 +72,9 @@ def decrypt_message(ciphertext, key):
 
     return decrypted_message
 
-# Example usage:
 ciphertext = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
 key = "SUPERSPY"
+
+# Decrypt the message using provided ciphertext and key
 plaintext = decrypt_message(ciphertext, key)
 print(plaintext)
