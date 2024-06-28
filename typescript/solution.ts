@@ -1,8 +1,3 @@
-const ENCRYPTED_TEXT = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
-const ENCRYPTION_KEY = "SUPERSPY";
-const OMMITED_LETTER = "J";
-const PADDING = "X";
-
 /**
  * Represents a position in the grid
  */
@@ -17,22 +12,23 @@ interface Position {
  * @param padding Padding character
  * @returns Decrypted message
  * @example
- * 
+ *
  * const decryptor = new Decryptor("KEY", "X");
  * const decryptedText = decryptor.decrypt("ENCRYPTED_TEXT");
- * 
+ *
  */
 class Decryptor {
     private readonly grid: string[][];
     private readonly padding: string;
     private readonly rowSize = 5;
     private readonly gridIndex: Map<string, Position>;
+    private readonly ommitedLetter = "J";
 
     /**
      * Creates a new instance of the Decryptor class
-     * 
+     *
      * @param key The encryption key
-     * @param padding The padding character used in the encryption 
+     * @param padding The padding character used in the encryption
      */
     constructor(key: string, padding: string) {
         this.grid = this.generateKeyGrid(key);
@@ -42,9 +38,9 @@ class Decryptor {
 
     /**
      * Decrypts an encrypted message using the Playfair cipher
-     * 
+     *
      * @param encryptedText Encrypted message to decrypt
-     * @returns Decrypted message  
+     * @returns Decrypted message
      */
     public decrypt(encryptedText: string): string {
         let decryptedText = "";
@@ -59,36 +55,35 @@ class Decryptor {
         return decryptedText;
     }
 
-
-    /**  
+    /**
      * Decrypts an encrypted message using the Playfair cipher
-     * 
+     *
      * @param encryptedText Encrypted message to decrypt
      * @param key Encryption key
      * @param padding Padding character
      * @returns Decrypted message
-     * 
+     *
      * @example
-     * 
+     *
      * const decryptedText = Decryptor.decrypt("ENCRYPTED_TEXT", "KEY", "X");
-    */
+     */
     public static decrypt(encryptedText: string, key: string, padding: string) {
         const decryptor = new Decryptor(key, padding);
         return decryptor.decrypt(encryptedText);
     }
 
     /**
-     * 
-     * @param string String to get the pair from 
+     *
+     * @param string String to get the pair from
      * @param index Index of the first letter of the pair
-     * @returns A pair of letters from the string 
+     * @returns A pair of letters from the string
      */
     private getPair(string: string, index: number) {
         return string[index] + string[index + 1];
     }
 
     /**
-     * 
+     *
      * @param pair Pair of letters to decrypt
      * @returns Decrypted pair of letters
      */
@@ -112,7 +107,7 @@ class Decryptor {
     /**
      * Helper function to decrypt a pair of letters in the same row
      * @param first First letter position
-     * @param second Second letter postion 
+     * @param second Second letter postion
      * @returns Decrypted pair of letters
      */
     private decryptRow(first: Position, second: Position): string {
@@ -125,11 +120,11 @@ class Decryptor {
     }
 
     /**
-      * Helper function to decrypt a pair of letters in the same column
-      * @param first First letter position
-      * @param second Second letter postion 
-      * @returns Decrypted pair of letters
-      */
+     * Helper function to decrypt a pair of letters in the same column
+     * @param first First letter position
+     * @param second Second letter postion
+     * @returns Decrypted pair of letters
+     */
     private decryptColumn(first: Position, second: Position): string {
         let result = "";
 
@@ -142,7 +137,7 @@ class Decryptor {
     /**
      * Helper function to decrypt a pair of letters neither in the same row nor column
      * @param first First letter position
-     * @param second Second letter postion 
+     * @param second Second letter postion
      * @returns Decrypted pair of letters
      */
     private decryptRectangle(first: Position, second: Position): string {
@@ -155,7 +150,7 @@ class Decryptor {
     }
 
     /**
-     * 
+     *
      * @param letter Letter to find in the grid
      * @returns `Position` of the letter in the grid if found, else throws an error
      */
@@ -169,7 +164,7 @@ class Decryptor {
     }
 
     /**
-     * 
+     *
      * @param key Encryption key
      * @returns A 5x5 grid generated from the encryption key for the Playfair cipher
      */
@@ -178,7 +173,7 @@ class Decryptor {
         const keySet = new Set<string>(key);
         const gridLetters = Array.from(keySet);
         let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        alphabet = alphabet.replace(OMMITED_LETTER, "");
+        alphabet = alphabet.replace(this.ommitedLetter, "");
         const maxLetters = this.rowSize * this.rowSize;
 
         // Add the remaining letters of the alphabet to the grid
@@ -206,7 +201,7 @@ class Decryptor {
     }
 
     /**
-     * 
+     *
      * @returns A map of the letters in the grid to their positions
      */
     private createGridIndex(): Map<string, Position> {
@@ -223,7 +218,7 @@ class Decryptor {
     }
 
     /**
-     * 
+     *
      * @param text Text to remove padding from
      * @returns Text with all instances of the padding character removed
      */
@@ -231,6 +226,10 @@ class Decryptor {
         return text.replace(new RegExp(this.padding, "g"), "");
     }
 }
+
+const ENCRYPTED_TEXT = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
+const ENCRYPTION_KEY = "SUPERSPY";
+const PADDING = "X";
 
 function main() {
     const decryptor = new Decryptor(ENCRYPTION_KEY, PADDING);
