@@ -161,6 +161,7 @@ def main():
 
     
     encryptedString = encryptedString.replace("X", "").replace(" ", "")
+    encryptedString = ''.join(filter(str.isalnum, encryptedString))
     print(encryptedString)
 
 if __name__ == '__main__':
