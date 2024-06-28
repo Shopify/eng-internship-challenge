@@ -52,7 +52,7 @@ def decrypt_pairs(encoded_string: str, grid: list, mapping: dict):
     mapping (dict): The mapping from letters to their positions in the grid.
     
     Returns:
-    list: A list of decrypted characters.
+    str: The original message.
     """
     decrypted_text = []
     for i in range(0, len(encoded_string), 2):
@@ -75,15 +75,14 @@ def decrypt_pairs(encoded_string: str, grid: list, mapping: dict):
             decrypted_text.append(grid[i1][j2])
             decrypted_text.append(grid[i2][j1])
     
-    return decrypted_text
+    return "".join(decrypted_text).replace('X', '')
 
 def main():
     """Main function to perform the decryption process."""
     reordered_alphabet = create_reordered_alphabet(KEYCODE, ALPHABET)
     grid, mapping = create_grid_and_mapping(reordered_alphabet)
     decrypted_text = decrypt_pairs(ENCODED_STRING, grid, mapping)
-    final_text = "".join(decrypted_text).replace('X', '')
-    print(final_text)
+    print(decrypted_text)
 
 if __name__ == "__main__":
     main()
