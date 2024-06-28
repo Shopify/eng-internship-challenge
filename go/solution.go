@@ -14,6 +14,7 @@ func createKeyTable(key string) [25]rune {
 	tableIndex := 0                         // The index to keep track of the table
 	// Add the characters from the key and the alphabet to the key table
 	for _, c := range key + alphabet {
+		// If the character is J, we will use I instead
 		if c == 'J' {
 			used['I'] = true
 			keyTable[tableIndex] = 'I'
@@ -76,8 +77,9 @@ func decryptPlayfairCipher(key, text string) string {
 }
 
 func main() {
+	// Set the key, and the encrypted text
 	key := "SUPERSPY"
-	text := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
-	decrypted := decryptPlayfairCipher(key, text)
+	encryptedText := "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV"
+	decrypted := decryptPlayfairCipher(key, encryptedText)
 	println(decrypted)
 }
