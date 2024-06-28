@@ -9,7 +9,6 @@ class KeyTable {
 
     constructor (key: string) {
         this.table = this.makeKeyTable(key);
-        console.log(this.table);
     }
 
     private makeKeyTable(text: string) {
@@ -30,4 +29,26 @@ class KeyTable {
     }
 }
 
+class Decryptor {
+
+    private table: KeyTable
+
+    constructor(table: KeyTable) {
+        this.table = table;
+    }
+
+    public decrypt(msg: string) {
+        let pairs = this.toPairs(msg);
+    }
+
+    toPairs(text: string): string[] {
+        let pairs: string[] = []
+        for (let i = 0; i < text.length; i = i + 2)
+            pairs.push(text.substring(i, i + 2));
+        return pairs;
+    }
+}
+
 let testTable = new KeyTable(KEY);
+let decryptor = new Decryptor(testTable);
+decryptor.decrypt(ENCYPT_MSG);
