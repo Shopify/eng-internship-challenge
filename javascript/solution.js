@@ -58,14 +58,14 @@ function decryptDigraph(grid, digraph) {
 
 function decryptPlayfairCipher(ciphertext, key) {
     //Ensure that ciphertext and key are uppercase
-    key.toUpperCase();
-    ciphertext.toUpperCase();
+    let cleanedKey = key.toUpperCase();
+    let cleanedCiphertext = ciphertext.toUpperCase();
 
-    let grid = createPlayfairGrid(key);
+    let grid = createPlayfairGrid(cleanedKey);
     let plaintext = "";
 
-    for (let i = 0; i < ciphertext.length; i += 2) { //Increment by 2 to check for pairs of letters
-        let digraph = ciphertext.slice(i, i + 2);
+    for (let i = 0; i < cleanedCiphertext.length; i += 2) { //Increment by 2 to check for pairs of letters
+        let digraph = cleanedCiphertext.slice(i, i + 2);
         plaintext += decryptDigraph(grid, digraph);
     }
 
