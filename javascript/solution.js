@@ -71,5 +71,4 @@ function createMatrix(key) {
   const message = "IKEWENENXLNQLPZSLERUMRHEERYBOFNEINCHCV";
   const key = "SUPERSPY";
   
-  decryptMessage(message, key);
-  
+  decryptMessage(message, key);  
