@@ -104,6 +104,7 @@ function decryptMessage(encrypted, key) {
         const encryptedLetter1RowIndex = thisRow.indexOf(letterPair[0]);
         const encryptedLetter2RowIndex = thisRow.indexOf(letterPair[1]);
 
+        //if moving one cell to the left creates a negative index number, wrap around to the rightmost cell by adding 4 to the index
         const decryptedLetter1RowIndex =
           encryptedLetter1RowIndex - 1 >= 0
             ? encryptedLetter1RowIndex - 1
@@ -136,6 +137,7 @@ function decryptMessage(encrypted, key) {
         const encryptedLetter1ColIndex = thisColumn.indexOf(letterPair[0]);
         const encryptedLetter2ColIndex = thisColumn.indexOf(letterPair[1]);
 
+        //if moving one cell up in the column creates a negative number, wrap around to the bottom of the column by adding 4 to the index
         const decryptedLetter1ColIndex =
           encryptedLetter1ColIndex - 1 >= 0
             ? encryptedLetter1ColIndex - 1
