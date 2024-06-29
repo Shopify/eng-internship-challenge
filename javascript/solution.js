@@ -24,7 +24,6 @@ function generateCipherMatrix(cipherKey, squareSize) {
   const letterArray = Array.from(letterSet);
 
   const matrix = [];
-
   for (let row = 0; row < squareSize; row++) {
     matrix.push([]);
 
@@ -32,7 +31,6 @@ function generateCipherMatrix(cipherKey, squareSize) {
       matrix[row].push(letterArray.shift());
     }
   }
-
   return matrix;
 }
 
@@ -43,7 +41,6 @@ function generateCipherMatrix(cipherKey, squareSize) {
  */
 function generateColumnsFromMatrix(matrix) {
   columnSet = [];
-
   for (let col = 0; col < matrix[0].length; col++) {
     columnSet.push([]);
 
