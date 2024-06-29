@@ -40,7 +40,7 @@ while(len(split_message) > 0):
         
         solution += (
             new_grid[offset + (new_grid.index(pair[0] // 5 - 1)) % 5 * 5] + # move 1 upwards, so 5 index positions, modulus wrap
-            new_grid[offset + (new_grid.index(pair[1] // 5 - 1)) % 5 * 5]   # and then volumn offset gets added last, thanks BEDMAS
+            new_grid[offset + (new_grid.index(pair[1] // 5 - 1)) % 5 * 5]   # and then column offset gets added last, thanks BEDMAS
             )
 
     else: # case 3, box!
