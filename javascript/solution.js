@@ -88,7 +88,6 @@ function decryptMessage(encrypted, key) {
   let decryptedMessage = "";
 
   encryptedLetterPairs.forEach((letterPair) => {
-    //if both letters are in the same row, then move up left one column to get decrypted letters, wrapping around if needed
 
     let lettersAreInRow;
     let lettersAreInColumn;
@@ -129,8 +128,7 @@ function decryptMessage(encrypted, key) {
     for (let col = 0; col < cipherColumns.length; col++) {
       const thisColumn = cipherColumns[col];
       lettersAreInCol =
-        thisColumn.includes(letterPair[0]) &&
-        thisColumn.includes(letterPair[1]);
+        thisColumn.includes(letterPair[0]) && thisColumn.includes(letterPair[1]);
 
       if (lettersAreInCol) {
         //add decrypted letters to decryptedMessage by
