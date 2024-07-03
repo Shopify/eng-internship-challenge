@@ -8,13 +8,13 @@ Assumptions:
 
 class PlayfairCipher:
     
-    def __init__(self, cipher_key : str) -> None:
+    def __init__(self, cipher_key):
     
         self.key = cipher_key
         self.mapping, self.table = self.construct_mapping(cipher_key)
 
     # By doing some extra processing during initialization, we can make lookups more efficient
-    def construct_mapping(self, cipher_key: str):
+    def construct_mapping(self, cipher_key):
         
         row, col = 0, 0
         table = [['' for i in range(5)] for j in range(5)]
@@ -50,10 +50,10 @@ class PlayfairCipher:
         return letterToPosition, table
 
     # O(1) lookups
-    def position(self, letter : str) -> tuple[int, int]:
+    def position(self, letter):
         return self.mapping[letter]
 
-    def decrypt_digram(self, digram: str) -> str:
+    def decrypt_digram(self, digram):
         
         c1 = digram[0]
         c2 = digram[1] 
@@ -81,7 +81,7 @@ class PlayfairCipher:
         
         return c1 + c2
         
-    def decrypt(self, encrypted_string: str) -> str: 
+    def decrypt(self, encrypted_string): 
         
         decrypted_string = ""
 
