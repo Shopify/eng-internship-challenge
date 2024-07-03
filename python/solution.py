@@ -28,7 +28,7 @@ class PlayfairCipherSolver:
         # Map characters to their positions for efficient lookup
         self.character_positions = self._map_character_positions()
 
-    def _build_cipher_table(self, keyword: str) -> list[list[str]]:
+    def _build_cipher_table(self, keyword: str):
         """
         Build the Playfair Cipher table using the keyword.
         
@@ -63,7 +63,7 @@ class PlayfairCipherSolver:
         
         return cipher_table
 
-    def _map_character_positions(self) -> dict[str, tuple[int, int]]:
+    def _map_character_positions(self):
         """
         Map each character to its position in the cipher table.
         
@@ -80,7 +80,7 @@ class PlayfairCipherSolver:
 
         return character_positions
 
-    def _find_position(self, character: str) -> tuple[int, int]:
+    def _find_position(self, character: str):
         """
         Find the position of a character in the cipher table.
         
