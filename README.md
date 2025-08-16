@@ -27,7 +27,7 @@ Ensure your code is properly commented and formatted for readability and ease-of
     - **Do not** edit the test file in the folder. Tests will only work as intended after you have submitted a PR.
     - You'll find a separate `README.md` in that folder with language specific instructions.
 4. Ensure your application is executable from the command-line by running your `solution` file.
-5. Your decrypted string must by entirely **UPPER CASE**, and not include `spaces`, the letter `"X"`, or `special characters`. Ensure you meet all these conditions before outputting the result.
+5. Your decrypted string must be entirely **UPPER CASE**, and not include `spaces`, the letter `"X"`, or `special characters`. Ensure you meet all these conditions before outputting the result.
 6. Your application must output ***only*** the decrypted Playfair Cipher string.
     - ie: `BANANAS` ***not*** `The decrypted text is: BANANAS`
 
