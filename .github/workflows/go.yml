@@ -18,7 +18,7 @@ jobs:
         uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42 # v1
 
       - name: Set up Go
-        uses: actions/setup-go@bfdd3570ce990073878bf10f6b2d79082de49492 # v2.2.0
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
           go-version: '1.21.5'  # Specify your Go version here
 
