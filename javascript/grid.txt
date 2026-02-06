@@ -1,0 +1,8 @@
+Here is the 5x5 grid using the keyword "superspy"
+It omits the duplicate letter "s"
+
+S   U   P   E   R
+Y   A   B   C   D
+F   G   H   I   K
+L   M   N   O   Q
+T   V   W   X   Z
